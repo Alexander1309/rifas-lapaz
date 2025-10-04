@@ -1,0 +1,611 @@
+/* ------------------- RESET ------------------- */
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	}
+
+	body {
+		min-height: 100vh;
+		overflow-x: hidden;
+		color: #fff;
+		transition: background 0.2s;
+		background: radial-gradient(circle at 50% 50%, #003300 0%, #000 100%);
+	}
+
+	/* ------------------- HEADER ------------------- */
+	header {
+		padding: 15px 20px;
+		background: rgba(0, 0, 0, 0.7);
+		border-bottom: 2px solid #00ff88;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 15px;
+		flex-wrap: wrap;
+	}
+
+	header .logo {
+		width: 80px;
+	}
+
+	header .header-text {
+		flex: 1;
+		text-align: center;
+	}
+
+	header h1 {
+		font-size: 2rem;
+		color: #00ff88;
+		text-shadow: 0 0 10px #00ff88;
+	}
+
+	header p {
+		font-size: 1rem;
+		opacity: 0.8;
+		margin-top: 4px;
+	}
+
+	/* ------------------- PREMIOS ------------------- */
+	.rifa {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: 20px;
+	}
+
+	.premios-rifa {
+		display: flex;
+		gap: 25px;
+		justify-content: center;
+		flex-wrap: wrap;
+		margin-bottom: 20px;
+	}
+
+	.premio-item {
+		background: rgba(255, 255, 255, 0.05);
+		padding: 15px;
+		border-radius: 12px;
+		width: 250px;
+		position: relative;
+		text-align: center;
+		border: 2px solid #00ff88;
+		cursor: pointer;
+		overflow: hidden;
+		transition: all 0.4s ease;
+	}
+
+	.premio-item:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0 20px #00ff88;
+	}
+
+	.premio-item img {
+		width: 100%;
+		border-radius: 10px;
+		margin: 10px 0;
+		transition: transform 0.4s ease;
+	}
+
+	.premio-item:hover img {
+		transform: scale(1.1);
+	}
+
+	.premio-item h3 {
+		color: #00ff88;
+		margin-bottom: 5px;
+	}
+
+	.premio-item p {
+		font-weight: 600;
+	}
+
+	/* Detalles siempre visibles con animación uno por uno */
+	.detalles {
+		list-style: none;
+		text-align: left;
+		margin-top: 10px;
+		color: #00ff99;
+		opacity: 1;
+	}
+
+	.detalles li {
+		opacity: 0;
+		transform: translateX(-20px);
+		animation: detalleAnim 0.5s forwards;
+	}
+
+	.detalles li:nth-child(1) {
+		animation-delay: 0.1s;
+	}
+
+	.detalles li:nth-child(2) {
+		animation-delay: 0.3s;
+	}
+
+	.detalles li:nth-child(3) {
+		animation-delay: 0.5s;
+	}
+
+	.detalles li:nth-child(4) {
+		animation-delay: 0.7s;
+	}
+
+
+	@keyframes detalleAnim {
+		to {
+			opacity: 1;
+			transform: translateX(0);
+		}
+	}
+
+	/* ------------------- BOTONES ------------------- */
+	button {
+		padding: 12px 25px;
+		font-size: 16px;
+		border: none;
+		border-radius: 10px;
+		font-weight: bold;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		background: linear-gradient(90deg, #00cc66, #00ffcc);
+		color: #000;
+		box-shadow: 0 0 15px #00ff88;
+	}
+
+	button:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0 25px #00ffcc;
+	}
+
+	/* ------------------- MODALES ------------------- */
+	.modal {
+		display: none;
+		position: fixed;
+		z-index: 999;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.8);
+		justify-content: center;
+		align-items: center;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.modal.show {
+		display: flex;
+		opacity: 1;
+	}
+
+	.modal-content {
+		background: #111;
+		padding: 25px;
+		border-radius: 15px;
+		max-width: 600px;
+		width: 95%;
+		text-align: center;
+		position: relative;
+		animation: popIn 0.5s ease;
+	}
+
+	@keyframes popIn {
+		from {
+			transform: scale(0.6);
+			opacity: 0;
+		}
+
+		to {
+			transform: scale(1);
+			opacity: 1;
+		}
+	}
+
+	.close {
+		position: absolute;
+		top: 10px;
+		right: 15px;
+		font-size: 25px;
+		cursor: pointer;
+		color: #00ff88;
+	}
+
+	.boletos-container {
+		display: flex;
+		flex-wrap: wrap;
+		max-height: 300px;
+		overflow-y: auto;
+		justify-content: center;
+		gap: 5px;
+		background: #000;
+		border-radius: 10px;
+		padding: 10px;
+		border: 1px solid #00ff88;
+	}
+
+	.boleto {
+		border: 1px solid #00ff88;
+		padding: 6px 10px;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 0.9rem;
+		color: #00ff88;
+		transition: all 0.2s;
+	}
+
+	.boleto:hover,
+	.boleto.selected {
+		background: #00ff88;
+		color: #000;
+		font-weight: bold;
+	}
+
+	.pago-box input {
+		width: 100%;
+		padding: 12px;
+		margin: 8px 0;
+		border-radius: 8px;
+		border: 1px solid #00cc66;
+		background: #111;
+		color: #00ff88;
+		transition: 0.3s;
+	}
+
+	.pago-box input:focus {
+		border-color: #00ffcc;
+		box-shadow: 0 0 10px #00ffcc;
+		outline: none;
+	}
+
+	/* ------------------- WhatsApp flotante ------------------- */
+	.whatsapp-float {
+		position: fixed;
+		bottom: 25px;
+		right: 25px;
+		width: 65px;
+		height: 65px;
+		background: #25d366;
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		box-shadow: 0 0 20px #25d366;
+		animation: pulse 2s infinite, bounce 3s infinite;
+		z-index: 2000;
+	}
+
+	.whatsapp-float img {
+		width: 40px;
+		height: 40px;
+		filter: drop-shadow(0 0 5px #000);
+	}
+
+	@keyframes pulse {
+
+		0%,
+		100% {
+			box-shadow: 0 0 15px #25d366, 0 0 30px #25d366;
+		}
+
+		50% {
+			box-shadow: 0 0 25px #25d366, 0 0 60px #25d366;
+		}
+	}
+
+	@keyframes bounce {
+
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+
+		50% {
+			transform: translateY(-8px);
+		}
+	}
+
+	/* ------------------- FAQ ANIMADA ------------------- */
+	.faq {
+		display: flex;
+		justify-content: center;
+		margin: 30px 10px;
+	}
+
+	.faq-box {
+		background: rgba(0, 255, 136, 0.05);
+		border: 2px solid #00ff88;
+		border-radius: 15px;
+		padding: 20px;
+		max-width: 900px;
+		width: 100%;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		cursor: default;
+	}
+
+	.faq-box:hover {
+		transform: translateY(-5px) scale(1.02);
+		box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
+	}
+
+	.faq-box h2 {
+		color: #00ff88;
+		text-align: center;
+		margin-bottom: 15px;
+		font-size: 1.8rem;
+		text-shadow: 0 0 10px #00ff88;
+	}
+
+	.faq-box p {
+		color: #ccffcc;
+		font-size: 1rem;
+		margin-bottom: 15px;
+		line-height: 1.6;
+	}
+
+	.faq-box strong {
+		color: #00ffcc;
+	}
+
+	/* ------------------- ACERCA DE NOSOTROS ------------------- */
+	.about-us {
+		display: flex;
+		justify-content: center;
+		margin: 30px 10px 60px 10px;
+	}
+
+	.about-box {
+		background: rgba(0, 255, 136, 0.05);
+		border: 2px solid #00ff88;
+		border-radius: 15px;
+		padding: 25px;
+		max-width: 900px;
+		width: 100%;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		cursor: default;
+	}
+
+	.about-box:hover {
+		transform: translateY(-5px) scale(1.02);
+		box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
+	}
+
+	.about-box h2 {
+		color: #00ff88;
+		text-align: center;
+		margin-bottom: 15px;
+		font-size: 1.8rem;
+		text-shadow: 0 0 10px #00ff88;
+	}
+
+	.about-box p {
+		color: #ccffcc;
+		font-size: 1rem;
+		margin-bottom: 15px;
+		line-height: 1.6;
+	}
+
+	.social-buttons {
+		display: flex;
+		justify-content: center;
+		gap: 15px;
+		margin-top: 20px;
+		flex-wrap: wrap;
+	}
+
+	.social-btn {
+		text-decoration: none;
+		padding: 10px 20px;
+		border-radius: 10px;
+		font-weight: bold;
+		color: #000;
+		transition: all 0.3s ease;
+		box-shadow: 0 0 10px #00ff88;
+	}
+
+	.social-btn:hover {
+		transform: scale(1.05);
+		box-shadow: 0 0 20px #00ffcc;
+	}
+
+	.social-btn.fb {
+		background: #3b5998;
+		color: #fff;
+	}
+
+	.social-btn.ig {
+		background: #e1306c;
+		color: #fff;
+	}
+
+	.social-btn.wa {
+		background: #25d366;
+		color: #fff;
+	}
+
+	/* ------------------- RESPONSIVE ------------------- */
+	@media(min-width:769px) {
+		.premios-rifa {
+			flex-direction: row;
+		}
+	}
+
+	@media(max-width:768px) {
+		.premios-rifa {
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+
+	/* =================== ENHANCEMENTS PARA PARECERSE A LA CAPTURA =================== */
+	:root {
+		--bg-start: #003300;
+		--bg-end: #000000;
+		--primary: #00ff88;
+		--primary-2: #00ffcc;
+		--text: #eafff2;
+		--text-dim: #ccffcc;
+		--ring: rgba(0, 255, 136, 0.35);
+	}
+
+	/* Contenedor principal más centrado y ancho máximo */
+	.rifa {
+		width: 100%;
+		max-width: 1200px;
+		margin: 32px auto 16px auto;
+		padding: 0 16px;
+		gap: 22px;
+	}
+
+	/* Grupo de premios con borde/halo y grid responsivo */
+	.premios-rifa {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(240px, 1fr));
+		gap: 26px;
+		width: 100%;
+		justify-items: center;
+		padding: 18px;
+		border: 2px solid var(--primary);
+		border-radius: 16px;
+		background: linear-gradient(180deg, rgba(0, 255, 136, 0.05), rgba(0, 255, 136, 0.02));
+		box-shadow: 0 0 24px var(--ring), inset 0 0 0 1px rgba(0, 255, 136, 0.15);
+	}
+
+	/* Tarjetas con look más moderno y brillo sutil */
+	.premio-item {
+		background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+			radial-gradient(120% 120% at 50% 0%, rgba(0, 255, 136, 0.06) 0%, rgba(0, 0, 0, 0) 60%);
+		padding: 16px 16px 18px 16px;
+		border-radius: 16px;
+		width: 100%;
+		max-width: 320px;
+		border: 2px solid var(--primary);
+		box-shadow: 0 0 18px var(--ring), inset 0 0 0 1px rgba(0, 255, 136, 0.25);
+		transition: transform 0.25s ease, box-shadow 0.25s ease;
+	}
+
+	.premio-item:hover {
+		transform: translateY(-3px) scale(1.02);
+		box-shadow: 0 0 28px var(--primary), inset 0 0 0 1px rgba(0, 255, 136, 0.35);
+	}
+
+	.premio-item img {
+		border-radius: 12px;
+		margin: 12px 0;
+		transition: transform 0.35s ease;
+	}
+
+	.premio-item:hover img {
+		transform: scale(1.04);
+	}
+
+	.premio-item h3 {
+		color: var(--primary);
+		margin-bottom: 8px;
+		font-weight: 700;
+		text-shadow: 0 0 8px var(--primary);
+	}
+
+	.premio-item p {
+		font-weight: 600;
+		color: var(--text);
+	}
+
+	/* Detalles con un poco más de aire */
+	.detalles {
+		margin-top: 12px;
+	}
+
+	.detalles li {
+		padding: 2px 0;
+	}
+
+	/* Botón principal estilo píldora con degradado */
+	button {
+		padding: 12px 28px;
+		border-radius: 999px;
+		font-weight: 700;
+		background: linear-gradient(90deg, var(--primary) 0%, var(--primary-2) 100%);
+		color: #001a0f;
+		box-shadow: 0 0 16px var(--ring);
+		transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+	}
+
+	button:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 0 22px var(--primary-2);
+		filter: saturate(1.05);
+	}
+
+	/* WhatsApp flotante tamaño y sombra acorde */
+	.whatsapp-float {
+		width: 64px;
+		height: 64px;
+		box-shadow: 0 0 20px #25d366, 0 0 30px rgba(37, 211, 102, 0.35);
+	}
+
+	.whatsapp-float img {
+		width: 38px;
+		height: 38px;
+	}
+
+	/* Cajas FAQ / About con brillo y borde consistente */
+	.faq-box,
+	.about-box {
+		border-color: var(--primary);
+		border-radius: 16px;
+		box-shadow: 0 0 24px var(--ring), inset 0 0 0 1px rgba(0, 255, 136, 0.15);
+		background: linear-gradient(180deg, rgba(0, 255, 136, 0.05), rgba(0, 255, 136, 0.03));
+	}
+
+	.faq-box:hover,
+	.about-box:hover {
+		transform: translateY(-4px) scale(1.01);
+	}
+
+	.faq-box h2,
+	.about-box h2 {
+		color: var(--primary);
+		text-shadow: 0 0 10px var(--primary);
+		letter-spacing: 0.5px;
+	}
+
+	.faq-box p,
+	.about-box p {
+		color: var(--text-dim);
+	}
+
+	.faq-box strong {
+		color: var(--primary-2);
+	}
+
+	/* Modales con leve blur y borde consistente */
+	.modal {
+		background: rgba(0, 0, 0, 0.82);
+		backdrop-filter: blur(3px);
+	}
+
+	.modal-content {
+		background: linear-gradient(180deg, #0e120f, #0b0f0c);
+		border-radius: 16px;
+		border: 2px solid var(--primary);
+		box-shadow: 0 0 24px var(--ring);
+	}
+
+	.close {
+		color: var(--primary);
+	}
+
+	/* Responsive grid */
+	@media(max-width:1024px) {
+		.premios-rifa {
+			grid-template-columns: repeat(2, minmax(240px, 1fr));
+		}
+	}
+
+	@media(max-width:768px) {
+		.premios-rifa {
+			grid-template-columns: 1fr;
+		}
+	}

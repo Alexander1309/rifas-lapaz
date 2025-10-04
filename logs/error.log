@@ -1,0 +1,240 @@
+[2025-09-28 23:06:59] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-09-29 12:38:44] ERROR: Uncaught Exception: Unmatched '}' | exception_class: ParseError | trace: #0 C:\xampp\htdocs\libs\app.php(76): require_once()
+#1 C:\xampp\htdocs\libs\app.php(27): App->loadController('auth')
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: UserModel.php | line: 324 | full_path: C:\xampp\htdocs\models\UserModel.php
+[2025-09-29 12:49:02] ERROR: Uncaught Exception: Unmatched '}' | exception_class: ParseError | trace: #0 C:\xampp\htdocs\libs\app.php(76): require_once()
+#1 C:\xampp\htdocs\libs\app.php(27): App->loadController('auth')
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: UserModel.php | line: 324 | full_path: C:\xampp\htdocs\models\UserModel.php
+[2025-09-29 12:59:00] ERROR: Uncaught Exception: Unmatched '}' | exception_class: ParseError | trace: #0 C:\xampp\htdocs\libs\app.php(76): require_once()
+#1 C:\xampp\htdocs\libs\app.php(27): App->loadController('auth')
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: UserModel.php | line: 324 | full_path: C:\xampp\htdocs\models\UserModel.php
+[2025-09-29 13:17:57] ERROR: PHP Warning: Undefined array key "id_branch" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 51 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-09-29 13:17:57] ERROR: PHP Warning: Undefined array key "user_idRol" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 62 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-09-29 17:54:54] ERROR: Error al obtener todos los clientes: Error en la consulta a la base de datos | file: CustomersModel.php | line: 144 | full_path: C:\xampp\htdocs\models\CustomersModel.php
+[2025-09-29 18:03:34] ERROR: Error al obtener todos los clientes: Error en la consulta a la base de datos | file: CustomersModel.php | line: 144 | full_path: C:\xampp\htdocs\models\CustomersModel.php
+[2025-09-30 09:04:07] ERROR: PHP Warning: Undefined array key "id_branch" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 51 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-09-30 09:04:07] ERROR: PHP Warning: Undefined array key "user_idRol" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 62 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-09-30 10:43:21] ERROR: Uncaught Exception: Call to undefined method Database::fetchColumn() | exception_class: Error | trace: #0 C:\xampp\htdocs\controllers\ProductsController.php(50): ProductsModel->getAll(15, 0)
+#1 C:\xampp\htdocs\libs\app.php(97): ProductsController->list()
+#2 C:\xampp\htdocs\libs\app.php(32): App->executeController('products', 'list', Array)
+#3 C:\xampp\htdocs\libs\app.php(16): App->route()
+#4 C:\xampp\htdocs\index.php(14): App->__construct()
+#5 {main} | file: ProductsModel.php | line: 216 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-09-30 10:47:40] ERROR: Uncaught Exception: Call to undefined method Database::prepare() | exception_class: Error | trace: #0 C:\xampp\htdocs\models\ProductsModel.php(216): Database->fetchColumn('SELECT COUNT(p....')
+#1 C:\xampp\htdocs\controllers\ProductsController.php(50): ProductsModel->getAll(15, 0)
+#2 C:\xampp\htdocs\libs\app.php(97): ProductsController->list()
+#3 C:\xampp\htdocs\libs\app.php(32): App->executeController('products', 'list', Array)
+#4 C:\xampp\htdocs\libs\app.php(16): App->route()
+#5 C:\xampp\htdocs\index.php(14): App->__construct()
+#6 {main} | file: db.php | line: 25 | full_path: C:\xampp\htdocs\libs\db.php
+[2025-09-30 10:53:16] ERROR: Uncaught Exception: Call to undefined method Database::prepare() | exception_class: Error | trace: #0 C:\xampp\htdocs\controllers\ProductsController.php(50): ProductsModel->getAll(15, 0)
+#1 C:\xampp\htdocs\libs\app.php(97): ProductsController->list()
+#2 C:\xampp\htdocs\libs\app.php(32): App->executeController('products', 'list', Array)
+#3 C:\xampp\htdocs\libs\app.php(16): App->route()
+#4 C:\xampp\htdocs\index.php(14): App->__construct()
+#5 {main} | file: ProductsModel.php | line: 244 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-01 10:25:49] ERROR: PHP Warning: Undefined array key "id_branch" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 51 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-10-01 10:25:49] ERROR: PHP Warning: Undefined array key "user_idRol" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 62 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-10-01 11:05:36] ERROR: Uncaught Exception: VendorsController::__construct(): Argument #1 ($view) must be of type View, array given, called in C:\xampp\htdocs\libs\app.php on line 90 | exception_class: TypeError | trace: #0 C:\xampp\htdocs\libs\app.php(90): VendorsController->__construct(Array)
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('vendors', 'list', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: VendorsController.php | line: 7 | full_path: C:\xampp\htdocs\controllers\VendorsController.php
+[2025-10-01 11:27:51] ERROR: Uncaught Exception: VendorsController::__construct(): Argument #1 ($view) must be of type View, array given, called in C:\xampp\htdocs\libs\app.php on line 90 | exception_class: TypeError | trace: #0 C:\xampp\htdocs\libs\app.php(90): VendorsController->__construct(Array)
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('vendors', 'list', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: VendorsController.php | line: 7 | full_path: C:\xampp\htdocs\controllers\VendorsController.php
+[2025-10-01 11:35:30] ERROR: PHP Warning: Undefined property: VendorsModel::$table | severity: 2 | severity_name: Warning | file: VendorsModel.php | line: 23 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:35:30] ERROR: Error al obtener proveedores paginados: Error en la consulta a la base de datos | file: VendorsModel.php | line: 42 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:38:40] ERROR: PHP Warning: Undefined property: VendorsModel::$table | severity: 2 | severity_name: Warning | file: VendorsModel.php | line: 16 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:38:40] ERROR: Error al obtener proveedores paginados: Error en la consulta a la base de datos | file: VendorsModel.php | line: 35 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:43:23] ERROR: PHP Warning: Undefined property: VendorsModel::$table | severity: 2 | severity_name: Warning | file: VendorsModel.php | line: 16 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:43:23] ERROR: Error al obtener proveedores paginados: Error en la consulta a la base de datos | file: VendorsModel.php | line: 35 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:44:30] ERROR: PHP Warning: Undefined property: VendorsModel::$table | severity: 2 | severity_name: Warning | file: VendorsModel.php | line: 45 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:44:30] ERROR: Error al agregar proveedor: Error en la consulta a la base de datos | file: VendorsModel.php | line: 64 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:52:14] ERROR: PHP Warning: Undefined property: VendorsModel::$table | severity: 2 | severity_name: Warning | file: VendorsModel.php | line: 41 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:52:14] ERROR: Uncaught Exception: Logger::logError(): Argument #2 ($file) must be of type string, array given, called in C:\xampp\htdocs\models\VendorsModel.php on line 72 | exception_class: TypeError | trace: #0 C:\xampp\htdocs\models\VendorsModel.php(72): Logger->logError('Excepci\xC3\xB3n de D...', Array, 'VendorsModel::a...')
+#1 C:\xampp\htdocs\controllers\VendorsController.php(90): VendorsModel->add(Array)
+#2 C:\xampp\htdocs\libs\app.php(97): VendorsController->add()
+#3 C:\xampp\htdocs\libs\app.php(32): App->executeController('vendors', 'add', Array)
+#4 C:\xampp\htdocs\libs\app.php(16): App->route()
+#5 C:\xampp\htdocs\index.php(14): App->__construct()
+#6 {main} | file: logger.php | line: 32 | full_path: C:\xampp\htdocs\libs\logger.php
+[2025-10-01 11:52:18] ERROR: PHP Warning: Undefined property: VendorsModel::$table | severity: 2 | severity_name: Warning | file: VendorsModel.php | line: 16 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:52:18] ERROR: Error al obtener proveedores paginados: Error en la consulta a la base de datos | file: VendorsModel.php | line: 35 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:52:24] ERROR: PHP Warning: Undefined property: VendorsModel::$table | severity: 2 | severity_name: Warning | file: VendorsModel.php | line: 41 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:52:24] ERROR: Uncaught Exception: Logger::logError(): Argument #2 ($file) must be of type string, array given, called in C:\xampp\htdocs\models\VendorsModel.php on line 72 | exception_class: TypeError | trace: #0 C:\xampp\htdocs\models\VendorsModel.php(72): Logger->logError('Excepci\xC3\xB3n de D...', Array, 'VendorsModel::a...')
+#1 C:\xampp\htdocs\controllers\VendorsController.php(90): VendorsModel->add(Array)
+#2 C:\xampp\htdocs\libs\app.php(97): VendorsController->add()
+#3 C:\xampp\htdocs\libs\app.php(32): App->executeController('vendors', 'add', Array)
+#4 C:\xampp\htdocs\libs\app.php(16): App->route()
+#5 C:\xampp\htdocs\index.php(14): App->__construct()
+#6 {main} | file: logger.php | line: 32 | full_path: C:\xampp\htdocs\libs\logger.php
+[2025-10-01 11:53:46] ERROR: PHP Warning: Undefined property: VendorsModel::$table | severity: 2 | severity_name: Warning | file: VendorsModel.php | line: 41 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 11:53:46] ERROR: Uncaught Exception: Logger::logError(): Argument #2 ($file) must be of type string, array given, called in C:\xampp\htdocs\models\VendorsModel.php on line 72 | exception_class: TypeError | trace: #0 C:\xampp\htdocs\models\VendorsModel.php(72): Logger->logError('Excepci\xC3\xB3n de D...', Array, 'VendorsModel::a...')
+#1 C:\xampp\htdocs\controllers\VendorsController.php(85): VendorsModel->add(Array)
+#2 C:\xampp\htdocs\libs\app.php(97): VendorsController->add()
+#3 C:\xampp\htdocs\libs\app.php(32): App->executeController('vendors', 'add', Array)
+#4 C:\xampp\htdocs\libs\app.php(16): App->route()
+#5 C:\xampp\htdocs\index.php(14): App->__construct()
+#6 {main} | file: logger.php | line: 32 | full_path: C:\xampp\htdocs\libs\logger.php
+[2025-10-01 12:01:29] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:01:32] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:01:40] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:03:32] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:03:39] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:03:54] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:04:22] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:06:42] ERROR: Error al obtener proveedores paginados: Error en la consulta a la base de datos | file: VendorsModel.php | line: 84 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 12:07:07] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:12:54] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:14:11] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:14:14] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-01 12:15:22] ERROR: Uncaught Exception: syntax error, unexpected token "if" | exception_class: ParseError | trace: #0 C:\xampp\htdocs\libs\app.php(27): App->loadController('vendors')
+#1 C:\xampp\htdocs\libs\app.php(16): App->route()
+#2 C:\xampp\htdocs\index.php(14): App->__construct()
+#3 {main} | file: VendorsController.php | line: 68 | full_path: C:\xampp\htdocs\controllers\VendorsController.php
+[2025-10-01 12:15:50] ERROR: Error al obtener proveedores paginados: Error en la consulta a la base de datos | file: VendorsModel.php | line: 91 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 12:15:52] ERROR: Error al obtener proveedores paginados: Error en la consulta a la base de datos | file: VendorsModel.php | line: 91 | full_path: C:\xampp\htdocs\models\VendorsModel.php
+[2025-10-01 12:36:25] ERROR: PHP Warning: Undefined array key "isVisible" | severity: 2 | severity_name: Warning | file: edit.php | line: 29 | full_path: C:\xampp\htdocs\views\Units\edit.php
+[2025-10-01 12:36:25] ERROR: PHP Warning: Undefined array key "isVisible" | severity: 2 | severity_name: Warning | file: edit.php | line: 30 | full_path: C:\xampp\htdocs\views\Units\edit.php
+[2025-10-01 12:36:31] ERROR: PHP Warning: Undefined array key "isVisible" | severity: 2 | severity_name: Warning | file: edit.php | line: 29 | full_path: C:\xampp\htdocs\views\Units\edit.php
+[2025-10-01 12:36:31] ERROR: PHP Warning: Undefined array key "isVisible" | severity: 2 | severity_name: Warning | file: edit.php | line: 30 | full_path: C:\xampp\htdocs\views\Units\edit.php
+[2025-10-02 05:12:26] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:12:29] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:15:41] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:16:42] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:17:06] ERROR: PHP Warning: Undefined array key "id_branch" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 51 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-10-02 05:17:06] ERROR: PHP Warning: Undefined array key "user_idRol" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 62 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-10-02 05:25:40] ERROR: Error al actualizar producto completamente: Error en la consulta a la base de datos | file: ProductsModel.php | line: 664 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 05:26:28] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:27:37] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:28:12] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:30:20] ERROR: PHP Warning: Undefined array key "number" | severity: 2 | severity_name: Warning | file: CategoriesModel.php | line: 33 | full_path: C:\xampp\htdocs\models\CategoriesModel.php
+[2025-10-02 05:30:20] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:30:48] ERROR: PHP Warning: Undefined array key "number" | severity: 2 | severity_name: Warning | file: CategoriesModel.php | line: 124 | full_path: C:\xampp\htdocs\models\CategoriesModel.php
+[2025-10-02 05:30:48] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:32:39] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:34:30] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:35:19] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:35:45] ERROR: Uncaught Exception: Too few arguments to function ProductsModel::getAll(), 0 passed in C:\xampp\htdocs\controllers\InventoryController.php on line 57 and at least 2 expected | exception_class: ArgumentCountError | trace: #0 C:\xampp\htdocs\controllers\InventoryController.php(57): ProductsModel->getAll()
+#1 C:\xampp\htdocs\libs\app.php(97): InventoryController->add()
+#2 C:\xampp\htdocs\libs\app.php(32): App->executeController('inventory', 'add', Array)
+#3 C:\xampp\htdocs\libs\app.php(16): App->route()
+#4 C:\xampp\htdocs\index.php(14): App->__construct()
+#5 {main} | file: ProductsModel.php | line: 209 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 05:36:02] ERROR: Uncaught Exception: Too few arguments to function ProductsModel::getAll(), 0 passed in C:\xampp\htdocs\controllers\InventoryController.php on line 57 and at least 2 expected | exception_class: ArgumentCountError | trace: #0 C:\xampp\htdocs\controllers\InventoryController.php(57): ProductsModel->getAll()
+#1 C:\xampp\htdocs\libs\app.php(97): InventoryController->add()
+#2 C:\xampp\htdocs\libs\app.php(32): App->executeController('inventory', 'add', Array)
+#3 C:\xampp\htdocs\libs\app.php(16): App->route()
+#4 C:\xampp\htdocs\index.php(14): App->__construct()
+#5 {main} | file: ProductsModel.php | line: 209 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 05:36:24] ERROR: Uncaught Exception: Too few arguments to function ProductsModel::getAll(), 0 passed in C:\xampp\htdocs\controllers\InventoryController.php on line 57 and at least 2 expected | exception_class: ArgumentCountError | trace: #0 C:\xampp\htdocs\controllers\InventoryController.php(57): ProductsModel->getAll()
+#1 C:\xampp\htdocs\libs\app.php(97): InventoryController->add()
+#2 C:\xampp\htdocs\libs\app.php(32): App->executeController('inventory', 'add', Array)
+#3 C:\xampp\htdocs\libs\app.php(16): App->route()
+#4 C:\xampp\htdocs\index.php(14): App->__construct()
+#5 {main} | file: ProductsModel.php | line: 209 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 05:41:15] ERROR: Uncaught Exception: Call to undefined method CustomersModel::getAll() | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): SalesController->index()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('sales', 'index', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: SalesController.php | line: 27 | full_path: C:\xampp\htdocs\controllers\SalesController.php
+[2025-10-02 05:41:18] ERROR: Uncaught Exception: Call to undefined method CustomersModel::getAll() | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): SalesController->index()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('sales', 'index', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: SalesController.php | line: 27 | full_path: C:\xampp\htdocs\controllers\SalesController.php
+[2025-10-02 05:41:37] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:45:11] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:45:15] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:47:43] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:50:37] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:52:37] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:52:40] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:54:16] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:56:17] ERROR: PHP Warning: Undefined array key "user_id" | severity: 2 | severity_name: Warning | file: CustomersModel.php | line: 42 | full_path: C:\xampp\htdocs\models\CustomersModel.php
+[2025-10-02 05:56:17] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 05:57:04] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:06:38] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:09:51] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:10:17] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:23:47] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:29:52] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:30:00] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:32:09] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:32:14] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:35:04] ERROR: PHP Warning: Undefined array key "idCategory" | severity: 2 | severity_name: Warning | file: ProductsModel.php | line: 50 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 06:35:04] ERROR: PHP Warning: Undefined array key "idUnit" | severity: 2 | severity_name: Warning | file: ProductsModel.php | line: 51 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 06:35:04] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:37:29] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:38:36] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 06:38:43] ERROR: PHP Warning: Undefined array key "isVisible" | severity: 2 | severity_name: Warning | file: edit.php | line: 29 | full_path: C:\xampp\htdocs\views\Units\edit.php
+[2025-10-02 06:38:43] ERROR: PHP Warning: Undefined array key "isVisible" | severity: 2 | severity_name: Warning | file: edit.php | line: 30 | full_path: C:\xampp\htdocs\views\Units\edit.php
+[2025-10-02 06:38:47] ERROR: PHP Warning: Undefined array key "isVisible" | severity: 2 | severity_name: Warning | file: edit.php | line: 29 | full_path: C:\xampp\htdocs\views\Units\edit.php
+[2025-10-02 06:38:47] ERROR: PHP Warning: Undefined array key "isVisible" | severity: 2 | severity_name: Warning | file: edit.php | line: 30 | full_path: C:\xampp\htdocs\views\Units\edit.php
+[2025-10-02 09:41:22] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 09:41:22] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 09:46:11] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 09:46:12] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 09:47:12] ERROR: PHP Warning: Undefined array key "id_branch" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 51 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-10-02 09:47:12] ERROR: PHP Warning: Undefined array key "user_idRol" | severity: 2 | severity_name: Warning | file: AuthController.php | line: 62 | full_path: C:\xampp\htdocs\controllers\AuthController.php
+[2025-10-02 09:47:12] ERROR: Uncaught Exception: Call to undefined method CustomersModel::getAll() | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): SalesController->index()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('sales', 'index', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: SalesController.php | line: 27 | full_path: C:\xampp\htdocs\controllers\SalesController.php
+[2025-10-02 09:52:15] ERROR: PHP Warning: Undefined array key "success" | severity: 2 | severity_name: Warning | file: SalesController.php | line: 28 | full_path: C:\xampp\htdocs\controllers\SalesController.php
+[2025-10-02 09:52:55] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 09:53:19] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 09:53:30] ERROR: PHP Warning: Undefined array key "success" | severity: 2 | severity_name: Warning | file: SalesController.php | line: 28 | full_path: C:\xampp\htdocs\controllers\SalesController.php
+[2025-10-02 09:55:33] ERROR: PHP Warning: Undefined array key "success" | severity: 2 | severity_name: Warning | file: SalesController.php | line: 28 | full_path: C:\xampp\htdocs\controllers\SalesController.php
+[2025-10-02 09:55:44] ERROR: PHP Warning: Undefined array key "success" | severity: 2 | severity_name: Warning | file: SalesController.php | line: 28 | full_path: C:\xampp\htdocs\controllers\SalesController.php
+[2025-10-02 10:18:42] ERROR: Uncaught Exception: Call to undefined function setMessageAndRedirect() | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): ProductsController->delete()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('products', 'delete', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: ProductsController.php | line: 532 | full_path: C:\xampp\htdocs\controllers\ProductsController.php
+[2025-10-02 10:22:20] ERROR: Uncaught Exception: Call to undefined function setMessageAndRedirect() | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): ProductsController->delete()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('products', 'delete', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: ProductsController.php | line: 532 | full_path: C:\xampp\htdocs\controllers\ProductsController.php
+[2025-10-02 10:22:29] ERROR: Uncaught Exception: Call to undefined function setMessageAndRedirect() | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): ProductsController->delete()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('products', 'delete', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: ProductsController.php | line: 532 | full_path: C:\xampp\htdocs\controllers\ProductsController.php
+[2025-10-02 10:27:01] ERROR: PHP Warning: Undefined array key "idCategory" | severity: 2 | severity_name: Warning | file: ProductsModel.php | line: 50 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 10:27:01] ERROR: PHP Warning: Undefined array key "idUnit" | severity: 2 | severity_name: Warning | file: ProductsModel.php | line: 51 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 10:27:01] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 11:04:32] ERROR: PHP Warning: Undefined array key "idCategory" | severity: 2 | severity_name: Warning | file: ProductsModel.php | line: 50 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 11:04:32] ERROR: PHP Warning: Undefined array key "idUnit" | severity: 2 | severity_name: Warning | file: ProductsModel.php | line: 51 | full_path: C:\xampp\htdocs\models\ProductsModel.php
+[2025-10-02 11:04:32] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-02 11:17:36] ERROR: PHP Warning: Undefined property: BrandsController::$unitsModel | severity: 2 | severity_name: Warning | file: BrandsController.php | line: 140 | full_path: C:\xampp\htdocs\controllers\BrandsController.php
+[2025-10-02 11:17:36] ERROR: Uncaught Exception: Call to a member function delete() on null | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): BrandsController->delete()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('brands', 'delete', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: BrandsController.php | line: 140 | full_path: C:\xampp\htdocs\controllers\BrandsController.php
+[2025-10-02 11:17:43] ERROR: PHP Warning: Undefined property: BrandsController::$unitsModel | severity: 2 | severity_name: Warning | file: BrandsController.php | line: 140 | full_path: C:\xampp\htdocs\controllers\BrandsController.php
+[2025-10-02 11:17:43] ERROR: Uncaught Exception: Call to a member function delete() on null | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): BrandsController->delete()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('brands', 'delete', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: BrandsController.php | line: 140 | full_path: C:\xampp\htdocs\controllers\BrandsController.php
+[2025-10-02 11:18:48] ERROR: PHP Warning: Undefined property: BrandsController::$unitsModel | severity: 2 | severity_name: Warning | file: BrandsController.php | line: 140 | full_path: C:\xampp\htdocs\controllers\BrandsController.php
+[2025-10-02 11:18:48] ERROR: Uncaught Exception: Call to a member function delete() on null | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(97): BrandsController->delete()
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('brands', 'delete', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: BrandsController.php | line: 140 | full_path: C:\xampp\htdocs\controllers\BrandsController.php
+[2025-10-02 13:08:19] ERROR: PHP Warning: Undefined array key "number" | severity: 2 | severity_name: Warning | file: CategoriesModel.php | line: 33 | full_path: C:\xampp\htdocs\models\CategoriesModel.php
+[2025-10-02 13:08:19] ERROR: Manual 500 Error: Error al ejecutar el controlador: Error en la consulta a la base de datos | file: index.php | line: 0 | full_path: /index.php
