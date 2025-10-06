@@ -14,7 +14,6 @@ class RifaController extends Controller
 	{
 		$this->view->render('Rifa/index', [
 			'pageTitle' => 'Rifas La Paz - Participa',
-			'useSidebar' => false
-		], ['rifa.css', 'rifa.js']);
+		]);
 	}
 }

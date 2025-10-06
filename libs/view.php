@@ -62,20 +62,15 @@ class View
 			return;
 		}
 
-		// Construir ruta base de assets usando la URL base de la app
 		$baseUrl = rtrim($this->getBaseUrl(), '/');
 
-		// Por defecto, usar BASE_URL/assets/ para evitar rutas absolutas incorrectas como "/assets/"
 		$assetsPath = $baseUrl . '/assets/';
 
-		// Si existe ASSETS_PATH, normalizarlo para soportar valores absolutos o relativos
 		if (defined('ASSETS_PATH') && ASSETS_PATH) {
 			$configured = ASSETS_PATH;
 			if (preg_match('#^https?://#i', $configured)) {
-				// URL absoluta a CDN u origen externo
 				$assetsPath = rtrim($configured, '/') . '/';
 			} else {
-				// Ruta relativa (o comenzando por "/"): anteponer baseUrl
 				$configured = ltrim($configured, '/');
 				$assetsPath = $baseUrl . '/' . ($configured !== '' ? rtrim($configured, '/') . '/' : '');
 			}
@@ -243,6 +238,9 @@ class View
 		$this->footerContent .= 'window.addEventListener("error", function(e) {';
 		$this->footerContent .= 'console.error("Error detectado:", e.error);';
 		$this->footerContent .= '});';
+
+		// Exponer baseUrl para navegación en subcarpetas
+		$this->footerContent .= 'window.baseUrl = ' . json_encode($baseUrl) . ';';
 
 		if ($csrfToken) {
 			$this->footerContent .= 'window.csrfToken = "' . $csrfToken . '";';
