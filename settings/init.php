@@ -4,7 +4,7 @@ define('DEFAULT_CONTROLLER', 'rifa');
 define('DEBUG_MODE', true);
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', '');
+define('DB_NAME', 'rifaslapaz');
 define('DB_USER', 'root');
 define('DB_PASSWORD', "");
 define('DB_CHARSET', 'utf8mb4');
