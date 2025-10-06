@@ -1,1 +1,2 @@
 [2025-10-06 08:59:27] INFO: Intento de autenticación fallido para: sfasf | process: UserModel::getByUsernameAndPassword
+[2025-10-06 12:13:45] INFO: Intento de autenticación fallido para: wfasrsafas | process: UserModel::getByUsernameAndPassword
