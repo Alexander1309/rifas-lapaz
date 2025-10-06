@@ -14,6 +14,7 @@ class RifaController extends Controller
 	{
 		$this->view->render('Rifa/index', [
 			'pageTitle' => 'Rifas La Paz - Participa',
+			"title" => "RIFAS LA PAZ"
 		]);
 	}
 }
