@@ -33,7 +33,7 @@ class View
 				$headerPath = $this->getViewPath('templates/header');
 			}
 		} else {
-			$headerPath = $this->getViewPath('templates/header-login');
+			$headerPath = $this->getViewPath('templates/header');
 		}
 
 		$viewPath = $this->getViewPath($view);
