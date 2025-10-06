@@ -25,6 +25,7 @@ class View
 		$this->processFooter();
 
 		$useSidebar = $params['useSidebar'] ?? false;
+		$useLogin = $params['useLogin'] ?? false;
 
 		if (isset($_SESSION['username'])) {
 			if ($useSidebar) {
@@ -33,7 +34,11 @@ class View
 				$headerPath = $this->getViewPath('templates/header');
 			}
 		} else {
-			$headerPath = $this->getViewPath('templates/header');
+			if ($useLogin) {
+				$headerPath = $this->getViewPath('templates/header-login');
+			} else {
+				$headerPath = $this->getViewPath('templates/header');
+			}
 		}
 
 		$viewPath = $this->getViewPath($view);
