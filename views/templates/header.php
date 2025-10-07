@@ -5,7 +5,7 @@
 <body class="no-sidebar <?php echo $this->getBodyClass(); ?>" <?php echo $this->getBodyAttributes(); ?>>
 	<?php echo $this->getMessages(); ?>
 
-	<nav class="navbar navbar-expand-lg bg-dark">
+	<nav class="navbar navbar-expand-lg bg-dark fixed-top" style="box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);">
 		<div class="container">
 			<a class="navbar-brand text-white" href="#">
 				<img src="/assets/images/logo.png" alt="Rifas La Paz" width="110" height="55">
@@ -15,27 +15,14 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ms-auto align-items-center">
-					<li class="nav-item">
-						<a class="nav-link text-white" href="#">
-							<i class="bi bi-info-circle-fill"></i> Sobre Nosotros
-						</a>
-					</li>
 					<li class="nav-item ms-3">
-						<a class="nav-link text-white" href="#" title="Facebook">
-							<i class="bi bi-facebook fs-5"></i>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-white" href="#" title="Instagram">
-							<i class="bi bi-instagram fs-5"></i>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-white" href="#" title="WhatsApp">
-							<i class="bi bi-whatsapp fs-5"></i>
+						<a class="btn btn-success btn-lg px-4 fw-bold btn-compra" href="/rifa/seleccionar" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border: none; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4); animation: pulse 2s infinite;">
+							<i class="bi bi-cart-fill me-2"></i>¡COMPRA YA!
 						</a>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</nav>
+
+	<div style="margin-top: 8%;">

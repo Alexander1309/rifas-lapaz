@@ -1,0 +1,546 @@
+/* ===========================
+   CONTENEDOR PRINCIPAL
+   =========================== */
+.boletos-container {
+	display: flex;
+	gap: 2rem;
+	padding: 2rem;
+	min-height: 100vh;
+	background: #fafafa;
+}
+
+/* ===========================
+   GRID DE BOLETOS
+   =========================== */
+.boletos-grid {
+	flex: 1;
+	padding: 2rem;
+	background: transparent;
+	border-radius: 15px;
+	box-shadow: none;
+	overflow-y: auto;
+	max-height: calc(100vh - 4rem);
+}
+
+.grid-boletos {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+	gap: 15px;
+	padding: 1rem;
+}
+
+/* ===========================
+   DISEÑO DEL BOLETO (TICKET)
+   =========================== */
+.boleto {
+	position: relative;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	height: 110px;
+	background: transparent;
+	border: 2px solid #28a745;
+	border-radius: 8px;
+	overflow: visible;
+	box-shadow: none;
+	user-select: none;
+}
+
+.boleto:hover {
+	transform: translateY(-2px);
+	border-color: #1e7e34;
+	border-width: 2px;
+	z-index: 10;
+}
+
+/* Parte Superior del Boleto */
+.boleto-superior {
+	background: transparent;
+	height: 60%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	padding: 0.5rem;
+	border-bottom: none;
+}
+
+.boleto-numero {
+	color: #28a745;
+	font-size: 1.1rem;
+	font-weight: 700;
+	text-shadow: none;
+	letter-spacing: 0.5px;
+}
+
+/* Línea de Perforación */
+.boleto-perforacion {
+	height: 1px;
+	background: repeating-linear-gradient(
+		to right,
+		#28a745 0px,
+		#28a745 3px,
+		transparent 3px,
+		transparent 8px
+	);
+	position: relative;
+	z-index: 2;
+	margin: 0 10%;
+}
+
+.boleto-perforacion::before,
+.boleto-perforacion::after {
+	content: '';
+	position: absolute;
+	width: 8px;
+	height: 8px;
+	background: transparent;
+	border: 2px solid #28a745;
+	border-radius: 50%;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.boleto-perforacion::before {
+	left: -12px;
+}
+
+.boleto-perforacion::after {
+	right: -12px;
+}
+
+/* Parte Inferior del Boleto */
+.boleto-inferior {
+	background: transparent;
+	height: 40%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.3rem;
+}
+
+.boleto-precio {
+	color: #28a745;
+	font-size: 0.65rem;
+	font-weight: 600;
+	text-shadow: none;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+/* Estados del Boleto */
+.boleto.seleccionado {
+	background: transparent;
+	border-color: #28a745;
+	border-width: 3px;
+	transform: scale(1.05);
+	animation: pulse 0.5s ease;
+}
+
+.boleto.seleccionado::before,
+.boleto.seleccionado::after {
+	border-width: 3px;
+	border-color: #28a745;
+}
+
+.boleto.seleccionado .boleto-superior {
+	background: transparent;
+}
+
+.boleto.seleccionado .boleto-numero {
+	color: #28a745;
+	font-weight: 900;
+	font-size: 1.5rem;
+}
+
+.boleto.seleccionado .boleto-inferior {
+	background: transparent;
+}
+
+.boleto.seleccionado .boleto-precio {
+	color: #28a745;
+	font-weight: 700;
+}
+
+.boleto.seleccionado .boleto-perforacion {
+	background: repeating-linear-gradient(
+		to bottom,
+		#28a745 0px,
+		#28a745 4px,
+		transparent 4px,
+		transparent 8px
+	);
+}
+
+/* Checkmark para boleto seleccionado */
+.boleto.seleccionado > .boleto-superior::after {
+	content: '✓';
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background: transparent;
+	color: #28a745;
+	width: 18px;
+	height: 18px;
+	border: 2px solid #28a745;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 0.8rem;
+	z-index: 3;
+}
+
+.boleto.vendido {
+	background: transparent;
+	border-color: #ccc;
+	cursor: not-allowed;
+	opacity: 0.5;
+}
+
+.boleto.vendido::before,
+.boleto.vendido::after {
+	border-color: #ccc;
+}
+
+.boleto.vendido .boleto-superior {
+	background: transparent;
+}
+
+.boleto.vendido .boleto-numero {
+	color: #999;
+}
+
+.boleto.vendido .boleto-perforacion {
+	background: repeating-linear-gradient(
+		to bottom,
+		#ccc 0px,
+		#ccc 3px,
+		transparent 3px,
+		transparent 8px
+	);
+}
+
+.boleto.vendido .boleto-perforacion::before,
+.boleto.vendido .boleto-perforacion::after {
+	border-color: #ccc;
+}
+
+.boleto.vendido .boleto-inferior {
+	background: transparent;
+}
+
+.boleto.vendido .boleto-precio {
+	color: #999;
+}
+
+.boleto.vendido:hover {
+	transform: none;
+	border-color: #ccc;
+}
+
+.boleto.vendido > .boleto-superior::after {
+	content: '✕';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: #ccc;
+	font-size: 2rem;
+	font-weight: bold;
+	z-index: 3;
+	border: none;
+	width: auto;
+	height: auto;
+}
+
+/* ===========================
+   PANEL DE CONFIGURACIÓN FIXED
+   =========================== */
+.panel-configuracion {
+	position: sticky;
+	top: 2rem;
+	right: 2rem;
+	width: 350px;
+	height: fit-content;
+	max-height: calc(100vh - 4rem);
+	background: white;
+	border-radius: 15px;
+	border: 2px solid #e0e0e0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	overflow: hidden;
+	z-index: 100;
+}
+
+.panel-header {
+	background: transparent;
+	color: #28a745;
+	padding: 1.5rem;
+	text-align: center;
+	border-bottom: 2px solid #28a745;
+}
+
+.panel-header h3 {
+	margin: 0;
+	font-size: 1.5rem;
+	text-shadow: none;
+}
+
+.panel-body {
+	padding: 1.5rem;
+	overflow-y: auto;
+	max-height: calc(100vh - 12rem);
+}
+
+.config-section {
+	margin-bottom: 1.5rem;
+}
+
+.config-section label {
+	color: #333;
+	margin-bottom: 0.5rem;
+	font-size: 0.95rem;
+}
+
+.config-section .form-control {
+	border: 2px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 0.75rem;
+	font-size: 1rem;
+	transition: all 0.3s ease;
+}
+
+.config-section .form-control:focus {
+	border-color: #28a745;
+	box-shadow: none;
+	outline: 2px solid #28a745;
+}
+
+/* ===========================
+   BOTONES
+   =========================== */
+.btn-aleatorio {
+	background: transparent;
+	color: #28a745;
+	border: 2px solid #28a745;
+	padding: 0.85rem 1.5rem;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 1rem;
+	transition: all 0.3s ease;
+	box-shadow: none;
+}
+
+.btn-aleatorio:hover {
+	background: #28a745;
+	color: white;
+	transform: none;
+}
+
+.btn-pagar {
+	background: #28a745;
+	color: white;
+	border: 2px solid #28a745;
+	padding: 1rem 1.5rem;
+	border-radius: 8px;
+	font-weight: 700;
+	font-size: 1.1rem;
+	transition: all 0.3s ease;
+	box-shadow: none;
+}
+
+.btn-pagar:hover:not(:disabled) {
+	background: #1e7e34;
+	border-color: #1e7e34;
+	transform: none;
+}
+
+.btn-pagar:disabled {
+	background: transparent;
+	border-color: #ccc;
+	color: #ccc;
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.btn-limpiar {
+	background: transparent;
+	color: #000;
+	border: 2px solid #000;
+	padding: 0.75rem 1.5rem;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 0.95rem;
+	transition: all 0.3s ease;
+	box-shadow: none;
+}
+
+.btn-limpiar:hover {
+	background: #000;
+	color: white;
+	transform: none;
+}
+
+/* ===========================
+   RESUMEN
+   =========================== */
+.resumen {
+	background: transparent;
+	padding: 1rem;
+	border-radius: 8px;
+	border: 1px solid #e9ecef;
+}
+
+.resumen h5 {
+	color: #333;
+	margin-bottom: 1rem;
+	border-bottom: 1px solid #28a745;
+	padding-bottom: 0.5rem;
+}
+
+.boletos-seleccionados {
+	max-height: 150px;
+	overflow-y: auto;
+	margin-bottom: 1rem;
+}
+
+.boleto-chip {
+	display: inline-block;
+	background: transparent;
+	color: #28a745;
+	border: 1px solid #28a745;
+	padding: 0.4rem 0.8rem;
+	margin: 0.25rem;
+	border-radius: 15px;
+	font-size: 0.85rem;
+	font-weight: 600;
+	box-shadow: none;
+}
+
+.resumen-total {
+	border-top: 1px solid #dee2e6;
+	padding-top: 1rem;
+}
+
+.resumen-total .badge {
+	font-size: 1rem;
+	padding: 0.5rem 0.75rem;
+}
+
+/* ===========================
+   SCROLLBAR PERSONALIZADO
+   =========================== */
+.boletos-grid::-webkit-scrollbar,
+.panel-body::-webkit-scrollbar,
+.boletos-seleccionados::-webkit-scrollbar {
+	width: 8px;
+}
+
+.boletos-grid::-webkit-scrollbar-track,
+.panel-body::-webkit-scrollbar-track,
+.boletos-seleccionados::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 10px;
+}
+
+.boletos-grid::-webkit-scrollbar-thumb,
+.panel-body::-webkit-scrollbar-thumb,
+.boletos-seleccionados::-webkit-scrollbar-thumb {
+	background: #28a745;
+	border-radius: 10px;
+}
+
+.boletos-grid::-webkit-scrollbar-thumb:hover,
+.panel-body::-webkit-scrollbar-thumb:hover,
+.boletos-seleccionados::-webkit-scrollbar-thumb:hover {
+	background: #1e7e34;
+}
+
+/* ===========================
+   ANIMACIONES
+   =========================== */
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+	100% {
+		transform: scale(1.05);
+	}
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 1200px) {
+	.boletos-container {
+		flex-direction: column;
+	}
+
+	.panel-configuracion {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		top: auto;
+		width: 100%;
+		max-height: 50vh;
+		border-radius: 20px 20px 0 0;
+		z-index: 1000;
+	}
+
+	.grid-boletos {
+		grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+		gap: 10px;
+	}
+
+	.boleto {
+		height: 100px;
+	}
+}
+
+@media (max-width: 768px) {
+	.grid-boletos {
+		grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+		gap: 8px;
+	}
+
+	.boleto {
+		height: 90px;
+	}
+
+	.boleto-numero {
+		font-size: 1rem;
+	}
+
+	.boleto-precio {
+		font-size: 0.8rem;
+	}
+
+	.panel-configuracion {
+		max-height: 60vh;
+	}
+}
+
+/* ===========================
+   LOADING INDICATOR
+   =========================== */
+#loading-indicator {
+	grid-column: 1 / -1;
+	padding: 2rem;
+	text-align: center;
+}
+
+#loading-indicator .spinner-border {
+	width: 3rem;
+	height: 3rem;
+	border-width: 0.3em;
+}
+
+#loading-indicator p {
+	margin-top: 1rem;
+	color: #6c757d;
+	font-size: 0.95rem;
+}

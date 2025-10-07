@@ -18,6 +18,10 @@ if (!defined('BASE_URL')) {
 	define('BASE_URL', $protocol . '://' . $host . $baseDir . '/');
 }
 
+if (!defined('URL')) {
+	define('URL', BASE_URL);
+}
+
 if (!defined('ROOT_PATH')) {
 	define('ROOT_PATH', dirname(__DIR__));
 }

@@ -1,216 +1,225 @@
- <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>RIFAS LA PAZ</title>
-    </head>
+<div class="container">
+	<div class="row justify-content-center mt-3">
+		<div class="col-md-3">
+			<div class="card">
+				<img src="https://mac-center.com/cdn/shop/files/IMG-18067880_m_jpeg_1.jpg?v=1757469572&width=823" alt="Iphone 17 256 gb" class="card-img-top">
+				<div class="card-body">
+					<hr>
+					<h3 class="card-title">Primer Lugar</h3>
+					<p class="card-text">Iphone 17 256 gb</p>
+					<p class="card-text">Pantalla OLED 256gb Almacenamiento Camara 48 MP Bateria de larga duracion</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card">
+				<img src="https://http2.mlstatic.com/D_Q_NP_708759-MLA92042691589_092025-O.webp" alt="PlayStation 5 PRO" class="card-img-top">
+				<div class="card-body">
+					<hr>
+					<h3 class="card-title">Segundo Lugar</h3>
+					<p class="card-text">PlayStation 5 PRO</p>
+					<p class="card-text">8K compatible SSD ultrarrápido Mando DualSense Pro Retrocompatibilidad PS4</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card">
+				<img src="https://i5.walmartimages.com/asr/148eb753-90ff-40c4-930f-bb0f69fdbb66.0dea8a120732d5dd113f0e345d5662e9.jpeg" alt="Laptop Gamer RTX 4090" class="card-img-top">
+				<div class="card-body">
+					<hr>
+					<h3 class="card-title">Tercer Lugar</h3>
+					<p class="card-text">Laptop Gamer RTX 4090</p>
+					<p class="card-text">
+						RTX 4090 16GB 32 GB RAM DDR5 SSD 2TB NVMe Pantalla 240Hz.
+						Procesador Intel Core i9 14th Generación
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
 
- <main>
-            <!-- PREMIOS -->
-            <section class="rifa">
-                <div class="premios-rifa" id="premiosRifa">
-                        <div class="premio-item" style="width: 18rem;">
-                        <img src="https://mac-center.com/cdn/shop/files/IMG-18067880_m_jpeg_1.jpg?v=1757469572&width=823" class="card-img-top" alt="iphone 17 256 gb">
-                        <div class="iphone 17 256gb ">
-                        <p class="card-text">Pantalla OLED 256gb Almacenamiento Camara 48 MP Bateria de larga duracion</p>
-                        </div>
-                        </ul>
-                    </div>
-                    <div class="premio-item" data-premio="PlayStation 5 PRO">
-                        <h3>🥈 Segundo lugar</h3>
-                        <img src="https://http2.mlstatic.com/D_Q_NP_708759-MLA92042691589_092025-O.webp" alt="PlayStation 5 PRO">
-                        <p>PlayStation 5 PRO</p>
-                        <ul class="detalles">
-                            <li>8K compatible</li>
-                            <li>SSD ultrarrápido</li>
-                            <li>Mando DualSense Pro</li>
-                            <li>Retrocompatibilidad PS4</li>
-                        </ul>
-                    </div>
-                    <div class="premio-item" data-premio="Laptop Gamer RTX 4090">
-                        <h3>🥉 Tercer lugar</h3>
-                        <img src="https://i5.walmartimages.com/asr/148eb753-90ff-40c4-930f-bb0f69fdbb66.0dea8a120732d5dd113f0e345d5662e9.jpeg?odnHeight=612&odnWidth=612&odnBg=FFFFFF" alt="Laptop Gamer RTX 4090">
-                        <p>Laptop Gamer RTX 4090</p>
-                        <ul class="detalles">
-                            <li>RTX 4090 16GB</li>
-                            <li>32 GB RAM DDR5</li>
-                            <li>SSD 2TB NVMe</li>
-                            <li>Pantalla 240Hz</li>
-                        </ul>
-                    </div>
-                </div>
-                <button id="btnComprarBoleto">🎟 Comprar Boleto</button>
-            </section>
-            <!-- FAQ -->
-            <section class="info-box">
-                <h2>PREGUNTAS FRECUENTES</h2>
-                <p>
-                    <strong>¿CÓMO SE ELIGE A LOS GANADORES?</strong>
-                    <br>
-                    Con la <strong>Lotería Nacional</strong>
-                    . El número ganador se determina con las últimas cifras del primer premio.
-                </p>
-                <p>
-                    <strong>¿Y SI EL NÚMERO GANADOR NO FUE VENDIDO?</strong>
-                    <br>Se repite el sorteo en una nueva fecha cercana.
-                </p>
-                <p>
-                    <strong>¿DÓNDE SE PUBLICAN LOS GANADORES?</strong>
-                    <br>
-                    En Facebook <strong>Rifas La Paz</strong>
-                    y transmisiones en vivo.
-                </p>
-                <p>
-                    <strong>¿PUEDO COMPRAR VARIOS BOLETOS?</strong>
-                    <br>
-                    Sí, claro ya que por persona <strong>NO HAY</strong>
-                    limite de boletos.
-                </p>
-                <p>
-                    <strong>¿CÓMO RECIBO MI PREMIO?</strong>
-                    <br>Nos pondremos en <strong>CONTACTO CONTIGO</strong>por teléfono o WhatsApp para coordinar la entrega.
-                </p>
-            </section>
-            <!-- ABOUT US -->
-            <section class="info-box">
-                <h2>ACERCA DE NOSOTROS</h2>
-                <p>
-                    Somos <strong>RIFAS LA PAZ</strong>
-                    , organizamos rifas transparentes y divertidas. Nuestro objetivo: dar la oportunidad de ganar premios tecnológicos de última generación.
-                </p>
-                <div class="social-buttons">
-                    <a href="https://www.facebook.com/" target="_blank" class="social-btn fb">Facebook</a>
-                    <a href="https://www.instagram.com/" target="_blank" class="social-btn ig">Instagram</a>
-                    <a href="https://wa.me/529876543210" target="_blank" class="social-btn wa">WhatsApp</a>
-                </div>
-            </section>
-        </main>
-        <!-- Modal Boletos -->
-        <div class="modal" id="ticketModal">
-            <div class="modal-content ticket-box">
-                <span class="close">&times;</span>
-                <h2>Selecciona tus boletos</h2>
-                <p>Máximo 1000 boletos por persona</p>
-                <div class="boletos-container" id="boletosContainer"></div>
-                <button id="continuarPagoBtn">✅ Continuar al Pago</button>
-            </div>
-        </div>
-        <!-- Modal Pago -->
-        <div class="modal" id="pagoModal">
-            <div class="modal-content pago-box">
-                <span class="close">&times;</span>
-                <h2>💳 Completa tu pago</h2>
-                <form id="paymentForm">
-                    <p>
-                        <strong>🎁 Premio:</strong>
-                        <span id="premio"></span>
-                    </p>
-                    <p>
-                        <strong>🎟 Boletos:</strong>
-                        <span id="boleto"></span>
-                    </p>
-                    <input type="text" id="nombre" name="nombre" placeholder="👤 Nombre completo" required>
-                    <input type="email" id="correo" name="correo" placeholder="📧 Correo electrónico" required>
-                    <input type="tel" id="telefono" name="telefono" placeholder="📱 Teléfono" required>
-                    <button type="submit">✨ Pagar Ahora</button>
-                </form>
-            </div>
-        </div>
-        <!-- WhatsApp flotante -->
-        <a href="https://wa.me/529876543210" target="_blank" class="whatsapp-float" aria-label="Contactar por WhatsApp">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-        </a>
-        <script>
-            // ------------------- FONDO INTERACTIVO -------------------
-            document.addEventListener('mousemove', e => {
-                const x = (e.clientX / window.innerWidth) * 100;
-                const y = (e.clientY / window.innerHeight) * 100;
-                document.body.style.background = `radial-gradient(circle at ${x}% ${y}%, #003300 0%, #000 100%)`;
-            }
-            );
 
-            // ------------------- MODALES Y BOLETOS -------------------
-            document.addEventListener("DOMContentLoaded", () => {
-                const btnComprar = document.getElementById("btnComprarBoleto");
-                const ticketModal = document.getElementById("ticketModal");
-                const pagoModal = document.getElementById("pagoModal");
-                const boletosContainer = document.getElementById("boletosContainer");
-                const continuarPagoBtn = document.getElementById("continuarPagoBtn");
-                const premioSpan = document.getElementById("premio");
-                const boletoSpan = document.getElementById("boleto");
-                let boletosSeleccionados = [];
-                let premioSeleccionado = "";
+	<div class="card my-5">
+		<div class="card-header bg-success-subtle">
+			<h2 class="text-center fw-bold fs-3">PREGUNTAS FRECUENTES</h2>
+		</div>
+		<div class="card-body">
+			<div class="accordion accordion-flush" id="accordionFlushExample">
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+							¿CÓMO SE ELIGE A LOS GANADORES?
+						</button>
+					</h2>
+					<div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">Los ganadores se eligen mediante un sorteo aleatorio que se realiza en vivo a través de nuestras redes sociales. Utilizamos herramientas transparentes y verificables para garantizar la equidad del proceso. Cada boleto tiene las mismas probabilidades de ganar.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+							¿CUÁLES SON LOS REQUISITOS PARA PARTICIPAR?
+						</button>
+					</h2>
+					<div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">Para participar, debes ser mayor de edad y residir en Frontera, Coahuila o sus alrededores. Es necesario adquirir al menos un boleto de participación y proporcionar tus datos de contacto correctos para poder notificarte en caso de ser ganador.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+							¿DÓNDE SE PUBLICAN LOS GANADORES?
+						</button>
+					</h2>
+					<div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">Los ganadores se publican en nuestras redes sociales oficiales (Facebook, Instagram y WhatsApp) inmediatamente después del sorteo. Además, nos comunicamos directamente con los ganadores a través de los datos de contacto proporcionados al momento de la compra.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+							¿CUÁNDO SE REALIZA EL SORTEO?
+						</button>
+					</h2>
+					<div id="flush-collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">La fecha y hora del sorteo se anuncian con anticipación en nuestras redes sociales. El sorteo se realiza en vivo para que todos los participantes puedan presenciarlo en tiempo real y verificar la transparencia del proceso.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+							¿CÓMO RECIBO MI PREMIO SI GANO?
+						</button>
+					</h2>
+					<div id="flush-collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">Una vez verificada tu identidad como ganador, coordinamos la entrega del premio. Puedes recogerlo personalmente en nuestras oficinas en Frontera, Coahuila o, si prefieres, podemos enviarlo a tu domicilio de forma segura. Los premios son 100% nuevos y originales.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+							¿LOS PREMIOS SON ORIGINALES?
+						</button>
+					</h2>
+					<div id="flush-collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">¡Absolutamente! Todos nuestros premios son 100% originales, nuevos y con garantía oficial. Cada producto incluye su caja sellada, accesorios originales y certificado de garantía del fabricante. No trabajamos con productos usados ni réplicas.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-collapseSeven">
+							¿CUÁNTO TIEMPO TENGO PARA RECLAMAR MI PREMIO?
+						</button>
+					</h2>
+					<div id="flush-collapseSeven" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">Los ganadores tienen 30 días corridos desde la fecha del sorteo para reclamar su premio. Después de este período, si no recibimos respuesta, el premio quedará disponible para un nuevo sorteo entre los demás participantes.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEight" aria-expanded="false" aria-controls="flush-collapseEight">
+							¿PUEDO COMPRAR VARIOS BOLETOS?
+						</button>
+					</h2>
+					<div id="flush-collapseEight" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">¡Sí! Puedes comprar todos los boletos que desees. Mientras más boletos compres, más oportunidades tendrás de ganar. Ofrecemos descuentos especiales para compras de múltiples boletos. Contáctanos para conocer nuestras promociones.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseNine" aria-expanded="false" aria-controls="flush-collapseNine">
+							¿QUÉ MÉTODOS DE PAGO ACEPTAN?
+						</button>
+					</h2>
+					<div id="flush-collapseNine" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">Los boletos se pagan mediante transferencia bancaria. Al momento de comprar tus boletos, el sistema te pedirá que subas tu comprobante de pago. Tu(s) boleto(s) serán aprobados y recibirás tu número único de participación en un plazo máximo de 1 día hábil después de verificar tu pago.</div>
+					</div>
+				</div>
+				<div class="accordion-item">
+					<h2 class="accordion-header">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTen" aria-expanded="false" aria-controls="flush-collapseTen">
+							¿RIFAS LA PAZ ES UNA EMPRESA LEGALMENTE CONSTITUIDA?
+						</button>
+					</h2>
+					<div id="flush-collapseTen" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+						<div class="accordion-body">Sí, somos una empresa legalmente constituida en México. Operamos con total transparencia y cumplimos con todas las regulaciones vigentes. Puedes verificar nuestros datos en nuestras redes sociales oficiales y solicitar información adicional cuando lo desees.</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-                // Selección de premio
-                document.querySelectorAll(".premio-item").forEach(item => {
-                    item.addEventListener("click", () => {
-                        premioSeleccionado = item.dataset.premio;
-                        alert(`Has seleccionado: ${premioSeleccionado}`);
-                    }
-                    );
-                }
-                );
+<footer class="bg-dark text-white mt-5">
+	<div class="container-fluid py-5 px-4 px-md-5">
+		<div class="row">
+			<div class="col-lg-4 col-md-6">
+				<img src="assets/images/logo.png" alt="RIFAS LA PAZ Logo" class="img-fluid mb-3" style="max-width: 150px;">
+				<h5 class="fw-bold">RIFAS LA PAZ</h5>
+				<p class="text-light">
+					Organizamos rifas transparentes y divertidas. Nuestro objetivo es dar la oportunidad de ganar premios tecnológicos de última generación.
+				</p>
+			</div>
 
-                // Generar boletos 00000 - 10000
-                for (let i = 0; i <= 10000; i++) {
-                    const num = i.toString().padStart(5, "0");
-                    const div = document.createElement("div");
-                    div.classList.add("boleto");
-                    div.textContent = num;
-                    div.addEventListener("click", () => {
-                        if (boletosSeleccionados.includes(num)) {
-                            boletosSeleccionados = boletosSeleccionados.filter(b => b !== num);
-                            div.classList.remove("selected");
-                        } else {
-                            if (boletosSeleccionados.length < 1000) {
-                                boletosSeleccionados.push(num);
-                                div.classList.add("selected");
-                            } else {
-                                alert("⚠ Máximo 1000 boletos por persona");
-                            }
-                        }
-                    }
-                    );
-                    boletosContainer.appendChild(div);
-                }
+			<div class="col-lg-4 col-md-6 mb-4">
+				<h5 class="fw-bold mb-3">Enlaces Rápidos</h5>
+				<ul class="list-unstyled">
+					<li class="mb-2">
+						<a href="#" class="text-light text-decoration-none">
+							<i class="bi bi-chevron-right"></i> Inicio
+						</a>
+					</li>
+					<li class="mb-2">
+						<a href="#" class="text-light text-decoration-none">
+							<i class="bi bi-chevron-right"></i> Rifas Activas
+						</a>
+					</li>
+					<li class="mb-2">
+						<a href="#" class="text-light text-decoration-none">
+							<i class="bi bi-chevron-right"></i> Términos y Condiciones
+						</a>
+					</li>
+					<li class="mb-2">
+						<a href="#" class="text-light text-decoration-none">
+							<i class="bi bi-chevron-right"></i> Preguntas Frecuentes
+						</a>
+					</li>
+				</ul>
+			</div>
 
-                btnComprar.addEventListener("click", () => abrirModal(ticketModal));
-                continuarPagoBtn.addEventListener("click", () => {
-                    if (boletosSeleccionados.length === 0) {
-                        alert("⚠ Debes seleccionar al menos un boleto.");
-                        return;
-                    }
-                    cerrarModal(ticketModal);
-                    abrirModal(pagoModal);
-                    premioSpan.textContent = premioSeleccionado || "Participación en la rifa";
-                    boletoSpan.textContent = boletosSeleccionados.join(", ");
-                }
-                );
+			<div class="col-lg-4 col-md-12 mb-4">
+				<h5 class="fw-bold mb-3">Síguenos</h5>
+				<p class="text-light">Mantente conectado con nosotros en nuestras redes sociales</p>
+				<div class="d-flex gap-3 mb-3">
+					<a href="https://www.facebook.com/" target="_blank" class="btn btn-outline-light btn-lg rounded-circle" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center;">
+						<i class="bi bi-facebook"></i>
+					</a>
+					<a href="https://www.instagram.com/" target="_blank" class="btn btn-outline-light btn-lg rounded-circle" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center;">
+						<i class="bi bi-instagram"></i>
+					</a>
+					<a href="https://wa.me/529876543210" target="_blank" class="btn btn-outline-light btn-lg rounded-circle" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center;">
+						<i class="bi bi-whatsapp"></i>
+					</a>
+				</div>
+				<div class="mt-3">
+					<p class="mb-1"><i class="bi bi-telephone-fill me-2"></i> +52 987 654 3210</p>
+					<p class="mb-1"><i class="bi bi-envelope-fill me-2"></i> contacto@rifaslapaz.com</p>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                function abrirModal(modal) {
-                    modal.style.display = "flex";
-                    setTimeout( () => modal.classList.add("show"), 10);
-                }
-                function cerrarModal(modal) {
-                    modal.classList.remove("show");
-                    setTimeout( () => {
-                        modal.style.display = "none";
-                    }
-                    , 300);
-                }
-                document.querySelectorAll(".modal .close").forEach(btn => btn.addEventListener("click", e => cerrarModal(e.target.closest(".modal"))));
+	<div class="bg-black py-3">
+		<div class="container-fluid px-4 px-md-5">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<p class="mb-0 text-light">
+						&copy; 2025 <strong>RIFAS LA PAZ</strong>. Todos los derechos reservados.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
 
-                const paymentForm = document.getElementById("paymentForm");
-                paymentForm.addEventListener("submit", e => {
-                    e.preventDefault();
-                    alert("✅ Pago registrado. ¡Gracias por participar!");
-                    boletosSeleccionados = [];
-                    premioSeleccionado = "";
-                    cerrarModal(pagoModal);
-                    paymentForm.reset();
-                }
-                );
-            
-            );
-        </script>
-        </style>
-    </body>
-</html>
+<div class="container-fluid"> <!-- Reapertura del container-fluid del header -->

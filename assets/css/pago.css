@@ -1,0 +1,32 @@
+.boletos-lista {
+		max-height: 200px;
+		overflow-y: auto;
+	}
+
+	.boletos-lista .badge {
+		font-size: 0.95rem;
+	}
+
+	.card {
+		border: none;
+		border-radius: 15px;
+	}
+
+	.card-header {
+		border-radius: 15px 15px 0 0 !important;
+	}
+
+	.form-control:focus,
+	.form-check-input:focus {
+		border-color: #28a745;
+		box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+	}
+
+	.form-check-input:checked {
+		background-color: #28a745;
+		border-color: #28a745;
+	}
+
+	#countdown {
+		font-family: 'Courier New', monospace;
+	}

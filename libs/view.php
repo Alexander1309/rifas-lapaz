@@ -170,7 +170,7 @@ class View
 		$this->headContent .= '<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">';
 		$this->headContent .= '<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">';
 
-		$this->headContent .= '<link rel="stylesheet" href="' . $baseUrl . '/assets/css/styles.css">';
+		$this->headContent .= '<link rel="stylesheet" href="' . $baseUrl . '/assets/css/global.css">';
 		$this->headContent .= '<link rel="stylesheet" href="' . $baseUrl . '/assets/css/sidebar.css">';
 
 		if ($additionalCSS) {
