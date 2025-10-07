@@ -213,6 +213,11 @@ class Database
 		return $this->getConnection()->rollBack();
 	}
 
+	public function inTransaction(): bool
+	{
+		return $this->getConnection()->inTransaction();
+	}
+
 
 	public function __destruct()
 	{

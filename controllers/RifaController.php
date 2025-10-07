@@ -26,7 +26,8 @@ class RifaController extends Controller
 		// Cargar config clave para JS (precio y total)
 		$cfg = $this->config->getMany(['precio_boleto', 'total_boletos']);
 		require_once MODELS_PATH . 'BoletoModel.php';
-		$vendidos = (new BoletoModel())->getVendidosNumeros(5000);
+		$limite = isset($cfg['total_boletos']) ? (int)$cfg['total_boletos'] : 100000;
+		$vendidos = (new BoletoModel())->getVendidosNumeros($limite);
 
 		$this->view->render('Rifa/seleccionar', [
 			'pageTitle' => 'Seleccionar Boletos - Rifas La Paz',
@@ -161,43 +162,82 @@ class RifaController extends Controller
 		$fechaExp = (new DateTime())->modify("+{$expMins} minutes")->format('Y-m-d H:i:s');
 
 		$ordenModel = new OrdenModel();
-		$ordenId = $ordenModel->crear($usuarioId, count($boletos), $total, $fechaExp);
-
-		// Manejar comprobante (opcional) o folio
-		$rutaComprobante = null;
-		$nombreComprobante = null;
-		$folio = trim($_POST['folio'] ?? '');
-		if (isset($_FILES['comprobante']) && $_FILES['comprobante']['error'] === UPLOAD_ERR_OK) {
-			$nombreComprobante = basename($_FILES['comprobante']['name']);
-			$ext = strtolower(pathinfo($nombreComprobante, PATHINFO_EXTENSION));
-			if (!in_array($ext, ['jpg', 'jpeg', 'png', 'pdf'])) {
-				$this->setMessageAndRedirect('error', 'Formato de comprobante inválido', constant('URL') . 'rifa/pago');
+		$db = Database::getInstance();
+		$db->beginTransaction();
+		try {
+			// Generar un código explícito para poder localizar la orden si lastInsertId falla
+			$codigoOrden = strtoupper(bin2hex(random_bytes(5)));
+			$ordenId = $ordenModel->crear($usuarioId, count($boletos), $total, $fechaExp, $codigoOrden);
+			if ($ordenId <= 0) {
+				// Fallback defensivo: intentar localizar por codigo_orden
+				$rowOrden = $db->fetchOne("SELECT id FROM ordenes WHERE codigo_orden = :cod ORDER BY id DESC LIMIT 1", [':cod' => $codigoOrden]);
+				$ordenId = $rowOrden && isset($rowOrden['id']) ? (int)$rowOrden['id'] : 0;
 			}
-			$dir = __DIR__ . '/../uploads/comprobantes';
-			if (!is_dir($dir)) {
-				@mkdir($dir, 0777, true);
+			if ($ordenId <= 0) {
+				// No continuar para evitar violar la FK de boletos.orden_id
+				$db->rollback();
+				$logger = new Logger();
+				$logger->logError('ID de orden inválido tras crear', __FILE__, __LINE__, [
+					'cliente_id' => $clienteId,
+					'usuario_id' => $usuarioId,
+					'codigo_orden' => $codigoOrden,
+					'total' => $total,
+					'cantidad' => count($boletos)
+				]);
+				$this->setMessageAndRedirect('error', 'No se pudo crear tu orden. Intenta nuevamente.', constant('URL') . 'rifa/pago');
 			}
-			$dest = $dir . '/' . $ordenId . '_' . time() . '.' . $ext;
-			if (!move_uploaded_file($_FILES['comprobante']['tmp_name'], $dest)) {
-				$this->setMessageAndRedirect('error', 'No se pudo guardar el comprobante', constant('URL') . 'rifa/pago');
+
+			// Manejar comprobante (opcional) o folio
+			$rutaComprobante = null;
+			$nombreComprobante = null;
+			$folio = trim($_POST['folio'] ?? '');
+			if (isset($_FILES['comprobante']) && $_FILES['comprobante']['error'] === UPLOAD_ERR_OK) {
+				$nombreComprobante = basename($_FILES['comprobante']['name']);
+				$ext = strtolower(pathinfo($nombreComprobante, PATHINFO_EXTENSION));
+				if (!in_array($ext, ['jpg', 'jpeg', 'png', 'pdf'])) {
+					$this->setMessageAndRedirect('error', 'Formato de comprobante inválido', constant('URL') . 'rifa/pago');
+				}
+				$dir = __DIR__ . '/../uploads/comprobantes';
+				if (!is_dir($dir)) {
+					@mkdir($dir, 0777, true);
+				}
+				$dest = $dir . '/' . $ordenId . '_' . time() . '.' . $ext;
+				if (!move_uploaded_file($_FILES['comprobante']['tmp_name'], $dest)) {
+					$this->setMessageAndRedirect('error', 'No se pudo guardar el comprobante', constant('URL') . 'rifa/pago');
+				}
+				$rutaComprobante = str_replace('..', '', $dest);
+			} elseif ($folio !== '') {
+				$nombreComprobante = 'FOLIO:' . $folio;
+			} else {
+				$this->setMessageAndRedirect('error', 'Debes subir un comprobante o escribir tu folio de transferencia', constant('URL') . 'rifa/pago');
 			}
-			$rutaComprobante = str_replace('..', '', $dest);
-		} elseif ($folio !== '') {
-			$nombreComprobante = 'FOLIO:' . $folio;
-		} else {
-			$this->setMessageAndRedirect('error', 'Debes subir un comprobante o escribir tu folio de transferencia', constant('URL') . 'rifa/pago');
-		}
 
-		$ordenModel->adjuntarComprobante($ordenId, $rutaComprobante, $nombreComprobante);
+			$ordenModel->adjuntarComprobante($ordenId, $rutaComprobante, $nombreComprobante);
 
-		// Bloquear boletos con control de concurrencia
-		$boletoModel = new BoletoModel();
-		$resultado = $boletoModel->bloquearTemporal($boletos, $ordenId);
+			// Bloquear boletos con control de concurrencia (dentro de la misma transacción)
+			$boletoModel = new BoletoModel();
+			$resultado = $boletoModel->bloquearTemporal($boletos, $ordenId);
 
-		if (!$resultado['ok']) {
-			// Si ninguno pudo bloquearse, cancelar la orden y avisar conflicto
-			$ordenModel->denegar($ordenId, null, 'Conflicto al bloquear boletos');
-			$this->setMessageAndRedirect('error', 'Algunos boletos ya no están disponibles: ' . implode(', ', $resultado['conflictos']), constant('URL') . 'rifa/seleccionar');
+			if (!$resultado['ok']) {
+				// Si falla, revertimos todo
+				$db->rollback();
+				// Limpiar comprobante si se guardó físicamente
+				if ($rutaComprobante && is_file($rutaComprobante)) {
+					@unlink($rutaComprobante);
+				}
+				$this->setMessageAndRedirect('error', 'Algunos boletos ya no están disponibles: ' . implode(', ', $resultado['conflictos'] ?? []), constant('URL') . 'rifa/seleccionar');
+			}
+
+			// Todo ok, commit
+			$db->commit();
+		} catch (Throwable $e) {
+			$db->rollback();
+			if ($rutaComprobante && is_file($rutaComprobante)) {
+				@unlink($rutaComprobante);
+			}
+			$logger = new Logger();
+			$logger->logError('Error en confirmarPago (transacción)', __FILE__, __LINE__, ['exception' => $e->getMessage()]);
+			$this->setMessageAndRedirect('error', 'No se pudo procesar tu pago. Intenta nuevamente.', constant('URL') . 'rifa/seleccionar');
 		}
 
 		// Guardar en sesión datos mínimos de seguimiento
@@ -278,6 +318,21 @@ class RifaController extends Controller
 		$rows = $db->fetchAll("SELECT * FROM ordenes WHERE estado='pendiente' ORDER BY created_at DESC");
 		header('Content-Type: application/json');
 		echo json_encode($rows);
+		exit;
+	}
+
+	// Validar disponibilidad de boletos seleccionados desde el cliente
+	public function validarDisponibilidad()
+	{
+		$this->requireMethod('POST');
+		require_once MODELS_PATH . 'BoletoModel.php';
+		$payload = file_get_contents('php://input');
+		$data = json_decode($payload, true);
+		$boletos = is_array($data) ? ($data['boletos'] ?? []) : [];
+		$bm = new BoletoModel();
+		$noDisp = $bm->getNoDisponiblesPorNumeros($boletos);
+		header('Content-Type: application/json');
+		echo json_encode(['no_disponibles' => $noDisp]);
 		exit;
 	}
 }

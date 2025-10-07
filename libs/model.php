@@ -7,7 +7,8 @@ class Model
 
 	function __construct()
 	{
-		$this->db = new Database();
+		// Usar una única instancia de DB en toda la app para mayor consistencia
+		$this->db = Database::getInstance();
 		$this->pdo = $this->db->getConnection();
 		$this->logger  = new Logger();
 	}

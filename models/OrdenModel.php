@@ -20,7 +20,22 @@ class OrdenModel extends Model
 			$this->logger->logInfo('Creando orden', null, 'OrdenModel::crear', $params);
 		}
 		$this->db->execute($sql, $params);
-		return (int)$this->db->getLastInsertId();
+		$id = (int)$this->db->getLastInsertId();
+		if ($id <= 0) {
+			// Fallback: Obtener por codigo_orden (único)
+			$row = $this->db->fetchOne("SELECT id FROM {$this->table} WHERE codigo_orden = :cod ORDER BY id DESC LIMIT 1", [':cod' => $params[':cod']]);
+			if ($row && isset($row['id'])) {
+				$id = (int)$row['id'];
+				if (property_exists($this, 'logger') && $this->logger) {
+					$this->logger->logWarning('Fallback id de orden por codigo_orden', ['id' => $id, 'codigo' => $params[':cod']]);
+				}
+			} else {
+				if (property_exists($this, 'logger') && $this->logger) {
+					$this->logger->logError('No se pudo obtener ID de orden tras INSERT', __FILE__, __LINE__, $params);
+				}
+			}
+		}
+		return $id;
 	}
 
 	public function adjuntarComprobante(int $ordenId, ?string $ruta, ?string $nombre): void

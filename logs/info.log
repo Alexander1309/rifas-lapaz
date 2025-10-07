@@ -1,3 +1,22 @@
 [2025-10-07 13:36:14] INFO: Cliente creado | cliente_id: 1 | correo: alexanderperez4893@gmail.com | process: ClienteModel::getOrCreate
 [2025-10-07 13:36:14] INFO: Preparando creación de orden | cliente_id: 1 | usuario_id: 1 | boletos: ["000001"] | total: 20 | process: RifaController::confirmarPago
 [2025-10-07 13:36:14] INFO: Creando orden | :uid: 1 | :cod: 260E612EEA | :cant: 1 | :tot: 20 | :exp: 2025-10-07 13:56:14 | process: OrdenModel::crear
+[2025-10-07 13:40:46] INFO: Cliente creado | cliente_id: 1 | correo: alexanderperez4893@gmail.com | process: ClienteModel::getOrCreate
+[2025-10-07 13:40:46] INFO: Preparando creación de orden | cliente_id: 1 | usuario_id: 1 | boletos: ["000001"] | total: 20 | process: RifaController::confirmarPago
+[2025-10-07 13:40:46] INFO: Creando orden | :uid: 1 | :cod: F8C2221AEB | :cant: 1 | :tot: 20 | :exp: 2025-10-07 14:00:46 | process: OrdenModel::crear
+[2025-10-07 13:55:14] INFO: Cliente creado | cliente_id: 1 | correo: alexanderperez4893@gmail.com | process: ClienteModel::getOrCreate
+[2025-10-07 13:55:14] INFO: Preparando creación de orden | cliente_id: 1 | usuario_id: 1 | boletos: ["000001"] | total: 20 | process: RifaController::confirmarPago
+[2025-10-07 13:55:14] INFO: Creando orden | :uid: 1 | :cod: C9210797A1 | :cant: 1 | :tot: 20 | :exp: 2025-10-07 14:15:14 | process: OrdenModel::crear
+[2025-10-07 13:56:12] INFO: Cliente creado | cliente_id: 1 | correo: alexanderperez4893@gmail.com | process: ClienteModel::getOrCreate
+[2025-10-07 13:56:12] INFO: Preparando creación de orden | cliente_id: 1 | usuario_id: 1 | boletos: ["000001"] | total: 20 | process: RifaController::confirmarPago
+[2025-10-07 13:56:12] INFO: Creando orden | :uid: 1 | :cod: 5AA7E98F84 | :cant: 1 | :tot: 20 | :exp: 2025-10-07 14:16:12 | process: OrdenModel::crear
+[2025-10-07 14:01:01] INFO: Cliente creado | cliente_id: 1 | correo: alexanderperez4893@gmail.com | process: ClienteModel::getOrCreate
+[2025-10-07 14:01:01] INFO: Preparando creación de orden | cliente_id: 1 | usuario_id: 1 | boletos: ["000001"] | total: 20 | process: RifaController::confirmarPago
+[2025-10-07 14:01:01] INFO: Creando orden | :uid: 1 | :cod: E1B1C44768 | :cant: 1 | :tot: 20 | :exp: 2025-10-07 14:21:01 | process: OrdenModel::crear
+[2025-10-07 14:08:31] INFO: Cliente creado | cliente_id: 1 | correo: alexanderperez4893@gmail.com | process: ClienteModel::getOrCreate
+[2025-10-07 14:08:31] INFO: Preparando creación de orden | cliente_id: 1 | usuario_id: 1 | boletos: ["000001"] | total: 20 | process: RifaController::confirmarPago
+[2025-10-07 14:08:31] INFO: Creando orden | :uid: 1 | :cod: 0B0ECFA663 | :cant: 1 | :tot: 20 | :exp: 2025-10-07 14:28:31 | process: OrdenModel::crear
+[2025-10-07 14:16:45] INFO: Cliente creado | cliente_id: 1 | correo: alexanderperez4893@gmail.com | process: ClienteModel::getOrCreate
+[2025-10-07 14:16:45] INFO: Preparando creación de orden | cliente_id: 1 | usuario_id: 1 | boletos: ["000001"] | total: 20 | process: RifaController::confirmarPago
+[2025-10-07 14:16:45] INFO: Creando orden | :uid: 1 | :cod: AEEEE9B8C9 | :cant: 1 | :tot: 20 | :exp: 2025-10-07 14:36:45 | process: OrdenModel::crear
+[2025-10-07 14:16:45] INFO: Inicio bloqueo temporal | orden_id: 2 | cantidad: 1 | process: BoletoModel::bloquearTemporal

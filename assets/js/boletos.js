@@ -335,7 +335,7 @@ function limpiarSeleccion() {
 // ===========================
 // ENVIAR FORMULARIO DE PAGO
 // ===========================
-function enviarFormularioPago() {
+async function enviarFormularioPago() {
   if (boletosSeleccionados.size === 0) {
     mostrarAlerta("Debes seleccionar al menos un boleto", "warning");
     return;
@@ -343,6 +343,45 @@ function enviarFormularioPago() {
 
   const totalBoletos = boletosSeleccionados.size;
   const totalPagar = totalBoletos * PRECIO_BOLETO;
+
+  // Validar disponibilidad en servidor antes de enviar
+  const boletosArray = Array.from(boletosSeleccionados);
+  try {
+    const res = await fetch("/rifa/validarDisponibilidad", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ boletos: boletosArray }),
+    });
+    const data = await res.json();
+    if (
+      data &&
+      Array.isArray(data.no_disponibles) &&
+      data.no_disponibles.length > 0
+    ) {
+      // Quitar de la selección y marcar como vendidos en UI
+      data.no_disponibles.forEach((num) => {
+        const n = String(num).padStart(6, "0");
+        boletosSeleccionados.delete(n);
+        boletosVendidos.add(n);
+        const el = document.querySelector(`[data-numero="${n}"]`);
+        if (el) {
+          el.classList.remove("seleccionado");
+          el.classList.add("vendido");
+          el.style.pointerEvents = "none";
+        }
+      });
+      actualizarResumen();
+      mostrarAlerta(
+        `Algunos boletos ya no están disponibles: ${data.no_disponibles.join(
+          ", "
+        )}`,
+        "warning"
+      );
+      return; // No enviar aún
+    }
+  } catch (e) {
+    console.error("Error validando disponibilidad:", e);
+  }
 
   // Obtener el formulario oculto
   const form = document.getElementById("formPagoOculto");
@@ -355,7 +394,6 @@ function enviarFormularioPago() {
 
   // SOLUCIÓN: Enviar boletos como JSON en un solo campo
   // Esto evita el límite de max_input_vars de PHP
-  const boletosArray = Array.from(boletosSeleccionados);
   const inputJson = document.createElement("input");
   inputJson.type = "hidden";
   inputJson.name = "boletos_json";
