@@ -1,7 +1,6 @@
 const STORAGE_KEY = "rifa_pago_tiempo";
 const STORAGE_START_KEY = "rifa_pago_inicio";
 const countdownElement = document.getElementById("countdown");
-const baseURL = "<?php echo constant('URL'); ?>";
 let tiempoRestante;
 let intervalo;
 
@@ -27,7 +26,7 @@ function inicializarTiempo() {
     }
   } else {
     // Primera vez, iniciar con 10 minutos
-    tiempoRestante = 600;
+    tiempoRestante = 1200;
     localStorage.setItem(STORAGE_KEY, tiempoRestante);
     localStorage.setItem(STORAGE_START_KEY, Date.now());
   }

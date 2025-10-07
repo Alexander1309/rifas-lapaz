@@ -2,3 +2,24 @@
 [2025-10-06 08:59:10] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
 [2025-10-06 08:59:10] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
 [2025-10-06 12:12:18] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-07 09:52:31] ERROR: Uncaught Exception: Class "OrdenModel" not found | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(90): RifaController->__construct(Array)
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('rifa', 'pago', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: RifaController.php | line: 13 | full_path: C:\xampp\htdocs\controllers\RifaController.php
+[2025-10-07 09:52:34] ERROR: Uncaught Exception: Class "OrdenModel" not found | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(90): RifaController->__construct(Array)
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('rifa', 'seleccionar', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: RifaController.php | line: 13 | full_path: C:\xampp\htdocs\controllers\RifaController.php
+[2025-10-07 09:56:57] ERROR: Uncaught Exception: Class "OrdenModel" not found | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(90): RifaController->__construct(Array)
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('rifa', 'seleccionar', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: RifaController.php | line: 13 | full_path: C:\xampp\htdocs\controllers\RifaController.php
+[2025-10-07 09:56:58] ERROR: Uncaught Exception: Class "OrdenModel" not found | exception_class: Error | trace: #0 C:\xampp\htdocs\libs\app.php(90): RifaController->__construct(Array)
+#1 C:\xampp\htdocs\libs\app.php(32): App->executeController('rifa', 'seleccionar', Array)
+#2 C:\xampp\htdocs\libs\app.php(16): App->route()
+#3 C:\xampp\htdocs\index.php(14): App->__construct()
+#4 {main} | file: RifaController.php | line: 13 | full_path: C:\xampp\htdocs\controllers\RifaController.php
+[2025-10-07 09:57:51] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php

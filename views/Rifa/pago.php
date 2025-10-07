@@ -10,7 +10,7 @@
 						<div class="alert alert-warning mb-0 d-inline-block px-4 py-2" style="background-color: rgba(255, 193, 7, 0.2); border: 2px solid #ffc107;">
 							<i class="bi bi-clock-history"></i>
 							<strong>Tiempo restante:</strong>
-							<span id="countdown" style="font-size: 1.3rem; font-weight: bold;">10:00</span>
+							<span id="countdown" style="font-size: 1.3rem; font-weight: bold;">20:00</span>
 						</div>
 					</div>
 				</div>
@@ -29,12 +29,12 @@
 								<div class="accordion-body">
 									<div class="row">
 										<div class="col-md-6">
-											<p class="mb-2"><strong>Cantidad de boletos:</strong> <span id="cantidadBoletos"><?php echo count($_POST['boletos'] ?? []); ?></span></p>
-											<p class="mb-0"><strong>Precio por boleto:</strong> $10</p>
+											<p class="mb-2"><strong>Cantidad de boletos:</strong> <span id="cantidadBoletos"><?php echo count($_SESSION['boletos_seleccionados'] ?? []); ?></span></p>
+											<p class="mb-0"><strong>Precio por boleto:</strong> $<span id="precioPorBoleto">20.00</span></p>
 										</div>
 										<div class="col-md-6 text-end">
 											<h3 class="text-success mb-0">
-												<strong>Total: $<span id="totalPagar"><?php echo isset($_POST['total']) ? $_POST['total'] : 0; ?></span></strong>
+												<strong>Total: $<span id="totalPagar"><?php echo number_format((count($_SESSION['boletos_seleccionados'] ?? []) * 20), 2); ?></span></strong>
 											</h3>
 										</div>
 									</div>
@@ -45,8 +45,8 @@
 									</h6>
 									<div class="boletos-lista p-3 bg-light rounded">
 										<?php
-										if (isset($_POST['boletos']) && is_array($_POST['boletos'])) {
-											foreach ($_POST['boletos'] as $boleto) {
+										if (isset($_SESSION['boletos_seleccionados']) && is_array($_SESSION['boletos_seleccionados'])) {
+											foreach ($_SESSION['boletos_seleccionados'] as $boleto) {
 												echo '<span class="badge bg-primary me-2 mb-2 p-2">#' . htmlspecialchars($boleto) . '</span>';
 											}
 										} else {
@@ -73,8 +73,7 @@
 										<p class="mb-1"><strong>Banco:</strong> Banco Nacional</p>
 										<p class="mb-1"><strong>Tipo de Cuenta:</strong> Caja de Ahorro</p>
 										<p class="mb-1"><strong>Número de Cuenta:</strong> 1234567890</p>
-										<p class="mb-1"><strong>Titular:</strong> Rifa La Paz</p>
-										<p class="mb-0"><strong>CI/RUT:</strong> 12345678</p>
+										<p class="mb-0"><strong>Titular:</strong> Rifas La Paz</p>
 									</div>
 								</div>
 							</div>
@@ -112,16 +111,9 @@
 
 					<!-- Formulario de Datos del Comprador -->
 					<form action="/rifa/confirmarPago" method="POST" id="formPago" enctype="multipart/form-data">
-						<!-- Campos ocultos con los datos de la compra -->
-						<?php
-						if (isset($_POST['boletos']) && is_array($_POST['boletos'])) {
-							foreach ($_POST['boletos'] as $boleto) {
-								echo '<input type="hidden" name="boletos[]" value="' . htmlspecialchars($boleto) . '">';
-							}
-						}
-						?>
-						<input type="hidden" name="total" value="<?php echo isset($_POST['total']) ? htmlspecialchars($_POST['total']) : 0; ?>">
-						<input type="hidden" name="cantidad" value="<?php echo isset($_POST['boletos']) ? count($_POST['boletos']) : 0; ?>">
+						<!-- Los boletos ya están guardados en la sesión, no necesitamos campos ocultos -->
+						<input type="hidden" name="total" value="<?php echo (count($_SESSION['boletos_seleccionados'] ?? []) * 20); ?>">
+						<input type="hidden" name="cantidad" value="<?php echo count($_SESSION['boletos_seleccionados'] ?? []); ?>">
 
 						<h5 class="fw-semibold mb-3">
 							<i class="bi bi-person-fill"></i> Datos del Comprador

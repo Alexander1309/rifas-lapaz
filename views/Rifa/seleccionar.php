@@ -23,8 +23,9 @@
 		<div class="panel-body">
 			<!-- Cantidad de Boletos -->
 			<div class="config-section">
-				<label for="cantidadBoletos" class="form-label fw-semibold">Cantidad de Boletos</label>
-				<input type="number" class="form-control" id="cantidadBoletos" min="1" max="10000" value="1" placeholder="Ingresa cantidad">
+				<label for="cantidadBoletos" class="form-label fw-semibold">Cantidad de Boletos Aleatorios</label>
+				<input type="number" class="form-control" id="cantidadBoletos" min="1" max="1000" value="1" placeholder="Máx. 1000">
+				<small class="text-muted">Máximo 1000 para selección aleatoria</small>
 			</div>
 
 			<!-- Boleto Aleatorio -->
@@ -68,6 +69,12 @@
 		</div>
 	</div>
 </div>
+
+<!-- Datos para JavaScript -->
+<script>
+	// Boletos ya vendidos
+	window.BOLETOS_VENDIDOS_DATA = <?php echo $boletos_vendidos ?? '[]'; ?>;
+</script>
 
 <!-- Formulario oculto para enviar datos por POST -->
 <form id="formPagoOculto" action="/rifa/pago" method="POST" style="display: none;">

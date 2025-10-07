@@ -2,12 +2,13 @@
 // VARIABLES GLOBALES
 // ===========================
 let boletosSeleccionados = new Set();
-const PRECIO_BOLETO = 10;
+const PRECIO_BOLETO = 20;
 const boletosVendidos = new Set(); // Aquí se pueden agregar boletos ya vendidos
 
 // Lazy Loading Configuration
-const TOTAL_BOLETOS = 10000;
-const BOLETOS_POR_LOTE = 100; // Cargar 100 boletos a la vez
+const TOTAL_BOLETOS = 100000;
+const BOLETOS_POR_LOTE = 100;
+const MAX_BOLETOS_ALEATORIOS = 1000; // Máximo para selección aleatoria
 let boletosActuales = 0;
 let cargandoBoletos = false;
 
@@ -29,7 +30,7 @@ function cargarBoletosIniciales() {
 }
 
 function crearBoletoHTML(numero) {
-  const numeroFormateado = numero.toString().padStart(4, "0");
+  const numeroFormateado = numero.toString().padStart(5, "0");
 
   const boleto = document.createElement("div");
   boleto.className = "boleto";
@@ -206,8 +207,11 @@ function seleccionarBoletosAleatorios() {
   const cantidadInput = document.getElementById("cantidadBoletos");
   const cantidad = parseInt(cantidadInput.value) || 1;
 
-  if (cantidad < 1 || cantidad > 10000) {
-    mostrarAlerta("La cantidad debe estar entre 1 y 10000 boletos", "warning");
+  if (cantidad < 1 || cantidad > MAX_BOLETOS_ALEATORIOS) {
+    mostrarAlerta(
+      `La cantidad debe estar entre 1 y ${MAX_BOLETOS_ALEATORIOS} boletos para selección aleatoria`,
+      "warning"
+    );
     return;
   }
 
@@ -263,7 +267,7 @@ function seleccionarBoletosAleatorios() {
   }
 
   mostrarAlerta(
-    `Se seleccionaron ${boletosSeleccionadosAhora} boleto(s) aleatorio(s)`,
+    `Se seleccionaron ${boletosSeleccionadosAhora} boleto(s) aleatorio(s). Puedes seguir seleccionando más manualmente.`,
     "success"
   );
 }
@@ -337,21 +341,20 @@ function enviarFormularioPago() {
   // Obtener el formulario oculto
   const form = document.getElementById("formPagoOculto");
 
-  // Limpiar campos anteriores de boletos
+  // Limpiar campos anteriores
   const boletosInputsAnteriores = form.querySelectorAll(
-    'input[name="boletos[]"]'
+    'input[name="boletos[]"], input[name="boletos_json"]'
   );
   boletosInputsAnteriores.forEach((input) => input.remove());
 
-  // Agregar los boletos seleccionados como campos separados
+  // SOLUCIÓN: Enviar boletos como JSON en un solo campo
+  // Esto evita el límite de max_input_vars de PHP
   const boletosArray = Array.from(boletosSeleccionados);
-  boletosArray.forEach((numero) => {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = "boletos[]";
-    input.value = numero;
-    form.appendChild(input);
-  });
+  const inputJson = document.createElement("input");
+  inputJson.type = "hidden";
+  inputJson.name = "boletos_json";
+  inputJson.value = JSON.stringify(boletosArray);
+  form.appendChild(inputJson);
 
   // Agregar el total
   document.getElementById("totalInput").value = totalPagar;
@@ -369,6 +372,12 @@ function validarCantidad() {
 
   if (valor < 1) {
     input.value = 1;
+  } else if (valor > MAX_BOLETOS_ALEATORIOS) {
+    input.value = MAX_BOLETOS_ALEATORIOS;
+    mostrarAlerta(
+      `El máximo para selección aleatoria es ${MAX_BOLETOS_ALEATORIOS} boletos. Puedes seguir seleccionando más manualmente.`,
+      "info"
+    );
   }
 }
 
