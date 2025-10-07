@@ -74,6 +74,13 @@
 <script>
 	// Boletos ya vendidos
 	window.BOLETOS_VENDIDOS_DATA = <?php echo $boletos_vendidos ?? '[]'; ?>;
+	window.CONFIG = {
+		precio_boleto: <?php echo json_encode($this->params['precio_boleto'] ?? 20); ?>,
+		total_boletos: <?php echo json_encode($this->params['total_boletos'] ?? 100000); ?>
+	};
+	try {
+		window.BOLETOS_VENDIDOS_DATA = <?php echo $this->params['boletos_vendidos'] ?? '[]'; ?>;
+	} catch (e) {}
 </script>
 
 <!-- Formulario oculto para enviar datos por POST -->

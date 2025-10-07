@@ -1,2 +1,3 @@
-[2025-10-06 08:59:27] INFO: Intento de autenticación fallido para: sfasf | process: UserModel::getByUsernameAndPassword
-[2025-10-06 12:13:45] INFO: Intento de autenticación fallido para: wfasrsafas | process: UserModel::getByUsernameAndPassword
+[2025-10-07 13:36:14] INFO: Cliente creado | cliente_id: 1 | correo: alexanderperez4893@gmail.com | process: ClienteModel::getOrCreate
+[2025-10-07 13:36:14] INFO: Preparando creación de orden | cliente_id: 1 | usuario_id: 1 | boletos: ["000001"] | total: 20 | process: RifaController::confirmarPago
+[2025-10-07 13:36:14] INFO: Creando orden | :uid: 1 | :cod: 260E612EEA | :cant: 1 | :tot: 20 | :exp: 2025-10-07 13:56:14 | process: OrdenModel::crear

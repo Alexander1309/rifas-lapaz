@@ -19,16 +19,16 @@ class Database
 		$this->charset = $this->getConstant('DB_CHARSET', 'utf8mb4');
 	}
 	public function fetchColumn($sql, $params = [])
-    {
-        try {
-            // Usamos el método query() que ya prepara y ejecuta de forma segura
-            $stmt = $this->query($sql, $params);
-            return $stmt->fetchColumn();
-        } catch (PDOException $e) {
-            error_log("Error en fetchColumn: " . $e->getMessage());
-            return false;
-        }
-    }
+	{
+		try {
+			// Usamos el método query() que ya prepara y ejecuta de forma segura
+			$stmt = $this->query($sql, $params);
+			return $stmt->fetchColumn();
+		} catch (PDOException $e) {
+			error_log("Error en fetchColumn: " . $e->getMessage());
+			return false;
+		}
+	}
 
 	public static function getInstance()
 	{
@@ -153,7 +153,23 @@ class Database
 			$stmt->execute($params);
 			return $stmt;
 		} catch (PDOException $e) {
-			error_log("Error en consulta SQL: " . $e->getMessage());
+			// Log ampliado con SQL y parámetros
+			$safeParams = $params;
+			foreach ($safeParams as $k => $v) {
+				if (is_string($v) && strlen($v) > 500) {
+					$safeParams[$k] = substr($v, 0, 500) . '...';
+				}
+			}
+			$logMsg = "Error en consulta SQL: " . $e->getMessage() . " | SQL: " . $sql . " | Params: " . json_encode($safeParams, JSON_UNESCAPED_UNICODE);
+			error_log($logMsg);
+			// Intentar escribir en logs/error.log del proyecto para facilitar el diagnóstico
+			$projectLog = (isset($_SERVER['DOCUMENT_ROOT']) ? rtrim($_SERVER['DOCUMENT_ROOT'], '/\\') : dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'error.log';
+			@file_put_contents($projectLog, '[' . date('Y-m-d H:i:s') . "] ERROR: " . $logMsg . PHP_EOL, FILE_APPEND | LOCK_EX);
+
+			// En modo debug, propagar detalle
+			if (defined('DEBUG_MODE') && DEBUG_MODE === true) {
+				throw new RuntimeException('Error en la consulta a la base de datos: ' . $e->getMessage());
+			}
 			throw new RuntimeException('Error en la consulta a la base de datos');
 		}
 	}

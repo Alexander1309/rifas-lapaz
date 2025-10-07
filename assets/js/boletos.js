@@ -2,11 +2,17 @@
 // VARIABLES GLOBALES
 // ===========================
 let boletosSeleccionados = new Set();
-const PRECIO_BOLETO = 20;
-const boletosVendidos = new Set(); // Aquí se pueden agregar boletos ya vendidos
+const PRECIO_BOLETO =
+  (window.CONFIG && Number(window.CONFIG.precio_boleto)) || 20;
+const boletosVendidos = new Set(
+  Array.isArray(window.BOLETOS_VENDIDOS_DATA)
+    ? window.BOLETOS_VENDIDOS_DATA
+    : []
+);
 
 // Lazy Loading Configuration
-const TOTAL_BOLETOS = 100000;
+const TOTAL_BOLETOS =
+  (window.CONFIG && Number(window.CONFIG.total_boletos)) || 100000;
 const BOLETOS_POR_LOTE = 100;
 const MAX_BOLETOS_ALEATORIOS = 1000; // Máximo para selección aleatoria
 let boletosActuales = 0;
@@ -30,7 +36,7 @@ function cargarBoletosIniciales() {
 }
 
 function crearBoletoHTML(numero) {
-  const numeroFormateado = numero.toString().padStart(5, "0");
+  const numeroFormateado = numero.toString().padStart(6, "0");
 
   const boleto = document.createElement("div");
   boleto.className = "boleto";
@@ -218,7 +224,7 @@ function seleccionarBoletosAleatorios() {
   // Obtener boletos disponibles del total (no solo los cargados)
   const boletosDisponibles = [];
   for (let i = 1; i <= TOTAL_BOLETOS; i++) {
-    const numero = String(i).padStart(4, "0");
+    const numero = String(i).padStart(6, "0");
     if (!boletosSeleccionados.has(numero) && !boletosVendidos.has(numero)) {
       boletosDisponibles.push(numero);
     }
@@ -409,5 +415,5 @@ function mostrarAlerta(mensaje, tipo = "info") {
 // UTILIDADES
 // ===========================
 function formatearNumero(numero) {
-  return String(numero).padStart(4, "0");
+  return String(numero).padStart(6, "0");
 }

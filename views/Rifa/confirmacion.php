@@ -21,7 +21,7 @@
 					<!-- Número de Orden -->
 					<div class="alert alert-success text-center mb-4">
 						<h5 class="mb-0">
-							<i class="bi bi-hash"></i> Orden: <strong><?php echo strtoupper(uniqid('RIF-')); ?></strong>
+							<i class="bi bi-hash"></i> Orden: <strong><?php echo htmlspecialchars($this->params['codigo_orden'] ?? strtoupper(uniqid('RIF-'))); ?></strong>
 						</h5>
 						<small class="text-muted">Guarda este número para futuras consultas</small>
 					</div>
@@ -61,15 +61,15 @@
 									</tr>
 									<tr>
 										<td><strong>Precio por Boleto:</strong></td>
-										<td class="text-end">Bs. 10</td>
+										<td class="text-end">$ <?php echo number_format(($this->params['precio_boleto'] ?? 20), 2); ?></td>
 									</tr>
 									<tr>
 										<td><strong>Método de Pago:</strong></td>
 										<td class="text-end text-capitalize"><?php echo htmlspecialchars($this->params['metodoPago'] ?? 'N/A'); ?></td>
 									</tr>
 									<tr class="table-success">
-										<td><strong>Total Pagado:</strong></td>
-										<td class="text-end"><strong class="fs-5">Bs. <?php echo htmlspecialchars($this->params['total'] ?? 0); ?></strong></td>
+										<td><strong>Total:</strong></td>
+										<td class="text-end"><strong class="fs-5">$ <?php echo number_format(($this->params['total'] ?? 0), 2); ?></strong></td>
 									</tr>
 								</tbody>
 							</table>

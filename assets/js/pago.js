@@ -25,8 +25,10 @@ function inicializarTiempo() {
       return false;
     }
   } else {
-    // Primera vez, iniciar con 10 minutos
-    tiempoRestante = 1200;
+    // Primera vez, iniciar con el tiempo de expiración configurado (minutos)
+    const cfgMins =
+      (window.CONFIG && Number(window.CONFIG.tiempo_expiracion)) || 20;
+    tiempoRestante = Math.max(1, cfgMins) * 60;
     localStorage.setItem(STORAGE_KEY, tiempoRestante);
     localStorage.setItem(STORAGE_START_KEY, Date.now());
   }

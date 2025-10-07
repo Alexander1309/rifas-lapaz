@@ -30,11 +30,11 @@
 									<div class="row">
 										<div class="col-md-6">
 											<p class="mb-2"><strong>Cantidad de boletos:</strong> <span id="cantidadBoletos"><?php echo count($_SESSION['boletos_seleccionados'] ?? []); ?></span></p>
-											<p class="mb-0"><strong>Precio por boleto:</strong> $<span id="precioPorBoleto">20.00</span></p>
+											<p class="mb-0"><strong>Precio por boleto:</strong> $<span id="precioPorBoleto"><?php echo number_format(($this->params['precio_boleto'] ?? 20), 2); ?></span></p>
 										</div>
 										<div class="col-md-6 text-end">
 											<h3 class="text-success mb-0">
-												<strong>Total: $<span id="totalPagar"><?php echo number_format((count($_SESSION['boletos_seleccionados'] ?? []) * 20), 2); ?></span></strong>
+												<strong>Total: $<span id="totalPagar"><?php echo number_format((count($_SESSION['boletos_seleccionados'] ?? []) * ($this->params['precio_boleto'] ?? 20)), 2); ?></span></strong>
 											</h3>
 										</div>
 									</div>
@@ -70,10 +70,10 @@
 									<div class="alert alert-success mb-0">
 										<h6 class="alert-heading"><i class="bi bi-bank2"></i> Datos Bancarios</h6>
 										<hr>
-										<p class="mb-1"><strong>Banco:</strong> Banco Nacional</p>
-										<p class="mb-1"><strong>Tipo de Cuenta:</strong> Caja de Ahorro</p>
-										<p class="mb-1"><strong>Número de Cuenta:</strong> 1234567890</p>
-										<p class="mb-0"><strong>Titular:</strong> Rifas La Paz</p>
+										<p class="mb-1"><strong>Banco:</strong> <?php echo htmlspecialchars($this->params['banco']['banco_nombre'] ?? ''); ?></p>
+										<p class="mb-1"><strong>Tipo de Cuenta:</strong> Cuenta</p>
+										<p class="mb-1"><strong>Número de Cuenta:</strong> <?php echo htmlspecialchars($this->params['banco']['cuenta_banco'] ?? ''); ?></p>
+										<p class="mb-0"><strong>Titular:</strong> <?php echo htmlspecialchars($this->params['banco']['titular_cuenta'] ?? ''); ?></p>
 									</div>
 								</div>
 							</div>
@@ -112,7 +112,7 @@
 					<!-- Formulario de Datos del Comprador -->
 					<form action="/rifa/confirmarPago" method="POST" id="formPago" enctype="multipart/form-data">
 						<!-- Los boletos ya están guardados en la sesión, no necesitamos campos ocultos -->
-						<input type="hidden" name="total" value="<?php echo (count($_SESSION['boletos_seleccionados'] ?? []) * 20); ?>">
+						<input type="hidden" name="total" value="<?php echo (count($_SESSION['boletos_seleccionados'] ?? []) * ($this->params['precio_boleto'] ?? 20)); ?>">
 						<input type="hidden" name="cantidad" value="<?php echo count($_SESSION['boletos_seleccionados'] ?? []); ?>">
 
 						<h5 class="fw-semibold mb-3">
@@ -140,9 +140,15 @@
 						</h5>
 
 						<div class="mb-4">
-							<label for="comprobante" class="form-label">Subir Comprobante de Pago *</label>
-							<input type="file" class="form-control" id="comprobante" name="comprobante" accept="image/*,application/pdf" required>
+							<label for="comprobante" class="form-label">Subir Comprobante de Pago</label>
+							<input type="file" class="form-control" id="comprobante" name="comprobante" accept="image/*,application/pdf">
 							<small class="form-text text-muted">Formatos aceptados: JPG, PNG, PDF (Máx. 5MB)</small>
+						</div>
+
+						<div class="mb-4">
+							<label for="folio" class="form-label">O ingresa el Folio de Transferencia</label>
+							<input type="text" class="form-control" id="folio" name="folio" placeholder="Ej. TRX12345">
+							<small class="form-text text-muted">Si no subes comprobante, ingresa tu folio de transferencia.</small>
 						</div>
 
 						<div class="d-grid gap-2">
@@ -159,3 +165,9 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	window.CONFIG = window.CONFIG || {};
+	window.CONFIG.tiempo_expiracion = <?php echo json_encode((int)($this->params['tiempo_expiracion'] ?? 20)); ?>;
+	window.CONFIG.precio_boleto = <?php echo json_encode((float)($this->params['precio_boleto'] ?? 20)); ?>;
+</script>
