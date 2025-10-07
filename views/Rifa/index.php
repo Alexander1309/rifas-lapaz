@@ -1,37 +1,37 @@
 <div class="container">
 	<div class="row justify-content-center mt-3">
 		<div class="col-md-3">
-			<div class="card">
-				<img src="https://mac-center.com/cdn/shop/files/IMG-18067880_m_jpeg_1.jpg?v=1757469572&width=823" alt="Iphone 17 256 gb" class="card-img-top">
+			<div class="card bg-success p-2 text-dark bg-opacity-25">
+				<img src="/assets/images/iphone17.jpg" alt="Iphone 17 256 gb" class="card-img-top">
 				<div class="card-body">
 					<hr>
-					<h3 class="card-title">Primer Lugar</h3>
-					<p class="card-text">Iphone 17 256 gb</p>
+					<h3 class="card-title">PRIMER LUGAR</h3>
+					<p class="card-text fw-bold">Iphone 17 256 gb</p>
 					<p class="card-text">Pantalla OLED 256gb Almacenamiento Camara 48 MP Bateria de larga duracion</p>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-3">
-			<div class="card">
-				<img src="https://http2.mlstatic.com/D_Q_NP_708759-MLA92042691589_092025-O.webp" alt="PlayStation 5 PRO" class="card-img-top">
+			<div class="card bg-success p-2 text-dark bg-opacity-25">
+				<img src="/assets/images/ps5.jpg" alt="PlayStation 5" class="card-img-top">
 				<div class="card-body">
 					<hr>
-					<h3 class="card-title">Segundo Lugar</h3>
-					<p class="card-text">PlayStation 5 PRO</p>
-					<p class="card-text">8K compatible SSD ultrarrápido Mando DualSense Pro Retrocompatibilidad PS4</p>
+					<h3 class="card-title">SEGUNDO LUGAR</h3>
+					<p class="card-text fw-bold">PlayStation 5</p>
+					<p class="card-text">4K compatible SSD ultrarrápido Edicion astro bot Retrocompatibilidad PS4</p>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-3">
-			<div class="card">
-				<img src="https://i5.walmartimages.com/asr/148eb753-90ff-40c4-930f-bb0f69fdbb66.0dea8a120732d5dd113f0e345d5662e9.jpeg" alt="Laptop Gamer RTX 4090" class="card-img-top">
+			<div class="card bg-success p-2 text-dark bg-opacity-25">
+				<img src="https://m.media-amazon.com/images/I/81tMUyKLsNL.jpg" alt="PANTALLA LG 55 UHD" class="card-img-top">
 				<div class="card-body">
 					<hr>
-					<h3 class="card-title">Tercer Lugar</h3>
-					<p class="card-text">Laptop Gamer RTX 4090</p>
-					<p class="card-text">
-						RTX 4090 16GB 32 GB RAM DDR5 SSD 2TB NVMe Pantalla 240Hz.
-						Procesador Intel Core i9 14th Generación
+					<h3 class="card-title">TERCER LUGAR</h3>
+					<p class="card-text fw-bold">Pantalla LG 55 4K</p>
+					<p class="card-text"> LG Pantalla UHD AI ThinQ 55 Pulgadas 4K Smart TV 
+                        Tecnologia de Control de Brillo con AI
+
 					</p>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 						</button>
 					</h2>
 					<div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-						<div class="accordion-body">Los ganadores se eligen mediante un sorteo aleatorio que se realiza en vivo a través de nuestras redes sociales. Utilizamos herramientas transparentes y verificables para garantizar la equidad del proceso. Cada boleto tiene las mismas probabilidades de ganar.</div>
+						<div class="accordion-body">Con la Lotería Nacional. El número ganador se determina con las últimas cifras del primer premio.</div>
 					</div>
 				</div>
 				<div class="accordion-item">
@@ -62,7 +62,7 @@
 						</button>
 					</h2>
 					<div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-						<div class="accordion-body">Para participar, debes ser mayor de edad y residir en Frontera, Coahuila o sus alrededores. Es necesario adquirir al menos un boleto de participación y proporcionar tus datos de contacto correctos para poder notificarte en caso de ser ganador.</div>
+						<div class="accordion-body"> Es necesario adquirir al menos un boleto de participación y proporcionar tus datos de contacto correctos para poder notificarte en caso de ser ganador.</div>
 					</div>
 				</div>
 				<div class="accordion-item">
@@ -94,16 +94,7 @@
 					<div id="flush-collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
 						<div class="accordion-body">Una vez verificada tu identidad como ganador, coordinamos la entrega del premio. Puedes recogerlo personalmente en nuestras oficinas en Frontera, Coahuila o, si prefieres, podemos enviarlo a tu domicilio de forma segura. Los premios son 100% nuevos y originales.</div>
 					</div>
-				</div>
-				<div class="accordion-item">
-					<h2 class="accordion-header">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
-							¿LOS PREMIOS SON ORIGINALES?
-						</button>
-					</h2>
-					<div id="flush-collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-						<div class="accordion-body">¡Absolutamente! Todos nuestros premios son 100% originales, nuevos y con garantía oficial. Cada producto incluye su caja sellada, accesorios originales y certificado de garantía del fabricante. No trabajamos con productos usados ni réplicas.</div>
-					</div>
+
 				</div>
 				<div class="accordion-item">
 					<h2 class="accordion-header">
@@ -135,14 +126,7 @@
 						<div class="accordion-body">Los boletos se pagan mediante transferencia bancaria. Al momento de comprar tus boletos, el sistema te pedirá que subas tu comprobante de pago. Tu(s) boleto(s) serán aprobados y recibirás tu número único de participación en un plazo máximo de 1 día hábil después de verificar tu pago.</div>
 					</div>
 				</div>
-				<div class="accordion-item">
-					<h2 class="accordion-header">
-						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTen" aria-expanded="false" aria-controls="flush-collapseTen">
-							¿RIFAS LA PAZ ES UNA EMPRESA LEGALMENTE CONSTITUIDA?
-						</button>
-					</h2>
-					<div id="flush-collapseTen" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-						<div class="accordion-body">Sí, somos una empresa legalmente constituida en México. Operamos con total transparencia y cumplimos con todas las regulaciones vigentes. Puedes verificar nuestros datos en nuestras redes sociales oficiales y solicitar información adicional cuando lo desees.</div>
+
 					</div>
 				</div>
 			</div>
