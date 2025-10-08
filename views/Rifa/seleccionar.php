@@ -70,17 +70,20 @@
 	</div>
 </div>
 
-<!-- Datos para JavaScript -->
-<script>
-	// Boletos ya vendidos
-	window.BOLETOS_VENDIDOS_DATA = <?php echo $boletos_vendidos ?? '[]'; ?>;
-	window.CONFIG = {
-		precio_boleto: <?php echo json_encode($this->params['precio_boleto'] ?? 20); ?>,
-		total_boletos: <?php echo json_encode($this->params['total_boletos'] ?? 100000); ?>
-	};
-	try {
-		window.BOLETOS_VENDIDOS_DATA = <?php echo $this->params['boletos_vendidos'] ?? '[]'; ?>;
-	} catch (e) {}
+<!-- Datos para JavaScript (inputs ocultos) -->
+<?php
+// Asegurar valores seguros para atributos numéricos
+$precioBoletoVal = htmlspecialchars((string)($this->params['precio_boleto'] ?? 20), ENT_QUOTES, 'UTF-8');
+$totalBoletosVal = htmlspecialchars((string)($this->params['total_boletos'] ?? 100000), ENT_QUOTES, 'UTF-8');
+// boeltos_vendidos ya viene como JSON desde el controlador
+$vendidosJson = is_string($this->params['boletos_vendidos'] ?? null)
+	? $this->params['boletos_vendidos']
+	: json_encode($this->params['boletos_vendidos'] ?? []);
+?>
+<input type="hidden" id="configPrecioBoleto" value="<?php echo $precioBoletoVal; ?>">
+<input type="hidden" id="configTotalBoletos" value="<?php echo $totalBoletosVal; ?>">
+<script type="application/json" id="boletosVendidosData">
+	<?php echo $vendidosJson; ?>
 </script>
 
 <!-- Formulario oculto para enviar datos por POST -->

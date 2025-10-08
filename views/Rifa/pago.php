@@ -15,98 +15,64 @@
 					</div>
 				</div>
 				<div class="card-body p-5">
-					<!-- Accordion de Información -->
-					<div class="accordion mb-4" id="accordionInformacion">
-
-						<!-- Resumen de Compra -->
-						<div class="accordion-item">
-							<h2 class="accordion-header" id="headingResumen">
-								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseResumen" aria-expanded="true" aria-controls="collapseResumen">
-									<i class="bi bi-info-circle me-2"></i> <strong>Resumen de Compra</strong>
-								</button>
-							</h2>
-							<div id="collapseResumen" class="accordion-collapse collapse show" aria-labelledby="headingResumen" data-bs-parent="#accordionInformacion">
-								<div class="accordion-body">
-									<div class="row">
-										<div class="col-md-6">
-											<p class="mb-2"><strong>Cantidad de boletos:</strong> <span id="cantidadBoletos"><?php echo count($_SESSION['boletos_seleccionados'] ?? []); ?></span></p>
-											<p class="mb-0"><strong>Precio por boleto:</strong> $<span id="precioPorBoleto"><?php echo number_format(($this->params['precio_boleto'] ?? 20), 2); ?></span></p>
-										</div>
-										<div class="col-md-6 text-end">
-											<h3 class="text-success mb-0">
-												<strong>Total: $<span id="totalPagar"><?php echo number_format((count($_SESSION['boletos_seleccionados'] ?? []) * ($this->params['precio_boleto'] ?? 20)), 2); ?></span></strong>
-											</h3>
-										</div>
-									</div>
-									<hr>
-									<!-- Boletos Seleccionados -->
-									<h6 class="fw-semibold mb-3">
-										<i class="bi bi-ticket-perforated"></i> Boletos Seleccionados
-									</h6>
-									<div class="boletos-lista p-3 bg-light rounded">
-										<?php
-										if (isset($_SESSION['boletos_seleccionados']) && is_array($_SESSION['boletos_seleccionados'])) {
-											foreach ($_SESSION['boletos_seleccionados'] as $boleto) {
-												echo '<span class="badge bg-primary me-2 mb-2 p-2">#' . htmlspecialchars($boleto) . '</span>';
-											}
-										} else {
-											echo '<p class="text-muted text-center">No hay boletos seleccionados</p>';
-										}
-										?>
-									</div>
-								</div>
+					<!-- Secciones visibles (sin acordeón) -->
+					<div class="mb-4">
+						<h5 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2"></i> Resumen de Compra</h5>
+						<div class="row">
+							<div class="col-md-6">
+								<p class="mb-2"><strong>Cantidad de boletos:</strong> <span id="cantidadBoletos"><?php echo count($_SESSION['boletos_seleccionados'] ?? []); ?></span></p>
+								<p class="mb-0"><strong>Precio por boleto:</strong> $<span id="precioPorBoleto"><?php echo number_format(($this->params['precio_boleto'] ?? 20), 2); ?></span></p>
+							</div>
+							<div class="col-md-6 text-end">
+								<h3 class="text-success mb-0">
+									<strong>Total: $<span id="totalPagar"><?php echo number_format((count($_SESSION['boletos_seleccionados'] ?? []) * ($this->params['precio_boleto'] ?? 20)), 2); ?></span></strong>
+								</h3>
 							</div>
 						</div>
+						<hr>
+						<h6 class="fw-semibold mb-3"><i class="bi bi-ticket-perforated"></i> Boletos Seleccionados</h6>
+						<div class="boletos-lista p-3 bg-light rounded">
+							<?php
+							if (isset($_SESSION['boletos_seleccionados']) && is_array($_SESSION['boletos_seleccionados'])) {
+								foreach ($_SESSION['boletos_seleccionados'] as $boleto) {
+									echo '<span class="badge bg-primary me-2 mb-2 p-2">#' . htmlspecialchars($boleto) . '</span>';
+								}
+							} else {
+								echo '<p class="text-muted text-center">No hay boletos seleccionados</p>';
+							}
+							?>
+						</div>
+					</div>
 
-						<!-- Información de Cuenta para Depósito -->
-						<div class="accordion-item">
-							<h2 class="accordion-header" id="headingCuenta">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCuenta" aria-expanded="false" aria-controls="collapseCuenta">
-									<i class="bi bi-bank me-2"></i> <strong>Información de Cuenta para Depósito</strong>
-								</button>
-							</h2>
-							<div id="collapseCuenta" class="accordion-collapse collapse" aria-labelledby="headingCuenta" data-bs-parent="#accordionInformacion">
-								<div class="accordion-body">
-									<div class="alert alert-success mb-0">
-										<h6 class="alert-heading"><i class="bi bi-bank2"></i> Datos Bancarios</h6>
-										<hr>
-										<p class="mb-1"><strong>Banco:</strong> <?php echo htmlspecialchars($this->params['banco']['banco_nombre'] ?? ''); ?></p>
-										<p class="mb-1"><strong>Tipo de Cuenta:</strong> Cuenta</p>
-										<p class="mb-1"><strong>Número de Cuenta:</strong> <?php echo htmlspecialchars($this->params['banco']['cuenta_banco'] ?? ''); ?></p>
-										<p class="mb-0"><strong>Titular:</strong> <?php echo htmlspecialchars($this->params['banco']['titular_cuenta'] ?? ''); ?></p>
-									</div>
-								</div>
+					<div class="mb-4">
+						<h5 class="fw-semibold mb-3"><i class="bi bi-bank me-2"></i> Información de Cuenta para Depósito</h5>
+						<div class="alert alert-success mb-0">
+							<h6 class="alert-heading"><i class="bi bi-bank2"></i> Datos Bancarios</h6>
+							<hr>
+							<p class="mb-1"><strong>Banco:</strong> <?php echo htmlspecialchars($this->params['banco']['banco_nombre'] ?? ''); ?></p>
+							<p class="mb-1"><strong>Tipo de Cuenta:</strong> Cuenta</p>
+							<p class="mb-1"><strong>Número de Cuenta:</strong> <?php echo htmlspecialchars($this->params['banco']['cuenta_banco'] ?? ''); ?></p>
+							<p class="mb-0"><strong>Titular:</strong> <?php echo htmlspecialchars($this->params['banco']['titular_cuenta'] ?? ''); ?></p>
+						</div>
+					</div>
+
+					<div class="mb-4">
+						<h5 class="fw-semibold mb-3"><i class="bi bi-exclamation-triangle-fill me-2"></i> Proceso de Validación y Acreditación</h5>
+						<div class="alert alert-warning border-warning mb-0">
+							<div class="mb-3">
+								<p class="mb-2"><i class="bi bi-lock-fill text-warning"></i> <strong>Bloqueo Temporal:</strong></p>
+								<p class="mb-3 ms-4">Los boletos seleccionados quedarán <strong>bloqueados temporalmente</strong> hasta que se valide tu pago.</p>
+
+								<p class="mb-2"><i class="bi bi-clock-fill text-info"></i> <strong>Tiempo de Validación:</strong></p>
+								<p class="mb-3 ms-4">La validación de tu comprobante se realizará en un plazo de <strong>24 horas hábiles</strong>.</p>
+
+								<p class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> <strong>Pago Validado:</strong></p>
+								<p class="mb-3 ms-4">Una vez validado el pago, tus boletos serán <strong>acreditados</strong> y recibirás un <strong>correo electrónico de confirmación</strong> con el detalle de tus números.</p>
+
+								<p class="mb-2"><i class="bi bi-x-circle-fill text-danger"></i> <strong>Pago No Validado:</strong></p>
+								<p class="mb-0 ms-4">Si no es posible validar el pago, los boletos se <strong>desbloquearán automáticamente</strong> y estarán disponibles para otros usuarios. Se te notificará por correo.</p>
 							</div>
 						</div>
-
-						<!-- Proceso de Validación -->
-						<div class="accordion-item">
-							<h2 class="accordion-header" id="headingValidacion">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseValidacion" aria-expanded="false" aria-controls="collapseValidacion">
-									<i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>Proceso de Validación y Acreditación</strong>
-								</button>
-							</h2>
-							<div id="collapseValidacion" class="accordion-collapse collapse" aria-labelledby="headingValidacion" data-bs-parent="#accordionInformacion">
-								<div class="accordion-body">
-									<div class="alert alert-warning border-warning mb-0">
-										<div class="mb-3">
-											<p class="mb-2"><i class="bi bi-lock-fill text-warning"></i> <strong>Bloqueo Temporal:</strong></p>
-											<p class="mb-3 ms-4">Los boletos seleccionados quedarán <strong>bloqueados temporalmente</strong> hasta que se valide tu pago.</p>
-
-											<p class="mb-2"><i class="bi bi-clock-fill text-info"></i> <strong>Tiempo de Validación:</strong></p>
-											<p class="mb-3 ms-4">La validación de tu comprobante se realizará en un plazo de <strong>24 horas hábiles</strong>.</p>
-
-											<p class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> <strong>Pago Validado:</strong></p>
-											<p class="mb-3 ms-4">Una vez validado el pago, tus boletos serán <strong>acreditados</strong> y recibirás un <strong>correo electrónico de confirmación</strong> con el detalle de tus números.</p>
-
-											<p class="mb-2"><i class="bi bi-x-circle-fill text-danger"></i> <strong>Pago No Validado:</strong></p>
-											<p class="mb-0 ms-4">Si no es posible validar el pago, los boletos se <strong>desbloquearán automáticamente</strong> y estarán disponibles para otros usuarios. Se te notificará por correo.</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
 					</div>
 
 					<!-- Formulario de Datos del Comprador -->

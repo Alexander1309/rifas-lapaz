@@ -2,17 +2,12 @@
 // VARIABLES GLOBALES
 // ===========================
 let boletosSeleccionados = new Set();
-const PRECIO_BOLETO =
-  (window.CONFIG && Number(window.CONFIG.precio_boleto)) || 20;
-const boletosVendidos = new Set(
-  Array.isArray(window.BOLETOS_VENDIDOS_DATA)
-    ? window.BOLETOS_VENDIDOS_DATA
-    : []
-);
+// Config por defecto, se sobrescribe en DOMContentLoaded
+let PRECIO_BOLETO = 20;
+let TOTAL_BOLETOS = 100000;
+let boletosVendidos = new Set();
 
 // Lazy Loading Configuration
-const TOTAL_BOLETOS =
-  (window.CONFIG && Number(window.CONFIG.total_boletos)) || 100000;
 const BOLETOS_POR_LOTE = 100;
 const MAX_BOLETOS_ALEATORIOS = 1000; // Máximo para selección aleatoria
 let boletosActuales = 0;
@@ -22,6 +17,28 @@ let cargandoBoletos = false;
 // INICIALIZACIÓN
 // ===========================
 document.addEventListener("DOMContentLoaded", function () {
+  // Leer configuración desde inputs ocultos (ya presentes en el DOM)
+  const precioInput = document.getElementById("configPrecioBoleto");
+  const totalInput = document.getElementById("configTotalBoletos");
+  const vendidosScript = document.getElementById("boletosVendidosData");
+
+  PRECIO_BOLETO = precioInput ? Number(precioInput.value) || 20 : 20;
+  TOTAL_BOLETOS = totalInput ? Number(totalInput.value) || 100000 : 100000;
+
+  if (vendidosScript && vendidosScript.textContent) {
+    try {
+      const parsed = JSON.parse(vendidosScript.textContent);
+      if (Array.isArray(parsed)) {
+        const normalizados = parsed.map((n) =>
+          String(n).replace(/\D/g, "").padStart(6, "0")
+        );
+        boletosVendidos = new Set(normalizados);
+      }
+    } catch (e) {
+      console.warn("boletosVendidosData JSON inválido", e);
+    }
+  }
+
   cargarBoletosIniciales();
   configurarScrollListener();
   configurarEventListeners();
@@ -31,20 +48,19 @@ document.addEventListener("DOMContentLoaded", function () {
 // LAZY LOADING DE BOLETOS
 // ===========================
 function cargarBoletosIniciales() {
-  // Cargar el primer lote
   cargarLoteBoletos();
 }
 
 function crearBoletoHTML(numero) {
-  const numeroFormateado = numero.toString().padStart(6, "0");
+  const numeroKey = String(numero).padStart(5, "0");
 
   const boleto = document.createElement("div");
   boleto.className = "boleto";
-  boleto.setAttribute("data-numero", numeroFormateado);
+  boleto.setAttribute("data-numero", numeroKey);
 
   boleto.innerHTML = `
     <div class="boleto-superior">
-      <span class="boleto-numero">${numeroFormateado}</span>
+      <span class="boleto-numero">${numeroKey}</span>
     </div>
     <div class="boleto-perforacion"></div>
     <div class="boleto-inferior">
@@ -53,17 +69,16 @@ function crearBoletoHTML(numero) {
   `;
 
   // Marcar como vendido si está en la lista
-  if (boletosVendidos.has(numeroFormateado)) {
+  if (boletosVendidos.has(numeroKey)) {
     boleto.classList.add("vendido");
     boleto.style.pointerEvents = "none";
-  }
-  // Marcar como seleccionado si ya está en la lista de seleccionados
-  else if (boletosSeleccionados.has(numeroFormateado)) {
+  } else if (boletosSeleccionados.has(numeroKey)) {
+    // Marcar como seleccionado si ya está en la lista de seleccionados
     boleto.classList.add("seleccionado");
   }
 
   // Agregar event listener si no está vendido
-  if (!boletosVendidos.has(numeroFormateado)) {
+  if (!boletosVendidos.has(numeroKey)) {
     boleto.addEventListener("click", function () {
       toggleBoleto(this);
     });
@@ -224,9 +239,13 @@ function seleccionarBoletosAleatorios() {
   // Obtener boletos disponibles del total (no solo los cargados)
   const boletosDisponibles = [];
   for (let i = 1; i <= TOTAL_BOLETOS; i++) {
-    const numero = String(i).padStart(6, "0");
-    if (!boletosSeleccionados.has(numero) && !boletosVendidos.has(numero)) {
-      boletosDisponibles.push(numero);
+    // Usar clave de 6 dígitos internamente
+    const numeroKey = String(i).padStart(5, "0");
+    if (
+      !boletosSeleccionados.has(numeroKey) &&
+      !boletosVendidos.has(numeroKey)
+    ) {
+      boletosDisponibles.push(numeroKey);
     }
   }
 
@@ -303,7 +322,7 @@ function actualizarResumen() {
     boletosArray.forEach((numero) => {
       const chip = document.createElement("span");
       chip.className = "boleto-chip";
-      chip.textContent = `#${numero}`;
+      chip.textContent = `#${formatearNumeroDisplay5(numero)}`;
       contenedor.appendChild(chip);
     });
 
@@ -360,7 +379,8 @@ async function enviarFormularioPago() {
     ) {
       // Quitar de la selección y marcar como vendidos en UI
       data.no_disponibles.forEach((num) => {
-        const n = String(num).padStart(6, "0");
+        // Normalizar a 6 dígitos para claves internas
+        const n = String(num).replace(/\D/g, "").padStart(5, "0");
         boletosSeleccionados.delete(n);
         boletosVendidos.add(n);
         const el = document.querySelector(`[data-numero="${n}"]`);
@@ -453,5 +473,19 @@ function mostrarAlerta(mensaje, tipo = "info") {
 // UTILIDADES
 // ===========================
 function formatearNumero(numero) {
-  return String(numero).padStart(6, "0");
+  // Clave interna en 6 dígitos
+  return String(numero).padStart(5, "0");
+}
+
+// Mostrar en 5 dígitos para UI cuando sea posible (e.g., 000001 -> 00001)
+function formatearNumeroDisplay5(numero) {
+  let s = String(numero);
+  if (s.length >= 5 && s[0] === "0") {
+    // recortar un 0 a la izquierda para mostrar 5 dígitos
+    return s.substring(1);
+  }
+  if (s.length < 5) {
+    return s.padStart(5, "0");
+  }
+  return s; // ya tiene 5 o más dígitos
 }

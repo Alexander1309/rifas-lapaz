@@ -3,3 +3,6 @@
 [2025-10-07 14:08:31] ERROR: Orden no existe al bloquear boletos | orden_id: 0 | numeros: ["000001"] | file: BoletoModel.php | line: 23 | full_path: C:\xampp\htdocs\models\BoletoModel.php
 [2025-10-07 14:16:45] WARNING: Fallback id de orden por codigo_orden | id: 2 | codigo: AEEEE9B8C9
 [2025-10-07 14:19:07] WARNING: Fallback id de orden por codigo_orden | id: 1 | codigo: 955F61B1C7
+[2025-10-07 20:19:21] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-07 20:19:30] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-07 20:22:01] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php

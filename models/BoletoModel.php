@@ -6,7 +6,7 @@ class BoletoModel extends Model
 
 	public function getVendidosNumeros(int $limit = 1000): array
 	{
-		$sql = "SELECT LPAD(numero, 6, '0') AS numero FROM {$this->table} WHERE estado <> 'disponible' ORDER BY numero ASC LIMIT :lim";
+		$sql = "SELECT LPAD(numero, 5,  '0') AS numero FROM {$this->table} WHERE estado <> 'disponible' ORDER BY numero ASC LIMIT :lim";
 		$stmt = $this->db->getConnection()->prepare($sql);
 		$stmt->bindValue(':lim', $limit, PDO::PARAM_INT);
 		$stmt->execute();
@@ -46,7 +46,7 @@ class BoletoModel extends Model
 			$pdo = $this->db->getConnection();
 			// Preferir match exacto (usa índice) y fallback a LPAD si no se encuentra
 			$sqlSelectExact = "SELECT id, numero, estado FROM {$this->table} WHERE numero = :num FOR UPDATE";
-			$sqlSelectLpad  = "SELECT id, numero, estado FROM {$this->table} WHERE LPAD(numero, 6, '0') = :num FOR UPDATE";
+			$sqlSelectLpad  = "SELECT id, numero, estado FROM {$this->table} WHERE LPAD(numero, 5,  '0') = :num FOR UPDATE";
 			$sqlUpdate = "UPDATE {$this->table} SET estado = 'bloqueado_temporal', orden_id = :orden, fecha_bloqueo = NOW() WHERE id = :id AND estado = 'disponible'";
 			$stmtSelExact = $pdo->prepare($sqlSelectExact);
 			$stmtSelLpad  = $pdo->prepare($sqlSelectLpad);
@@ -126,7 +126,7 @@ class BoletoModel extends Model
 			return str_pad($n, 6, '0', STR_PAD_LEFT);
 		}, $numeros)));
 		$placeholders = implode(',', array_fill(0, count($nums), '?'));
-		$sql = "SELECT LPAD(numero, 6, '0') AS numero FROM {$this->table} WHERE LPAD(numero, 6, '0') IN ($placeholders) AND estado <> 'disponible'";
+		$sql = "SELECT LPAD(numero, 5,  '0') AS numero FROM {$this->table} WHERE LPAD(numero, 5,  '0') IN ($placeholders) AND estado <> 'disponible'";
 		$rows = $this->db->fetchAll($sql, $nums);
 		return array_column($rows, 'numero');
 	}
