@@ -29,8 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const parsed = JSON.parse(vendidosScript.textContent);
       if (Array.isArray(parsed)) {
+        // Internamente usamos 5 dígitos para coincidir con data-numero del DOM
         const normalizados = parsed.map((n) =>
-          String(n).replace(/\D/g, "").padStart(6, "0")
+          String(n).replace(/\D/g, "").padStart(5, "0")
         );
         boletosVendidos = new Set(normalizados);
       }
@@ -167,9 +168,6 @@ function configurarScrollListener() {
 // MARCAR BOLETOS VENDIDOS
 // ===========================
 function marcarBoletosVendidos() {
-  // Aquí puedes agregar los números de boletos ya vendidos
-  // Ejemplo: boletosVendidos.add('0001');
-
   boletosVendidos.forEach((numero) => {
     const boleto = document.querySelector(`[data-numero="${numero}"]`);
     if (boleto) {
@@ -239,7 +237,7 @@ function seleccionarBoletosAleatorios() {
   // Obtener boletos disponibles del total (no solo los cargados)
   const boletosDisponibles = [];
   for (let i = 1; i <= TOTAL_BOLETOS; i++) {
-    // Usar clave de 6 dígitos internamente
+    // Usar clave de 5 dígitos internamente para coincidir con DOM
     const numeroKey = String(i).padStart(5, "0");
     if (
       !boletosSeleccionados.has(numeroKey) &&
@@ -322,7 +320,7 @@ function actualizarResumen() {
     boletosArray.forEach((numero) => {
       const chip = document.createElement("span");
       chip.className = "boleto-chip";
-      chip.textContent = `#${formatearNumeroDisplay5(numero)}`;
+      chip.textContent = `#${String(numero).padStart(5, "0")}`;
       contenedor.appendChild(chip);
     });
 
@@ -379,7 +377,7 @@ async function enviarFormularioPago() {
     ) {
       // Quitar de la selección y marcar como vendidos en UI
       data.no_disponibles.forEach((num) => {
-        // Normalizar a 6 dígitos para claves internas
+        // Normalizar a 5 dígitos para claves internas
         const n = String(num).replace(/\D/g, "").padStart(5, "0");
         boletosSeleccionados.delete(n);
         boletosVendidos.add(n);
@@ -391,10 +389,11 @@ async function enviarFormularioPago() {
         }
       });
       actualizarResumen();
+      const listaDisplay = data.no_disponibles
+        .map((n) => String(n).replace(/\D/g, "").padStart(5, "0"))
+        .join(", ");
       mostrarAlerta(
-        `Algunos boletos ya no están disponibles: ${data.no_disponibles.join(
-          ", "
-        )}`,
+        `Algunos boletos ya no están disponibles: ${listaDisplay}`,
         "warning"
       );
       return; // No enviar aún
@@ -423,8 +422,9 @@ async function enviarFormularioPago() {
   // Agregar el total
   document.getElementById("totalInput").value = totalPagar;
 
+  console.log(form);
   // Enviar el formulario
-  form.submit();
+  //form.submit();
 }
 
 // ===========================
@@ -473,19 +473,6 @@ function mostrarAlerta(mensaje, tipo = "info") {
 // UTILIDADES
 // ===========================
 function formatearNumero(numero) {
-  // Clave interna en 6 dígitos
+  // Clave interna en 5 dígitos (4 ceros máximo a la izquierda)
   return String(numero).padStart(5, "0");
-}
-
-// Mostrar en 5 dígitos para UI cuando sea posible (e.g., 000001 -> 00001)
-function formatearNumeroDisplay5(numero) {
-  let s = String(numero);
-  if (s.length >= 5 && s[0] === "0") {
-    // recortar un 0 a la izquierda para mostrar 5 dígitos
-    return s.substring(1);
-  }
-  if (s.length < 5) {
-    return s.padStart(5, "0");
-  }
-  return s; // ya tiene 5 o más dígitos
 }

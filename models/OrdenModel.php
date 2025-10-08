@@ -22,12 +22,23 @@ class OrdenModel extends Model
 		$this->db->execute($sql, $params);
 		$id = (int)$this->db->getLastInsertId();
 		if ($id <= 0) {
-			// Fallback: Obtener por codigo_orden (único)
-			$row = $this->db->fetchOne("SELECT id FROM {$this->table} WHERE codigo_orden = :cod ORDER BY id DESC LIMIT 1", [':cod' => $params[':cod']]);
+			// Fallback: Obtener por codigo_orden (único) y usuario_id para mayor certeza
+			$row = $this->db->fetchOne(
+				"SELECT id FROM {$this->table} WHERE codigo_orden = :cod AND usuario_id = :uid ORDER BY id DESC LIMIT 1",
+				[':cod' => $params[':cod'], ':uid' => $params[':uid']]
+			);
+			if (!$row) {
+				// Intento alterno solo por código (sigue siendo único)
+				$row = $this->db->fetchOne(
+					"SELECT id FROM {$this->table} WHERE codigo_orden = :cod ORDER BY id DESC LIMIT 1",
+					[':cod' => $params[':cod']]
+				);
+			}
 			if ($row && isset($row['id'])) {
 				$id = (int)$row['id'];
 				if (property_exists($this, 'logger') && $this->logger) {
-					$this->logger->logWarning('Fallback id de orden por codigo_orden', ['id' => $id, 'codigo' => $params[':cod']]);
+					// Bajar el nivel de log para no generar ruido si el fallback funciona
+					$this->logger->logInfo('Fallback id de orden por codigo_orden', null, 'OrdenModel::crear', ['id' => $id, 'codigo' => $params[':cod']]);
 				}
 			} else {
 				if (property_exists($this, 'logger') && $this->logger) {

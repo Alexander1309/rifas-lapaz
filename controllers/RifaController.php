@@ -64,7 +64,7 @@ class RifaController extends Controller
 		// Normalizar boletos a 6 dígitos (defensivo por si el cliente envía 5 dígitos)
 		$boletos = array_values(array_unique(array_filter(array_map(function ($n) {
 			$n = preg_replace('/\D/', '', (string)$n);
-			return $n === '' ? null : str_pad($n, 6, '0', STR_PAD_LEFT);
+			return $n === '' ? null : str_pad($n, 5, '0', STR_PAD_LEFT);
 		}, $boletos))));
 
 		// Verificar que existan boletos seleccionados
@@ -104,7 +104,7 @@ class RifaController extends Controller
 		// Normalizar de nuevo por seguridad
 		$boletos = array_values(array_unique(array_filter(array_map(function ($n) {
 			$n = preg_replace('/\D/', '', (string)$n);
-			return $n === '' ? null : str_pad($n, 6, '0', STR_PAD_LEFT);
+			return $n === '' ? null : str_pad($n, 5, '0', STR_PAD_LEFT);
 		}, $boletos))));
 		if (empty($boletos) || !is_array($boletos)) {
 			$this->setMessageAndRedirect('error', 'No hay boletos seleccionados', constant('URL') . 'rifa/seleccionar');

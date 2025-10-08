@@ -25,10 +25,10 @@ class BoletoModel extends Model
 			return ['ok' => false, 'bloqueados' => [], 'conflictos' => [], 'error' => 'orden_invalida'];
 		}
 
-		// Normalizar todos los números a 6 dígitos
+		// Normalizar todos los números a 5 dígitos
 		$numeros = array_values(array_unique(array_map(function ($n) {
 			$n = preg_replace('/\D/', '', (string)$n);
-			return str_pad($n, 6, '0', STR_PAD_LEFT);
+			return str_pad($n, 5, '0', STR_PAD_LEFT);
 		}, $numeros)));
 
 		sort($numeros);
@@ -115,7 +115,7 @@ class BoletoModel extends Model
 	}
 
 	/**
-	 * Retorna los números (formato 6 dígitos) que no están disponibles de una lista dada
+	 * Retorna los números (formato 5 dígitos) que no están disponibles de una lista dada
 	 */
 	public function getNoDisponiblesPorNumeros(array $numeros): array
 	{
@@ -123,7 +123,7 @@ class BoletoModel extends Model
 		// Normalizar
 		$nums = array_values(array_unique(array_map(function ($n) {
 			$n = preg_replace('/\D/', '', (string)$n);
-			return str_pad($n, 6, '0', STR_PAD_LEFT);
+			return str_pad($n, 5, '0', STR_PAD_LEFT);
 		}, $numeros)));
 		$placeholders = implode(',', array_fill(0, count($nums), '?'));
 		$sql = "SELECT LPAD(numero, 5,  '0') AS numero FROM {$this->table} WHERE LPAD(numero, 5,  '0') IN ($placeholders) AND estado <> 'disponible'";

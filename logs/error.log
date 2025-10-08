@@ -6,3 +6,8 @@
 [2025-10-07 20:19:21] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
 [2025-10-07 20:19:30] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
 [2025-10-07 20:22:01] ERROR: Manual 500 Error: Error al ejecutar el controlador: No se pudo establecer conexión con la base de datos | file: index.php | line: 0 | full_path: /index.php
+[2025-10-08 11:16:53] WARNING: Fallback id de orden por codigo_orden | id: 1 | codigo: 2EE0F83A5D
+[2025-10-08 11:17:40] WARNING: Fallback id de orden por codigo_orden | id: 2 | codigo: 69E7597B51
+[2025-10-08 11:18:43] WARNING: Fallback id de orden por codigo_orden | id: 3 | codigo: 0F55A4E291
+[2025-10-08 11:19:14] WARNING: Fallback id de orden por codigo_orden | id: 4 | codigo: FC986CA93B
+[2025-10-08 12:27:10] ERROR: Method Not Allowed: GET. Allowed: POST | current_method: GET | allowed_methods: ["POST"] | user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 | ip: 189.199.71.6 | file: index.php | line: 0 | full_path: /index.php
