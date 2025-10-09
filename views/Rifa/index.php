@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="row justify-content-center mt-3">
-		<div class="col-md-3">
+		<div class="col-md-3 mt-3">
 			<div class="card bg-success p-2 text-dark bg-opacity-25">
 				<img src="/assets/images/iphone17.jpg" alt="Iphone 17 256 gb" class="card-img-top">
 				<div class="card-body">
