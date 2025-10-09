@@ -1,32 +1,218 @@
-.boletos-lista {
-		max-height: 200px;
-		overflow-y: auto;
-	}
+/* Estilos generales del formulario de pago */
+.pago-page {
+	background-color: #f8f9fa;
+	min-height: 100vh;
+}
 
-	.boletos-lista .badge {
+.card {
+	border: none;
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+.card-header {
+	border-bottom: none;
+}
+
+.card-footer {
+	background-color: #f8f9fa;
+	border-top: 1px solid #dee2e6;
+}
+
+/* Barra de progreso */
+.progress {
+	background-color: rgba(255, 255, 255, 0.3);
+	border-radius: 10px;
+}
+
+.progress-bar {
+	transition: width 0.4s ease;
+}
+
+/* Labels de pasos */
+.step-label {
+	font-size: 0.85rem;
+	font-weight: 500;
+	transition: all 0.3s ease;
+}
+
+.step-label.active {
+	font-weight: 700;
+	font-size: 0.9rem;
+}
+
+/* Pasos del formulario */
+.form-step {
+	animation: fadeIn 0.4s ease;
+}
+
+.form-step.active {
+	display: block;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Countdown timer */
+#countdown {
+	font-family: 'Courier New', monospace;
+	font-size: 1.1rem;
+}
+
+/* Lista de boletos */
+.boletos-lista {
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.boletos-lista .badge {
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+
+/* Input groups */
+.input-group-text {
+	background-color: #f8f9fa;
+	border-right: none;
+}
+
+.input-group .form-control {
+	border-left: none;
+}
+
+.input-group .form-control:focus {
+	border-color: #ced4da;
+	box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+}
+
+.input-group .form-control:focus + .input-group-text,
+.input-group-text + .form-control:focus {
+	border-color: #28a745;
+}
+
+/* Checkbox de términos */
+.form-check-input:checked {
+	background-color: #28a745;
+	border-color: #28a745;
+}
+
+.form-check-input:focus {
+	border-color: #28a745;
+	box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+/* Validación */
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+	border-color: #dc3545;
+}
+
+.was-validated .form-control:valid,
+.form-control.is-valid {
+	border-color: #28a745;
+}
+
+/* Botones */
+.btn {
+	font-weight: 500;
+	border-radius: 6px;
+	transition: all 0.2s ease;
+}
+
+.btn-success {
+	box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+.btn-success:hover {
+	box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+	transform: translateY(-1px);
+}
+
+.btn-secondary {
+	box-shadow: 0 2px 4px rgba(108, 117, 125, 0.2);
+}
+
+/* Alertas personalizadas */
+.alert {
+	border-radius: 8px;
+}
+
+.alert-warning {
+	background-color: #fff3cd;
+	border-color: #ffc107;
+}
+
+.alert-success {
+	background-color: #d1e7dd;
+	border-color: #28a745;
+}
+
+/* Animación de shake para errores */
+.shake {
+	animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+	0%, 100% { transform: translateX(0); }
+	25% { transform: translateX(-8px); }
+	50% { transform: translateX(8px); }
+	75% { transform: translateX(-8px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.card-header h4 {
+		font-size: 1.2rem;
+	}
+	
+	.step-label {
+		font-size: 0.75rem;
+	}
+	
+	.step-label.active {
+		font-size: 0.8rem;
+	}
+	
+	#countdown {
 		font-size: 0.95rem;
 	}
-
-	.card {
-		border: none;
-		border-radius: 15px;
+	
+	.card-body {
+		padding: 1.5rem !important;
 	}
+}
 
-	.card-header {
-		border-radius: 15px 15px 0 0 !important;
+@media (max-width: 576px) {
+	.card-header .btn {
+		padding: 0.25rem 0.5rem;
+		font-size: 0.85rem;
 	}
+	
+	.card-header h4 {
+		font-size: 1rem;
+	}
+	
+	.alert-warning {
+		padding: 0.75rem;
+		font-size: 0.9rem;
+	}
+	
+	.step-label {
+		font-size: 0.7rem;
+	}
+}
 
-	.form-control:focus,
-	.form-check-input:focus {
-		border-color: #28a745;
-		box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-	}
-
-	.form-check-input:checked {
-		background-color: #28a745;
-		border-color: #28a745;
-	}
-
-	#countdown {
-		font-family: 'Courier New', monospace;
-	}
+/* Loader spinner */
+.spinner-border-sm {
+	width: 1rem;
+	height: 1rem;
+	border-width: 0.15em;
+}

@@ -422,9 +422,15 @@ async function enviarFormularioPago() {
   // Agregar el total
   document.getElementById("totalInput").value = totalPagar;
 
-  console.log(form);
+  // Agregar spinner al botón y deshabilitarlo
+  const btnPagar = document.getElementById("btnPagar");
+  const textoOriginal = btnPagar.innerHTML;
+  btnPagar.innerHTML =
+    '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
+  btnPagar.disabled = true;
+
   // Enviar el formulario
-  //form.submit();
+  form.submit();
 }
 
 // ===========================
