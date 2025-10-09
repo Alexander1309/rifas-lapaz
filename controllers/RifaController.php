@@ -24,7 +24,9 @@ class RifaController extends Controller
 	public function seleccionar()
 	{
 		// Cargar config clave para JS (precio y total)
-		$cfg = $this->config->getMany(['precio_boleto', 'total_boletos']);
+		$cfg = $this->config->getMany(['precio_boleto', 'total_boletos', 'rifa_activa']);
+		$rifaActiva = isset($cfg['rifa_activa']) ? (int)$cfg['rifa_activa'] : 0;
+
 		require_once MODELS_PATH . 'BoletoModel.php';
 		$limite = isset($cfg['total_boletos']) ? (int)$cfg['total_boletos'] : 100000;
 		$vendidos = (new BoletoModel())->getVendidosNumeros($limite);
@@ -35,6 +37,7 @@ class RifaController extends Controller
 			'precio_boleto' => $cfg['precio_boleto'] ?? 20,
 			'total_boletos' => $cfg['total_boletos'] ?? 100000,
 			'boletos_vendidos' => json_encode($vendidos),
+			'rifa_activa' => $rifaActiva,
 		], [
 			'boletos.css',
 			'boletos.js'
@@ -81,6 +84,8 @@ class RifaController extends Controller
 		$banco = [
 			'banco_nombre' => $this->config->get('banco_nombre', 'Banco'),
 			'cuenta_banco' => $this->config->get('cuenta_banco', ''),
+			'numero_cuenta' => $this->config->get('numero_cuenta', ''),
+			'cuenta_clave' => $this->config->get('cuenta_clave', ''),
 			'titular_cuenta' => $this->config->get('titular_cuenta', ''),
 		];
 

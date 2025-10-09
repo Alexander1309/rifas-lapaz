@@ -65,7 +65,7 @@ function crearBoletoHTML(numero) {
     </div>
     <div class="boleto-perforacion"></div>
     <div class="boleto-inferior">
-      <span class="boleto-precio">Rifa La Paz</span>
+      <span class="boleto-precio">Rifas La Paz</span>
     </div>
   `;
 

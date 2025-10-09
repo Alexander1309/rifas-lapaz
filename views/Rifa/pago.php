@@ -4,7 +4,7 @@
 			<form action="/rifa/confirmarPago" method="POST" id="formPago" enctype="multipart/form-data">
 				<input type="hidden" name="total" value="<?php echo (count($_SESSION['boletos_seleccionados'] ?? []) * ($this->params['precio_boleto'] ?? 20)); ?>">
 				<input type="hidden" name="cantidad" value="<?php echo count($_SESSION['boletos_seleccionados'] ?? []); ?>">
-				
+
 				<div class="card shadow-sm">
 					<div class="card-header bg-success text-white">
 						<div class="d-flex justify-content-between align-items-center mb-3">
@@ -20,12 +20,12 @@
 								<span id="countdown" style="font-weight: bold;">20:00</span>
 							</div>
 						</div>
-						
+
 						<!-- Barra de progreso -->
 						<div class="progress" style="height: 8px;">
 							<div class="progress-bar bg-danger" id="progress-bar" role="progressbar" style="width: 33%"></div>
 						</div>
-						
+
 						<!-- Labels de pasos -->
 						<div class="d-flex justify-content-between mt-2">
 							<small class="step-label active text-white" data-step="1">1. Condiciones</small>
@@ -90,7 +90,7 @@
 									<p class="mb-0 ms-4">Si no es posible validar el pago, los boletos se <strong>desbloquearán automáticamente</strong> y estarán disponibles para otros usuarios. Se te notificará por correo.</p>
 								</div>
 							</div>
-							
+
 							<div class="form-check mb-3">
 								<input class="form-check-input" type="checkbox" value="1" id="aceptaTerminos">
 								<label class="form-check-label" for="aceptaTerminos">
@@ -147,8 +147,9 @@
 								<div class="row">
 									<div class="col-md-6">
 										<p class="mb-1"><strong>Banco:</strong> <?php echo htmlspecialchars($this->params['banco']['banco_nombre'] ?? ''); ?></p>
-										<p class="mb-1"><strong>Tipo de Cuenta:</strong> Cuenta</p>
-										<p class="mb-1"><strong>Número de Cuenta:</strong> <?php echo htmlspecialchars($this->params['banco']['cuenta_banco'] ?? ''); ?></p>
+										<p class="mb-1"><strong>N° Cuenta:</strong> <?php echo htmlspecialchars($this->params['banco']['numero_cuenta'] ?? ''); ?></p>
+										<p class="mb-1"><strong>Tarjeta:</strong> <?php echo htmlspecialchars($this->params['banco']['cuenta_banco'] ?? ''); ?></p>
+										<p class="mb-1"><strong>Cuenta Clabe:</strong> <?php echo htmlspecialchars($this->params['banco']['cuenta_clave'] ?? ''); ?></p>
 									</div>
 									<div class="col-md-6">
 										<p class="mb-0"><strong>Titular:</strong> <?php echo htmlspecialchars($this->params['banco']['titular_cuenta'] ?? ''); ?></p>
@@ -159,7 +160,7 @@
 							<h5 class="text-secondary mb-3 mt-4">
 								<i class="bi bi-cloud-upload me-2"></i>Comprobante de Transferencia
 							</h5>
-							
+
 							<div class="row g-3">
 								<div class="col-md-6">
 									<label for="comprobante" class="form-label fw-bold">Subir Comprobante de Pago</label>
@@ -183,7 +184,7 @@
 									<small class="text-muted">Comprobante o folio requerido</small>
 								</div>
 							</div>
-							
+
 							<div class="invalid-feedback d-block" id="folioComprobanteError" style="display:none">
 								<i class="bi bi-exclamation-triangle me-1"></i>Debes subir un comprobante o ingresar el folio/clave de rastreo.
 							</div>
