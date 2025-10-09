@@ -11,7 +11,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-3 mt-3">
 			<div class="card bg-success p-2 text-dark bg-opacity-25">
 				<img src="/assets/images/ps5.jpg" alt="PlayStation 5" class="card-img-top">
 				<div class="card-body">
@@ -22,15 +22,15 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-3 mt-3">
 			<div class="card bg-success p-2 text-dark bg-opacity-25">
 				<img src="https://m.media-amazon.com/images/I/81tMUyKLsNL.jpg" alt="PANTALLA LG 55 UHD" class="card-img-top">
 				<div class="card-body">
 					<hr>
 					<h3 class="card-title">TERCER LUGAR</h3>
 					<p class="card-text fw-bold">Pantalla LG 55 4K</p>
-					<p class="card-text"> LG Pantalla UHD AI ThinQ 55 Pulgadas 4K Smart TV 
-                        Tecnologia de Control de Brillo con AI
+					<p class="card-text"> LG Pantalla UHD AI ThinQ 55 Pulgadas 4K Smart TV
+						Tecnologia de Control de Brillo con AI
 
 					</p>
 				</div>
@@ -127,11 +127,11 @@
 					</div>
 				</div>
 
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
+</div>
+</div>
 </div>
 
 <footer class="bg-dark text-white mt-5">
@@ -186,7 +186,7 @@
 					</a>
 				</div>
 				<div class="mt-3">
-					<p class="mb-1"><i class="bi bi-telephone-fill me-2"></i> +52 987 654 3210</p>
+					<p class="mb-1"><i class="bi bi-telephone-fill me-2"></i> +52 866 112 6294</p>
 					<p class="mb-1"><i class="bi bi-envelope-fill me-2"></i> contacto@rifaslapaz.com</p>
 				</div>
 			</div>
