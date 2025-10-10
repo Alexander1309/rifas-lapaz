@@ -27,18 +27,15 @@ class View
 		$useSidebar = $params['useSidebar'] ?? false;
 		$useLogin = $params['useLogin'] ?? false;
 
-		if (isset($_SESSION['username'])) {
-			if ($useSidebar) {
-				$headerPath = $this->getViewPath('templates/header-menu');
-			} else {
-				$headerPath = $this->getViewPath('templates/header');
-			}
+		// Forzar header-login si la vista lo solicita, sin importar el estado de sesión
+		if ($useLogin) {
+			$headerPath = $this->getViewPath('templates/header-login');
+		} else if (isset($_SESSION['username'])) {
+			$headerPath = $useSidebar
+				? $this->getViewPath('templates/header-menu')
+				: $this->getViewPath('templates/header');
 		} else {
-			if ($useLogin) {
-				$headerPath = $this->getViewPath('templates/header-login');
-			} else {
-				$headerPath = $this->getViewPath('templates/header');
-			}
+			$headerPath = $this->getViewPath('templates/header');
 		}
 
 		$viewPath = $this->getViewPath($view);

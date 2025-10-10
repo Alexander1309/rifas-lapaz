@@ -25,6 +25,36 @@ class ConfiguracionModel extends Model
 		return $out;
 	}
 
+	public function set(string $clave, $valor, string $tipo = 'texto'): bool
+	{
+		// Normaliza el valor para almacenar como string
+		$valorStr = $this->stringifyValor($valor, $tipo);
+		$sql = "INSERT INTO {$this->table} (clave, valor, tipo) VALUES (:clave, :valor, :tipo)
+			ON DUPLICATE KEY UPDATE valor = VALUES(valor), tipo = VALUES(tipo)";
+		return $this->db->execute($sql, [
+			':clave' => $clave,
+			':valor' => $valorStr,
+			':tipo' => $tipo,
+		]);
+	}
+
+	private function stringifyValor($valor, string $tipo): string
+	{
+		switch ($tipo) {
+			case 'numero':
+				return (string)(int)$valor;
+			case 'decimal':
+				return (string)(float)$valor;
+			case 'boolean':
+				return ((int)$valor === 1) ? '1' : '0';
+			case 'json':
+				return json_encode($valor, JSON_UNESCAPED_UNICODE);
+			case 'texto':
+			default:
+				return (string)$valor;
+		}
+	}
+
 	private function castValor($valor, string $tipo, $default = null)
 	{
 		if ($valor === null) return $default;

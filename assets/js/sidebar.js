@@ -49,19 +49,16 @@ class SidebarManager {
   }
 
   setupEventListeners() {
+    // Eliminar toggle desktop: solo usamos móvil
+    // Quitar listener de this.toggleBtn si existe
     if (this.toggleBtn) {
-      this.toggleBtn.addEventListener("click", () => this.toggleSidebar());
+      this.toggleBtn.remove();
+      this.toggleBtn = null;
     }
 
     if (this.mobileToggle) {
       this.mobileToggle.addEventListener("click", () =>
         this.toggleMobileSidebar()
-      );
-    }
-
-    if (this.expandIndicator) {
-      this.expandIndicator.addEventListener("click", () =>
-        this.expandSidebar()
       );
     }
 
@@ -230,28 +227,13 @@ class SidebarManager {
     }
   }
 
+  // Desactivar completamente colapso en desktop
   toggleSidebar() {
-    if (this.isMobile) {
-      this.toggleMobileSidebar();
-      return;
-    }
-
-    this.isCollapsed = !this.isCollapsed;
-    this.sidebar.classList.toggle("collapsed", this.isCollapsed);
-
-    if (this.isCollapsed) {
-      this.closeAllDropdowns();
-    }
-
-    setTimeout(() => {
-      this.updateTooltips();
-      this.updateTooltipsOnToggle();
-    }, 300);
-    this.updateExpandIndicator();
-    localStorage.setItem("sidebarCollapsed", this.isCollapsed);
-    this.dispatchEvent("sidebarToggle", { collapsed: this.isCollapsed });
+    // No-op en desktop
+    return;
   }
 
+  // Mantener móvil igual
   toggleMobileSidebar() {
     const isOpen = this.sidebar.classList.contains("show");
 
@@ -340,39 +322,19 @@ class SidebarManager {
   }
 
   handleResize() {
-    const wasMobile = this.isMobile;
     this.isMobile = window.innerWidth <= 768;
 
-    if (wasMobile !== this.isMobile) {
-      if (this.isMobile) {
-        this.sidebar.classList.remove("collapsed");
-        this.sidebar.classList.remove("show");
-        if (this.overlay) {
-          this.overlay.classList.remove("show");
-        }
-        if (this.mobileToggle) {
-          this.mobileToggle.classList.add("show");
-        }
-        document.body.style.overflow = "";
-      } else {
-        this.sidebar.classList.remove("show");
-        if (this.overlay) {
-          this.overlay.classList.remove("show");
-        }
-        if (this.mobileToggle) {
-          this.mobileToggle.classList.remove("show");
-        }
-        document.body.style.overflow = "";
+    if (!this.isMobile) {
+      // Asegurar estado expandido en desktop
+      this.isCollapsed = false;
+      this.sidebar.classList.remove("collapsed");
+      if (this.overlay) this.overlay.classList.remove("show");
+      document.body.style.overflow = "";
+    }
 
-        const savedState = localStorage.getItem("sidebarCollapsed");
-        if (savedState === "true") {
-          this.isCollapsed = true;
-          this.sidebar.classList.add("collapsed");
-        }
-      }
-
-      this.updateTooltips();
-      this.updateExpandIndicator();
+    if (this.mobileToggle) {
+      if (this.isMobile) this.mobileToggle.classList.add("show");
+      else this.mobileToggle.classList.remove("show");
     }
   }
 
