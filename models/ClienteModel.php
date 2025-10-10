@@ -27,4 +27,10 @@ class ClienteModel extends Model
 		}
 		return $cid;
 	}
+
+	public function getById(int $id): ?array
+	{
+		$row = $this->db->fetchOne("SELECT * FROM {$this->table} WHERE id = :id", [':id' => $id]);
+		return $row ?: null;
+	}
 }

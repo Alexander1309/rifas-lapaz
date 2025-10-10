@@ -51,3 +51,29 @@ if (!defined('APP_TIMEZONE')) {
 }
 
 date_default_timezone_set(APP_TIMEZONE);
+
+// =====================
+// Configuración de correo (PHPMailer)
+// =====================
+if (!defined('MAIL_ENABLED')) define('MAIL_ENABLED', true);
+if (!defined('SMTP_HOST')) define('SMTP_HOST', 'smtp.gmail.com');
+if (!defined('SMTP_PORT')) define('SMTP_PORT', 587);
+if (!defined('SMTP_USER')) define('SMTP_USER', '');
+if (!defined('SMTP_PASS')) define('SMTP_PASS', '');
+if (!defined('SMTP_SECURE')) define('SMTP_SECURE', 'tls'); // tls | ssl | ''
+if (!defined('MAIL_FROM')) define('MAIL_FROM', 'no-reply@rifaslapaz.local');
+if (!defined('MAIL_FROM_NAME')) define('MAIL_FROM_NAME', 'Rifas La Paz');
+if (!defined('MAIL_REPLY_TO')) define('MAIL_REPLY_TO', '');
+if (!defined('MAIL_REPLY_TO_NAME')) define('MAIL_REPLY_TO_NAME', 'Soporte Rifas La Paz');
+// Opciones SSL para SMTP
+if (!defined('SMTP_VERIFY_PEER')) define('SMTP_VERIFY_PEER', true);
+if (!defined('SMTP_VERIFY_PEER_NAME')) define('SMTP_VERIFY_PEER_NAME', true);
+if (!defined('SMTP_ALLOW_SELF_SIGNED')) define('SMTP_ALLOW_SELF_SIGNED', false);
+// DKIM opcional
+if (!defined('DKIM_DOMAIN')) define('DKIM_DOMAIN', '');
+if (!defined('DKIM_SELECTOR')) define('DKIM_SELECTOR', '');
+if (!defined('DKIM_PRIVATE_KEY_PATH')) define('DKIM_PRIVATE_KEY_PATH', '');
+if (!defined('DKIM_PASSPHRASE')) define('DKIM_PASSPHRASE', '');
+if (!defined('DKIM_IDENTITY')) define('DKIM_IDENTITY', '');
+// List-Unsubscribe opcional
+if (!defined('MAIL_LIST_UNSUBSCRIBE')) define('MAIL_LIST_UNSUBSCRIBE', '');

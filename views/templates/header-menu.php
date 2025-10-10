@@ -36,13 +36,6 @@
 					</a>
 				</li>
 
-				<li class="nav-item" style="margin-top:8px;">
-					<a href="/rifa/revision" class="nav-link" title="Revisión de pagos" style="display:flex;align-items:center;gap:10px;color:#212529;padding:10px 12px;border-radius:8px;">
-						<i class="fas fa-clipboard-check" style="color:#28a745"></i>
-						<span class="nav-text">Revisión de pagos</span>
-					</a>
-				</li>
-
 				<!-- Nuevo: Configuración de la rifa -->
 				<li class="nav-item" style="margin-top:8px;">
 					<a href="/configuracion" class="nav-link <?php echo $this->isActiveRoute('configuracion'); ?>" title="Configuración de la rifa" style="display:flex;align-items:center;gap:10px;color:#212529;padding:10px 12px;border-radius:8px;">

@@ -250,6 +250,29 @@ class RifaController extends Controller
 
 		// Ir a pantalla de confirmación de recepción
 		$orden = $ordenModel->getById($ordenId);
+		// Enviar correo de recepción en revisión (best-effort) con subject y body explícitos
+		try {
+			require_once (defined('LIBS_PATH') ? LIBS_PATH : __DIR__ . '/../libs/') . 'Mailer.php';
+			$numeros = (new BoletoModel())->obtenerNumerosPorOrden($ordenId);
+			$mailer = new Mailer();
+			$codigo = $orden['codigo_orden'] ?? (string)$ordenId;
+			$subject = 'Pago recibido - En revisión';
+			$html =
+				'<h2>Gracias, ' . htmlspecialchars($nombre) . '.</h2>' .
+				'<p>Hemos recibido tu pago y está en revisión. Pronto te confirmaremos la compra de tus boletos.</p>' .
+				'<p><strong>Código de orden:</strong> ' . htmlspecialchars($codigo) . '</p>' .
+				'<p><strong>Boletos bloqueados:</strong> ' . htmlspecialchars(implode(', ', $numeros)) . '</p>' .
+				'<p><strong>Total:</strong> $ ' . number_format($total, 2) . '</p>';
+			$adj = [[
+				'data' => "Boletos en revisión (orden: " . $codigo . ")\r\n\r\n" . implode(", ", $numeros) . "\r\n",
+				'name' => 'boletos-pendientes-' . $codigo . '.txt',
+				'type' => 'text/plain'
+			]];
+			$mailer->send($correo, $subject, $html, null, $adj);
+		} catch (\Throwable $e) {
+			$logger = new Logger();
+			$logger->logError('No se pudo enviar correo de recepción: ' . $e->getMessage(), __FILE__, __LINE__);
+		}
 		$this->view->render('Rifa/confirmacion', [
 			'pageTitle' => 'Pago en revisión - Rifas La Paz',
 			'nombre' => $nombre,

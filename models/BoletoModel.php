@@ -158,4 +158,14 @@ class BoletoModel extends Model
 				ORDER BY b.updated_at DESC";
 		return $this->db->fetchAll($sql);
 	}
+
+	/**
+	 * Obtiene los números (con padding 5 dígitos) asociados a una orden
+	 */
+	public function obtenerNumerosPorOrden(int $ordenId): array
+	{
+		$sql = "SELECT LPAD(numero, 5, '0') AS numero FROM {$this->table} WHERE orden_id = :orden ORDER BY numero ASC";
+		$rows = $this->db->fetchAll($sql, [':orden' => $ordenId]);
+		return array_column($rows, 'numero');
+	}
 }
