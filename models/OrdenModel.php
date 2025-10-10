@@ -82,50 +82,7 @@ class OrdenModel extends Model
 			(new BoletoModel())->marcarVendidosPorOrden($ordenId);
 			$this->db->commit();
 
-			// Enviar correo de confirmación (fuera de la transacción)
-			try {
-				if (!class_exists('ClienteModel')) {
-					require_once (defined('MODELS_PATH') ? MODELS_PATH : __DIR__ . DIRECTORY_SEPARATOR) . 'ClienteModel.php';
-				}
-				if (!class_exists('BoletoModel')) {
-					require_once (defined('MODELS_PATH') ? MODELS_PATH : __DIR__ . DIRECTORY_SEPARATOR) . 'BoletoModel.php';
-				}
-				require_once (defined('LIBS_PATH') ? LIBS_PATH : __DIR__ . '/../libs/') . 'Mailer.php';
-				$orden = $this->getById($ordenId);
-				$cliente = (new ClienteModel())->getById((int)$orden['usuario_id']);
-				$numeros = (new BoletoModel())->obtenerNumerosPorOrden($ordenId);
-				// Obtener precio desde configuración
-				if (!class_exists('ConfiguracionModel')) {
-					require_once (defined('MODELS_PATH') ? MODELS_PATH : __DIR__ . DIRECTORY_SEPARATOR) . 'ConfiguracionModel.php';
-				}
-				$cfgModel = new ConfiguracionModel();
-				$precio = (float)$cfgModel->get('precio_boleto', 0);
-				$total = (float)$orden['total'];
-				$mailer = new Mailer();
-				if ($cliente && !empty($cliente['correo'])) {
-					$codigo = $orden['codigo_orden'] ?? (string)$ordenId;
-					// Preparar adjunto con los boletos
-					$contenido = "Boletos confirmados (orden: " . $codigo . ")\r\n\r\n" . implode(", ", $numeros) . "\r\n";
-					$adjuntos = [[
-						'data' => $contenido,
-						'name' => 'boletos-' . $codigo . '.txt',
-						'type' => 'text/plain'
-					]];
-					$subject = 'Confirmación de compra - Rifas La Paz';
-					$html =
-						'<h2>¡Gracias por tu compra, ' . htmlspecialchars($cliente['nombre_completo'] ?? 'Cliente') . '!</h2>' .
-						'<p>Confirmamos tus boletos:</p>' .
-						'<p><strong>Boletos:</strong> ' . htmlspecialchars(implode(', ', $numeros)) . '</p>' .
-						'<p><strong>Código de orden:</strong> ' . htmlspecialchars($codigo) . '</p>' .
-						'<p><strong>Total pagado:</strong> $ ' . number_format($total, 2) . ' (precio por boleto: $ ' . number_format($precio, 2) . ')</p>' .
-						'<p>Adjuntamos un archivo con tu lista de boletos.</p>';
-					$mailer->send($cliente['correo'], $subject, $html, null, $adjuntos);
-				}
-			} catch (\Throwable $e) {
-				if (property_exists($this, 'logger') && $this->logger) {
-					$this->logger->logError('Error enviando correo de confirmación: ' . $e->getMessage(), __FILE__, __LINE__);
-				}
-			}
+			// Se eliminó el envío de correos tras aprobación
 			return true;
 		} catch (Throwable $e) {
 			$this->db->rollback();
@@ -152,37 +109,7 @@ class OrdenModel extends Model
 			$this->db->commit();
 			$ok = ($rc === 1);
 
-			// Enviar correo de cancelación
-			try {
-				if (!class_exists('ClienteModel')) {
-					require_once (defined('MODELS_PATH') ? MODELS_PATH : __DIR__ . DIRECTORY_SEPARATOR) . 'ClienteModel.php';
-				}
-				if (!class_exists('BoletoModel')) {
-					require_once (defined('MODELS_PATH') ? MODELS_PATH : __DIR__ . DIRECTORY_SEPARATOR) . 'BoletoModel.php';
-				}
-				require_once (defined('LIBS_PATH') ? LIBS_PATH : __DIR__ . '/../libs/') . 'Mailer.php';
-				$orden = $this->getById($ordenId);
-				$cliente = (new ClienteModel())->getById((int)$orden['usuario_id']);
-				$numeros = (new BoletoModel())->obtenerNumerosPorOrden($ordenId);
-				$mailer = new Mailer();
-				if ($cliente && !empty($cliente['correo'])) {
-					$codigo = $orden['codigo_orden'] ?? (string)$ordenId;
-					$subject = 'Actualización de tu orden - Rifas La Paz';
-					$motivoText = $notas ? '<p><strong>Motivo:</strong> ' . htmlspecialchars($notas) . '</p>' : '';
-					$html =
-						'<h2>Hola ' . htmlspecialchars($cliente['nombre_completo'] ?? 'Cliente') . ',</h2>' .
-						'<p>Lamentamos informarte que tu orden fue cancelada y los boletos han sido liberados:</p>' .
-						'<p><strong>Boletos:</strong> ' . htmlspecialchars(implode(', ', $numeros)) . '</p>' .
-						'<p><strong>Código de orden:</strong> ' . htmlspecialchars($codigo) . '</p>' .
-						$motivoText .
-						'<p>Si crees que se trata de un error, por favor contáctanos respondiendo este correo.</p>';
-					$mailer->send($cliente['correo'], $subject, $html);
-				}
-			} catch (\Throwable $e) {
-				if (property_exists($this, 'logger') && $this->logger) {
-					$this->logger->logError('Error enviando correo de cancelación: ' . $e->getMessage(), __FILE__, __LINE__);
-				}
-			}
+			// Se eliminó el envío de correos tras cancelación
 
 			return $ok;
 		} catch (Throwable $e) {

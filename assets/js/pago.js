@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function actualizarCountdown() {
     if (!countdownElement) return;
-    
+
     const minutos = Math.floor(tiempoRestante / 60);
     const segundos = tiempoRestante % 60;
     countdownElement.textContent = `${minutos
@@ -87,7 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(alertaCancelacion);
 
     let segundosRedireccion = 5;
-    const redirectCountdownElement = document.getElementById("redirectCountdown");
+    const redirectCountdownElement =
+      document.getElementById("redirectCountdown");
     const intervaloRedireccion = setInterval(() => {
       segundosRedireccion--;
       if (redirectCountdownElement) {
@@ -124,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btnSiguiente: !!btnSiguiente,
     btnAnterior: !!btnAnterior,
     btnPagar: !!btnPagar,
-    progressBar: !!progressBar
+    progressBar: !!progressBar,
   });
 
   if (!btnSiguiente || !btnAnterior || !btnPagar || !progressBar) {
@@ -136,9 +137,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function actualizarVista() {
     console.log("📍 Actualizando vista al paso:", currentStep);
-    
+
     // Ocultar todos los pasos
-    document.querySelectorAll(".form-step").forEach(step => {
+    document.querySelectorAll(".form-step").forEach((step) => {
       step.style.display = "none";
       step.classList.remove("active");
     });
@@ -154,10 +155,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Actualizar labels
-    document.querySelectorAll(".step-label").forEach(label => {
+    document.querySelectorAll(".step-label").forEach((label) => {
       const stepNum = parseInt(label.getAttribute("data-step"));
       label.classList.remove("active", "text-white-50");
-      
+
       if (stepNum === currentStep) {
         label.classList.add("active");
       } else {
@@ -172,8 +173,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Mostrar/ocultar botones
     btnAnterior.style.display = currentStep === 1 ? "none" : "inline-block";
-    btnSiguiente.style.display = currentStep === totalSteps ? "none" : "inline-block";
-    btnPagar.style.display = currentStep === totalSteps ? "inline-block" : "none";
+    btnSiguiente.style.display =
+      currentStep === totalSteps ? "none" : "inline-block";
+    btnPagar.style.display =
+      currentStep === totalSteps ? "inline-block" : "none";
+    const btnPagarEfectivo = document.getElementById("btn-pagar-efectivo");
+    if (btnPagarEfectivo) {
+      const cantBoletos = parseInt(
+        document.getElementById("cantidadBoletos")?.textContent || "0",
+        10
+      );
+      const puedeEfectivo = cantBoletos > 10;
+      btnPagarEfectivo.style.display =
+        currentStep === totalSteps && puedeEfectivo ? "inline-block" : "none";
+    }
 
     // Scroll al inicio
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -185,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (paso === 1) {
       const checkbox = document.getElementById("aceptaTerminos");
       const error = document.getElementById("errorTerminos");
-      
+
       if (!checkbox) {
         console.error("❌ No se encontró el checkbox");
         return false;
@@ -213,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const nombre = document.getElementById("nombre");
       const telefono = document.getElementById("telefono");
       const correo = document.getElementById("correo");
-      
+
       if (!nombre || !telefono || !correo) {
         console.error("❌ Faltan campos del paso 2");
         return false;
@@ -221,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       let valido = true;
 
-      [nombre, telefono, correo].forEach(input => {
+      [nombre, telefono, correo].forEach((input) => {
         if (!input.checkValidity() || input.value.trim() === "") {
           input.classList.add("is-invalid");
           input.classList.remove("is-valid");
@@ -246,6 +259,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const comprobante = document.getElementById("comprobante");
       const folio = document.getElementById("folio");
       const error = document.getElementById("folioComprobanteError");
+      const metodoEfectivo = document.getElementById("metodo_efectivo");
+      const cantBoletos = parseInt(
+        document.getElementById("cantidadBoletos")?.textContent || "0",
+        10
+      );
 
       if (!comprobante || !folio) {
         console.error("❌ Faltan elementos del paso 3");
@@ -254,10 +272,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const tieneArchivo = comprobante.files && comprobante.files.length > 0;
       const tieneFolio = folio.value.trim().length > 0;
+      const esEfectivo =
+        metodoEfectivo && metodoEfectivo.checked && cantBoletos > 10;
 
       console.log("Archivo:", tieneArchivo, "Folio:", tieneFolio);
 
-      if (!tieneArchivo && !tieneFolio) {
+      if (!tieneArchivo && !tieneFolio && !esEfectivo) {
         if (error) error.style.display = "block";
         folio.focus();
         console.log("❌ Validación falló: falta comprobante o folio");
@@ -274,10 +294,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // EVENT LISTENERS
   console.log("📝 Registrando event listeners...");
 
-  btnSiguiente.addEventListener("click", function(e) {
+  btnSiguiente.addEventListener("click", function (e) {
     e.preventDefault();
     console.log("🖱️ CLICK en Siguiente - Paso actual:", currentStep);
-    
+
     const esValido = validarPaso(currentStep);
     console.log("Resultado validación:", esValido);
 
@@ -290,7 +310,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  btnAnterior.addEventListener("click", function(e) {
+  btnAnterior.addEventListener("click", function (e) {
     e.preventDefault();
     console.log("🖱️ CLICK en Anterior");
     if (currentStep > 1) {
@@ -314,11 +334,67 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // ==================== TOGGLE UI POR MÉTODO DE PAGO ====================
+  function actualizarUIMetodoPago() {
+    const metodoEfectivo = document.getElementById("metodo_efectivo");
+    const opcionEfectivo = document.getElementById("opcion-efectivo");
+    const cantBoletos = parseInt(
+      document.getElementById("cantidadBoletos")?.textContent || "0",
+      10
+    );
+    const puedeEfectivo = cantBoletos > 10;
+    if (opcionEfectivo) {
+      opcionEfectivo.style.display = puedeEfectivo ? "block" : "none";
+      if (!puedeEfectivo && metodoEfectivo) metodoEfectivo.checked = false;
+    }
+    const esEfectivoElegible =
+      metodoEfectivo && metodoEfectivo.checked && puedeEfectivo;
+
+    const inputComprobante = document.getElementById("comprobante");
+    const inputFolio = document.getElementById("folio");
+    const colComprobante = inputComprobante
+      ? inputComprobante.closest(".col-md-6")
+      : null;
+    const colFolio = inputFolio ? inputFolio.closest(".col-md-6") : null;
+
+    const errorSize = document.getElementById("fileSizeError");
+    const nombreArchivo = document.getElementById("comprobanteNombre");
+    const errorFolio = document.getElementById("folioComprobanteError");
+
+    if (esEfectivoElegible) {
+      if (colComprobante) colComprobante.style.display = "none";
+      if (colFolio) colFolio.style.display = "none";
+      if (errorSize) errorSize.style.display = "none";
+      if (nombreArchivo) nombreArchivo.style.display = "none";
+      if (errorFolio) errorFolio.style.display = "none";
+      if (inputComprobante) {
+        inputComprobante.value = "";
+        inputComprobante.disabled = true;
+      }
+      if (inputFolio) {
+        inputFolio.value = "";
+        inputFolio.disabled = true;
+      }
+    } else {
+      if (colComprobante) colComprobante.style.display = "";
+      if (colFolio) colFolio.style.display = "";
+      if (inputComprobante) inputComprobante.disabled = false;
+      if (inputFolio) inputFolio.disabled = false;
+    }
+  }
+
+  const metodoTransfer = document.getElementById("metodo_transferencia");
+  const metodoEfectivo = document.getElementById("metodo_efectivo");
+  if (metodoTransfer)
+    metodoTransfer.addEventListener("change", actualizarUIMetodoPago);
+  if (metodoEfectivo)
+    metodoEfectivo.addEventListener("change", actualizarUIMetodoPago);
+
   // Paso 2: Validar campos en tiempo real
-  ["nombre", "telefono", "correo"].forEach(id => {
+  ["nombre", "telefono", "correo"].forEach((id) => {
     const input = document.getElementById(id);
     if (input) {
-      ["input", "blur"].forEach(evento => {
+      ["input", "blur"].forEach((evento) => {
         input.addEventListener(evento, () => {
           if (input.checkValidity() && input.value.trim() !== "") {
             input.classList.remove("is-invalid");
@@ -375,6 +451,24 @@ document.addEventListener("DOMContentLoaded", function () {
   // ==================== ENVÍO DEL FORMULARIO ====================
   const formPago = document.getElementById("formPago");
   if (formPago) {
+    const btnPagarEfectivo = document.getElementById("btn-pagar-efectivo");
+    if (btnPagarEfectivo) {
+      btnPagarEfectivo.addEventListener("click", function () {
+        // Seleccionar método efectivo
+        const metodoEfectivo = document.getElementById("metodo_efectivo");
+        const metodoTransfer = document.getElementById("metodo_transferencia");
+        if (metodoEfectivo) metodoEfectivo.checked = true;
+        if (metodoTransfer) metodoTransfer.checked = false;
+
+        // Enviar sin exigir comprobante/folio
+        const spinner = document.getElementById("spinnerPagar");
+        if (spinner) spinner.classList.remove("d-none");
+        const btnPagar = document.getElementById("btn-pagar");
+        if (btnPagar) btnPagar.disabled = true;
+        limpiarStorage();
+        formPago.submit();
+      });
+    }
     formPago.addEventListener("submit", function (e) {
       e.preventDefault();
 
@@ -402,6 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Inicializar vista
   console.log("🎬 Inicializando vista...");
   actualizarVista();
+  actualizarUIMetodoPago();
   console.log("✅ Inicialización completa");
 });
 

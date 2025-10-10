@@ -142,6 +142,19 @@
 							<h5 class="text-secondary mb-3">
 								<i class="bi bi-bank me-2"></i>Información de Cuenta para Depósito
 							</h5>
+							<?php $cantBoletos = count($_SESSION['boletos_seleccionados'] ?? []);
+							$puedeEfectivo = ($cantBoletos > 10); ?>
+							<?php if ($puedeEfectivo): ?>
+								<div class="alert alert-info border-info">
+									<div class="d-flex align-items-start">
+										<i class="bi bi-cash-coin fs-4 me-2 text-success"></i>
+										<div>
+											<strong>Pago en efectivo disponible:</strong>
+											<div>Al comprar más de 10 boletos, puedes pagar en efectivo. Se generará tu orden sin comprobante y te redirigiremos a WhatsApp para crear tu ticket de pago.</div>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
 							<div class="alert alert-success border-success">
 								<h6 class="alert-heading mb-2"><i class="bi bi-bank2"></i> Datos Bancarios</h6>
 								<div class="row">
@@ -188,6 +201,24 @@
 							<div class="invalid-feedback d-block" id="folioComprobanteError" style="display:none">
 								<i class="bi bi-exclamation-triangle me-1"></i>Debes subir un comprobante o ingresar el folio/clave de rastreo.
 							</div>
+
+							<!-- Selector de método de pago -->
+							<div class="mt-4">
+								<h6 class="fw-bold mb-2"><i class="bi bi-ui-checks-grid me-2"></i>Método de pago</h6>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="metodo_pago" id="metodo_transferencia" value="transferencia" checked>
+									<label class="form-check-label" for="metodo_transferencia">
+										Transferencia/depósito bancario (requiere comprobante o folio)
+									</label>
+								</div>
+								<div class="form-check mt-2" id="opcion-efectivo" style="display:none;">
+									<input class="form-check-input" type="radio" name="metodo_pago" id="metodo_efectivo" value="efectivo">
+									<label class="form-check-label" for="metodo_efectivo">
+										Efectivo (sin comprobante, te redirigimos a WhatsApp)
+									</label>
+								</div>
+								<small class="text-muted d-block mt-1">Si eliges efectivo y tienes más de 10 boletos, no es necesario subir comprobante.</small>
+							</div>
 						</div>
 					</div>
 
@@ -198,6 +229,9 @@
 							</button>
 							<button type="button" class="btn btn-success" id="btn-siguiente">
 								Siguiente<i class="bi bi-arrow-right ms-2"></i>
+							</button>
+							<button type="button" class="btn btn-outline-success btn-lg me-2" id="btn-pagar-efectivo" style="display: none;">
+								<i class="bi bi-cash-coin me-2"></i>Pagar en efectivo
 							</button>
 							<button type="submit" class="btn btn-success btn-lg" id="btn-pagar" style="display: none;">
 								<i class="bi bi-check-circle-fill me-2"></i>Pagar

@@ -89,12 +89,15 @@ class RifaController extends Controller
 			'titular_cuenta' => $this->config->get('titular_cuenta', ''),
 		];
 
+		$whats = $this->config->get('whatsapp_numero', '528661126294');
+		$whats = preg_replace('/\D+/', '', (string)$whats);
 		$this->view->render('Rifa/pago', [
 			'pageTitle' => 'Procesar Pago - Rifas La Paz',
 			"useLogin" => true,
 			'precio_boleto' => $precio,
 			'banco' => $banco,
 			'tiempo_expiracion' => (int)$this->config->get('tiempo_expiracion', 20),
+			'whatsapp' => $whats,
 		], ["pago.css", "pago.js"]);
 	}
 
@@ -126,6 +129,9 @@ class RifaController extends Controller
 		// Precio y totales desde DB
 		$precio = (float)$this->config->get('precio_boleto', 20);
 		$total = $precio * count($boletos);
+		// Método de pago
+		$metodo = trim($_POST['metodo_pago'] ?? 'transferencia');
+		$esEfectivo = ($metodo === 'efectivo' && count($boletos) > 10);
 
 		// Crear o reutilizar cliente y usar SIEMPRE su id para la orden (FK a clientes)
 		$usuarioId = 0; // no usar id de tabla user aquí
@@ -192,29 +198,33 @@ class RifaController extends Controller
 				$this->setMessageAndRedirect('error', 'No se pudo crear tu orden. Intenta nuevamente.', constant('URL') . 'rifa/pago');
 			}
 
-			// Manejar comprobante (opcional) o folio
+			// Manejar comprobante/folio según método
 			$rutaComprobante = null;
 			$nombreComprobante = null;
 			$folio = trim($_POST['folio'] ?? '');
-			if (isset($_FILES['comprobante']) && $_FILES['comprobante']['error'] === UPLOAD_ERR_OK) {
-				$nombreComprobante = basename($_FILES['comprobante']['name']);
-				$ext = strtolower(pathinfo($nombreComprobante, PATHINFO_EXTENSION));
-				if (!in_array($ext, ['jpg', 'jpeg', 'png', 'pdf'])) {
-					$this->setMessageAndRedirect('error', 'Formato de comprobante inválido', constant('URL') . 'rifa/pago');
-				}
-				$dir = __DIR__ . '/../uploads/comprobantes';
-				if (!is_dir($dir)) {
-					@mkdir($dir, 0777, true);
-				}
-				$dest = $dir . '/' . $ordenId . '_' . time() . '.' . $ext;
-				if (!move_uploaded_file($_FILES['comprobante']['tmp_name'], $dest)) {
-					$this->setMessageAndRedirect('error', 'No se pudo guardar el comprobante', constant('URL') . 'rifa/pago');
-				}
-				$rutaComprobante = str_replace('..', '', $dest);
-			} elseif ($folio !== '') {
-				$nombreComprobante = 'FOLIO:' . $folio;
+			if ($esEfectivo) {
+				$nombreComprobante = 'EFECTIVO';
 			} else {
-				$this->setMessageAndRedirect('error', 'Debes subir un comprobante o escribir tu folio de transferencia', constant('URL') . 'rifa/pago');
+				if (isset($_FILES['comprobante']) && $_FILES['comprobante']['error'] === UPLOAD_ERR_OK) {
+					$nombreComprobante = basename($_FILES['comprobante']['name']);
+					$ext = strtolower(pathinfo($nombreComprobante, PATHINFO_EXTENSION));
+					if (!in_array($ext, ['jpg', 'jpeg', 'png', 'pdf'])) {
+						$this->setMessageAndRedirect('error', 'Formato de comprobante inválido', constant('URL') . 'rifa/pago');
+					}
+					$dir = __DIR__ . '/../uploads/comprobantes';
+					if (!is_dir($dir)) {
+						@mkdir($dir, 0777, true);
+					}
+					$dest = $dir . '/' . $ordenId . '_' . time() . '.' . $ext;
+					if (!move_uploaded_file($_FILES['comprobante']['tmp_name'], $dest)) {
+						$this->setMessageAndRedirect('error', 'No se pudo guardar el comprobante', constant('URL') . 'rifa/pago');
+					}
+					$rutaComprobante = str_replace('..', '', $dest);
+				} elseif ($folio !== '') {
+					$nombreComprobante = 'FOLIO:' . $folio;
+				} else {
+					$this->setMessageAndRedirect('error', 'Debes subir un comprobante o escribir tu folio de transferencia', constant('URL') . 'rifa/pago');
+				}
 			}
 
 			$ordenModel->adjuntarComprobante($ordenId, $rutaComprobante, $nombreComprobante);
@@ -248,42 +258,34 @@ class RifaController extends Controller
 		// Guardar en sesión datos mínimos de seguimiento
 		$_SESSION['orden_pendiente_id'] = $ordenId;
 
-		// Ir a pantalla de confirmación de recepción
+		// Flujo posterior: efectivo => redirigir a WhatsApp con mensaje; transfer => mostrar confirmación
 		$orden = $ordenModel->getById($ordenId);
-		// Enviar correo de recepción en revisión (best-effort) con subject y body explícitos
-		try {
-			require_once (defined('LIBS_PATH') ? LIBS_PATH : __DIR__ . '/../libs/') . 'Mailer.php';
+		if ($esEfectivo) {
 			$numeros = (new BoletoModel())->obtenerNumerosPorOrden($ordenId);
-			$mailer = new Mailer();
 			$codigo = $orden['codigo_orden'] ?? (string)$ordenId;
-			$subject = 'Pago recibido - En revisión';
-			$html =
-				'<h2>Gracias, ' . htmlspecialchars($nombre) . '.</h2>' .
-				'<p>Hemos recibido tu pago y está en revisión. Pronto te confirmaremos la compra de tus boletos.</p>' .
-				'<p><strong>Código de orden:</strong> ' . htmlspecialchars($codigo) . '</p>' .
-				'<p><strong>Boletos bloqueados:</strong> ' . htmlspecialchars(implode(', ', $numeros)) . '</p>' .
-				'<p><strong>Total:</strong> $ ' . number_format($total, 2) . '</p>';
-			$adj = [[
-				'data' => "Boletos en revisión (orden: " . $codigo . ")\r\n\r\n" . implode(", ", $numeros) . "\r\n",
-				'name' => 'boletos-pendientes-' . $codigo . '.txt',
-				'type' => 'text/plain'
-			]];
-			$mailer->send($correo, $subject, $html, null, $adj);
-		} catch (\Throwable $e) {
-			$logger = new Logger();
-			$logger->logError('No se pudo enviar correo de recepción: ' . $e->getMessage(), __FILE__, __LINE__);
+			$whats = $this->config->get('whatsapp_numero', '528661126294');
+			$whats = preg_replace('/\D+/', '', (string)$whats);
+			$msg = "Hola, quiero pagar en efectivo mi orden de rifas.%0A"
+				. "Nombre: " . rawurlencode($nombre) . "%0A"
+				. "Tel: " . rawurlencode($telefono) . "%0A"
+				. "Código: " . rawurlencode($codigo) . "%0A"
+				. "Boletos: " . rawurlencode(implode(', ', $numeros)) . "%0A"
+				. "Total: $ " . rawurlencode(number_format($total, 2));
+			header('Location: https://wa.me/' . $whats . '?text=' . $msg);
+			exit;
+		} else {
+			$this->view->render('Rifa/confirmacion', [
+				'pageTitle' => 'Pago en revisión - Rifas La Paz',
+				'nombre' => $nombre,
+				'telefono' => $telefono,
+				'email' => $correo,
+				'boletos' => $resultado['bloqueados'],
+				'total' => $total,
+				'codigo_orden' => $orden['codigo_orden'] ?? null,
+				'precio_boleto' => $precio,
+				'observaciones' => 'Tu pago está en revisión. Te notificaremos cuando sea aprobado.'
+			]);
 		}
-		$this->view->render('Rifa/confirmacion', [
-			'pageTitle' => 'Pago en revisión - Rifas La Paz',
-			'nombre' => $nombre,
-			'telefono' => $telefono,
-			'email' => $correo,
-			'boletos' => $resultado['bloqueados'],
-			'total' => $total,
-			'codigo_orden' => $orden['codigo_orden'] ?? null,
-			'precio_boleto' => $precio,
-			'observaciones' => 'Tu pago está en revisión. Te notificaremos cuando sea aprobado.'
-		]);
 	}
 
 	// Endpoint JSON para obtener configuración usada por JS
