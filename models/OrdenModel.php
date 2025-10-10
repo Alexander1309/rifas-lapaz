@@ -65,6 +65,13 @@ class OrdenModel extends Model
 	{
 		$this->db->beginTransaction();
 		try {
+			// Asegurar que BoletoModel esté cargado
+			if (!class_exists('BoletoModel')) {
+				$bmPath = (defined('MODELS_PATH') ? MODELS_PATH : __DIR__ . DIRECTORY_SEPARATOR) . 'BoletoModel.php';
+				if (file_exists($bmPath)) {
+					require_once $bmPath;
+				}
+			}
 			$sql = "UPDATE {$this->table} SET estado = 'aprobada', fecha_aprobacion = NOW(), admin_id = :aid WHERE id = :id AND estado = 'pendiente'";
 			$rc = $this->db->execute($sql, [':aid' => $adminId, ':id' => $ordenId]);
 			if ($rc !== 1) {
@@ -86,6 +93,13 @@ class OrdenModel extends Model
 	{
 		$this->db->beginTransaction();
 		try {
+			// Asegurar que BoletoModel esté cargado
+			if (!class_exists('BoletoModel')) {
+				$bmPath = (defined('MODELS_PATH') ? MODELS_PATH : __DIR__ . DIRECTORY_SEPARATOR) . 'BoletoModel.php';
+				if (file_exists($bmPath)) {
+					require_once $bmPath;
+				}
+			}
 			$sql = "UPDATE {$this->table} SET estado = 'cancelada', fecha_cancelacion = NOW(), admin_id = :aid, notas_admin = :nota WHERE id = :id AND estado = 'pendiente'";
 			$rc = $this->db->execute($sql, [':aid' => $adminId, ':nota' => $notas, ':id' => $ordenId]);
 			// liberar boletos bloqueados
@@ -97,5 +111,40 @@ class OrdenModel extends Model
 			$this->logger->logError('Error al denegar orden: ' . $e->getMessage(), __FILE__, __LINE__);
 			return false;
 		}
+	}
+
+	/**
+	 * Listado de órdenes pendientes con datos del cliente
+	 */
+	public function listarPendientes(): array
+	{
+		$sql = "SELECT o.*, c.nombre_completo, c.telefono, c.correo
+				FROM {$this->table} o
+				LEFT JOIN clientes c ON c.id = o.usuario_id
+				WHERE o.estado = 'pendiente'
+				ORDER BY o.created_at DESC";
+		return $this->db->fetchAll($sql);
+	}
+
+	/**
+	 * Listado de órdenes aprobadas con datos del cliente
+	 */
+	public function listarAprobadas(): array
+	{
+		$sql = "SELECT o.*, c.nombre_completo, c.telefono, c.correo
+				FROM {$this->table} o
+				LEFT JOIN clientes c ON c.id = o.usuario_id
+				WHERE o.estado = 'aprobada'
+				ORDER BY o.fecha_aprobacion DESC, o.created_at DESC";
+		return $this->db->fetchAll($sql);
+	}
+
+	/**
+	 * Obtiene información de comprobante (ruta/nombre) de una orden
+	 */
+	public function getComprobante(int $ordenId): ?array
+	{
+		$row = $this->db->fetchOne("SELECT comprobante_ruta, comprobante_nombre FROM {$this->table} WHERE id = :id", [':id' => $ordenId]);
+		return $row ?: null;
 	}
 }

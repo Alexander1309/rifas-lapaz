@@ -18,7 +18,7 @@ class AuthController extends Controller
 	public function index()
 	{
 		if (isset($_SESSION['user_id'])) {
-			header('Location: /');
+			header('Location: ' . (defined('URL') ? constant('URL') : '/') . 'dashboard');
 			exit();
 		}
 
@@ -63,7 +63,7 @@ class AuthController extends Controller
 				}
 
 				$this->logActivity('Login exitoso', $username);
-				header('Location: /dashboard');
+				header('Location: ' . (defined('URL') ? constant('URL') : '/') . 'dashboard');
 
 				exit();
 			} else {

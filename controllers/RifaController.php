@@ -308,10 +308,18 @@ class RifaController extends Controller
 	public function revision()
 	{
 		$this->requireLogin();
-		$this->view->render('Rifa/revision', [
-			'pageTitle' => 'Revisión de Pagos - Rifas La Paz',
+		// Redirigir al nuevo dashboard
+		header('Location: ' . constant('URL') . 'dashboard');
+		exit();
+	}
+
+	public function dashboard()
+	{
+		$this->requireLogin();
+		$this->view->render('Rifa/dashboard', [
+			'pageTitle' => 'Dashboard - Rifas La Paz',
 			'useSidebar' => true,
-		]);
+		], ['dashboard.css']);
 	}
 
 	// Opcional: listado simple de órdenes pendientes (para dashboard básico)

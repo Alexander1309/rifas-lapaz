@@ -130,4 +130,32 @@ class BoletoModel extends Model
 		$rows = $this->db->fetchAll($sql, $nums);
 		return array_column($rows, 'numero');
 	}
+
+	/**
+	 * Lista boletos vendidos con información de orden y cliente
+	 */
+	public function listarVendidos(): array
+	{
+		$sql = "SELECT b.*, o.codigo_orden, o.fecha_aprobacion, c.nombre_completo, c.telefono, c.correo
+				FROM {$this->table} b
+				LEFT JOIN ordenes o ON o.id = b.orden_id
+				LEFT JOIN clientes c ON c.id = o.usuario_id
+				WHERE b.estado = 'vendido'
+				ORDER BY b.fecha_venta DESC, b.updated_at DESC";
+		return $this->db->fetchAll($sql);
+	}
+
+	/**
+	 * Lista boletos bloqueados temporalmente (pendientes) con info de orden y cliente
+	 */
+	public function listarBloqueadosTemporal(): array
+	{
+		$sql = "SELECT b.*, o.codigo_orden, o.created_at as fecha_orden, o.fecha_expiracion, c.nombre_completo, c.telefono, c.correo
+				FROM {$this->table} b
+				LEFT JOIN ordenes o ON o.id = b.orden_id
+				LEFT JOIN clientes c ON c.id = o.usuario_id
+				WHERE b.estado = 'bloqueado_temporal'
+				ORDER BY b.updated_at DESC";
+		return $this->db->fetchAll($sql);
+	}
 }
