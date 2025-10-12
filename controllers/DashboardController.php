@@ -24,6 +24,40 @@ class DashboardController extends Controller
 	{
 		$this->requireLogin();
 		require_once MODELS_PATH . 'OrdenModel.php';
+		// Si viene de DataTables (server-side)
+		if ($this->isDataTablesRequest()) {
+			[$draw, $start, $length, $search, $orderCol, $orderDir] = $this->parseDTParams([
+				'id',
+				'codigo_orden',
+				'cliente',
+				'cantidad_boletos',
+				'total',
+				'comprobante',
+				'acciones'
+			]);
+			try {
+				$model = new OrdenModel();
+				$result = $model->sspPendientes($start, $length, $search, $orderCol, $orderDir);
+				header('Content-Type: application/json');
+				echo json_encode([
+					'draw' => $draw,
+					'recordsTotal' => $result['total'],
+					'recordsFiltered' => $result['filtrado'],
+					'data' => $result['rows'],
+				]);
+			} catch (Throwable $e) {
+				header('Content-Type: application/json');
+				echo json_encode([
+					'draw' => $draw,
+					'recordsTotal' => 0,
+					'recordsFiltered' => 0,
+					'data' => [],
+					'error' => 'Error al cargar pendientes: ' . $e->getMessage(),
+				]);
+			}
+			exit;
+		}
+		// Fallback legacy: devolver todo (no recomendado para grandes volúmenes)
 		$ordenes = (new OrdenModel())->listarPendientes();
 		header('Content-Type: application/json');
 		echo json_encode($ordenes);
@@ -35,6 +69,43 @@ class DashboardController extends Controller
 	{
 		$this->requireLogin();
 		require_once MODELS_PATH . 'BoletoModel.php';
+		if ($this->isDataTablesRequest()) {
+			[$draw, $start, $length, $search, $orderCol, $orderDir] = $this->parseDTParams([
+				'rownum',
+				'numero',
+				'codigo_orden',
+				'fecha_venta',
+				'cliente'
+			]);
+			try {
+				$model = new BoletoModel();
+				$result = $model->sspVendidos($start, $length, $search, $orderCol, $orderDir);
+				// Agregar rownum en base a start
+				$rows = [];
+				$idx = $start + 1;
+				foreach ($result['rows'] as $r) {
+					$r['rownum'] = $idx++;
+					$rows[] = $r;
+				}
+				header('Content-Type: application/json');
+				echo json_encode([
+					'draw' => $draw,
+					'recordsTotal' => $result['total'],
+					'recordsFiltered' => $result['filtrado'],
+					'data' => $rows,
+				]);
+			} catch (Throwable $e) {
+				header('Content-Type: application/json');
+				echo json_encode([
+					'draw' => $draw,
+					'recordsTotal' => 0,
+					'recordsFiltered' => 0,
+					'data' => [],
+					'error' => 'Error al cargar vendidos: ' . $e->getMessage(),
+				]);
+			}
+			exit;
+		}
 		$boletos = (new BoletoModel())->listarVendidos();
 		header('Content-Type: application/json');
 		echo json_encode($boletos);
@@ -46,6 +117,42 @@ class DashboardController extends Controller
 	{
 		$this->requireLogin();
 		require_once MODELS_PATH . 'BoletoModel.php';
+		if ($this->isDataTablesRequest()) {
+			[$draw, $start, $length, $search, $orderCol, $orderDir] = $this->parseDTParams([
+				'rownum',
+				'numero',
+				'codigo_orden',
+				'fecha_expiracion',
+				'cliente'
+			]);
+			try {
+				$model = new BoletoModel();
+				$result = $model->sspBloqueadosTemporal($start, $length, $search, $orderCol, $orderDir);
+				$rows = [];
+				$idx = $start + 1;
+				foreach ($result['rows'] as $r) {
+					$r['rownum'] = $idx++;
+					$rows[] = $r;
+				}
+				header('Content-Type: application/json');
+				echo json_encode([
+					'draw' => $draw,
+					'recordsTotal' => $result['total'],
+					'recordsFiltered' => $result['filtrado'],
+					'data' => $rows,
+				]);
+			} catch (Throwable $e) {
+				header('Content-Type: application/json');
+				echo json_encode([
+					'draw' => $draw,
+					'recordsTotal' => 0,
+					'recordsFiltered' => 0,
+					'data' => [],
+					'error' => 'Error al cargar bloqueados: ' . $e->getMessage(),
+				]);
+			}
+			exit;
+		}
 		$boletos = (new BoletoModel())->listarBloqueadosTemporal();
 		header('Content-Type: application/json');
 		echo json_encode($boletos);
@@ -131,5 +238,47 @@ class DashboardController extends Controller
 		header('Content-Type: text/plain; charset=utf-8');
 		echo $comp['comprobante_nombre'];
 		exit;
+	}
+
+	// Helpers
+	private function parseDTParams(array $columnWhitelist): array
+	{
+		$src = array_merge($_GET ?? [], $_POST ?? []);
+		$draw = intval($src['draw'] ?? 1);
+		$start = max(0, intval($src['start'] ?? 0));
+		$length = intval($src['length'] ?? 25);
+		if ($length < 1 || $length > 1000) $length = 25;
+		$search = '';
+		if (isset($src['search'])) {
+			if (is_array($src['search'])) {
+				$search = trim($src['search']['value'] ?? '');
+			} else {
+				$search = trim($src['search']);
+			}
+		}
+		$orderColIdx = 0;
+		$orderDir = 'asc';
+		if (isset($src['order'])) {
+			if (is_array($src['order'])) {
+				$first = $src['order'][0] ?? null;
+				if (is_array($first)) {
+					$orderColIdx = intval($first['column'] ?? 0);
+					$orderDir = strtolower($first['dir'] ?? 'asc');
+				}
+			}
+		}
+		$orderDir = in_array($orderDir, ['asc', 'desc'], true) ? $orderDir : 'asc';
+		$orderCol = $columnWhitelist[$orderColIdx] ?? $columnWhitelist[0];
+		return [$draw, $start, $length, $search, $orderCol, $orderDir];
+	}
+
+	private function isDataTablesRequest(): bool
+	{
+		// Detectar por presencia de parámetros típicos de DataTables (draw, start, length)
+		if (isset($_POST['draw']) || isset($_GET['draw'])) return true;
+		if (isset($_POST['start']) || isset($_GET['start'])) return true;
+		if (isset($_POST['length']) || isset($_GET['length'])) return true;
+		// Fallback al método POST por convención
+		return strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST';
 	}
 }

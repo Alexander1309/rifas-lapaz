@@ -168,4 +168,132 @@ class BoletoModel extends Model
 		$rows = $this->db->fetchAll($sql, [':orden' => $ordenId]);
 		return array_column($rows, 'numero');
 	}
+
+	/**
+	 * Server-side processing: vendidos
+	 */
+	public function sspVendidos(int $start, int $length, string $search, string $orderCol, string $orderDir): array
+	{
+		$pdo = $this->db->getConnection();
+		$total = (int)$this->db->fetchColumn("SELECT COUNT(*) FROM {$this->table} WHERE estado = 'vendido'");
+
+		$where = " WHERE b.estado = 'vendido' ";
+		$params = [];
+		if ($search !== '') {
+			$where .= " AND (b.numero LIKE :q1 OR o.codigo_orden LIKE :q2 OR c.nombre_completo LIKE :q3 OR c.telefono LIKE :q4 OR c.correo LIKE :q5)";
+			$params[':q1'] = '%' . $search . '%';
+			$params[':q2'] = '%' . $search . '%';
+			$params[':q3'] = '%' . $search . '%';
+			$params[':q4'] = '%' . $search . '%';
+			$params[':q5'] = '%' . $search . '%';
+		}
+		$orderMap = [
+			'rownum' => 'b.id',
+			'numero' => 'b.numero',
+			'codigo_orden' => 'o.codigo_orden',
+			'fecha_venta' => 'b.fecha_venta',
+			'cliente' => 'c.nombre_completo',
+		];
+		$orderBy = $orderMap[$orderCol] ?? 'b.fecha_venta';
+		$orderDir = in_array(strtolower($orderDir), ['asc', 'desc'], true) ? $orderDir : 'desc';
+
+		$sqlCount = "SELECT COUNT(*)
+					 FROM {$this->table} b
+					 LEFT JOIN ordenes o ON o.id = b.orden_id
+					 LEFT JOIN clientes c ON c.id = o.usuario_id
+					 $where";
+		$stmtCount = $pdo->prepare($sqlCount);
+		foreach ($params as $k => $v) {
+			$stmtCount->bindValue($k, $v, PDO::PARAM_STR);
+		}
+		$stmtCount->execute();
+		$filtrado = (int)$stmtCount->fetchColumn();
+
+		$sql = "SELECT LPAD(b.numero, 5, '0') AS numero, o.codigo_orden, b.fecha_venta,
+						c.nombre_completo, c.telefono, c.correo
+				FROM {$this->table} b
+				LEFT JOIN ordenes o ON o.id = b.orden_id
+				LEFT JOIN clientes c ON c.id = o.usuario_id
+				$where
+				ORDER BY $orderBy $orderDir
+				LIMIT :start, :length";
+		$stmt = $pdo->prepare($sql);
+		foreach ($params as $k => $v) {
+			$stmt->bindValue($k, $v, PDO::PARAM_STR);
+		}
+		$stmt->bindValue(':start', $start, PDO::PARAM_INT);
+		$stmt->bindValue(':length', $length, PDO::PARAM_INT);
+		$stmt->execute();
+		$rows = $stmt->fetchAll();
+
+		return [
+			'total' => $total,
+			'filtrado' => $filtrado,
+			'rows' => $rows,
+		];
+	}
+
+	/**
+	 * Server-side processing: bloqueados temporalmente
+	 */
+	public function sspBloqueadosTemporal(int $start, int $length, string $search, string $orderCol, string $orderDir): array
+	{
+		$pdo = $this->db->getConnection();
+		$total = (int)$this->db->fetchColumn("SELECT COUNT(*) FROM {$this->table} WHERE estado = 'bloqueado_temporal'");
+
+		$where = " WHERE b.estado = 'bloqueado_temporal' ";
+		$params = [];
+		if ($search !== '') {
+			$where .= " AND (b.numero LIKE :q1 OR o.codigo_orden LIKE :q2 OR c.nombre_completo LIKE :q3 OR c.telefono LIKE :q4 OR c.correo LIKE :q5)";
+			$params[':q1'] = '%' . $search . '%';
+			$params[':q2'] = '%' . $search . '%';
+			$params[':q3'] = '%' . $search . '%';
+			$params[':q4'] = '%' . $search . '%';
+			$params[':q5'] = '%' . $search . '%';
+		}
+		$orderMap = [
+			'rownum' => 'b.id',
+			'numero' => 'b.numero',
+			'codigo_orden' => 'o.codigo_orden',
+			'fecha_expiracion' => 'o.fecha_expiracion',
+			'cliente' => 'c.nombre_completo',
+		];
+		$orderBy = $orderMap[$orderCol] ?? 'b.updated_at';
+		$orderDir = in_array(strtolower($orderDir), ['asc', 'desc'], true) ? $orderDir : 'desc';
+
+		$sqlCount = "SELECT COUNT(*)
+					 FROM {$this->table} b
+					 LEFT JOIN ordenes o ON o.id = b.orden_id
+					 LEFT JOIN clientes c ON c.id = o.usuario_id
+					 $where";
+		$stmtCount = $pdo->prepare($sqlCount);
+		foreach ($params as $k => $v) {
+			$stmtCount->bindValue($k, $v, PDO::PARAM_STR);
+		}
+		$stmtCount->execute();
+		$filtrado = (int)$stmtCount->fetchColumn();
+
+		$sql = "SELECT LPAD(b.numero, 5, '0') AS numero, o.codigo_orden, o.fecha_expiracion,
+						c.nombre_completo, c.telefono, c.correo
+				FROM {$this->table} b
+				LEFT JOIN ordenes o ON o.id = b.orden_id
+				LEFT JOIN clientes c ON c.id = o.usuario_id
+				$where
+				ORDER BY $orderBy $orderDir
+				LIMIT :start, :length";
+		$stmt = $pdo->prepare($sql);
+		foreach ($params as $k => $v) {
+			$stmt->bindValue($k, $v, PDO::PARAM_STR);
+		}
+		$stmt->bindValue(':start', $start, PDO::PARAM_INT);
+		$stmt->bindValue(':length', $length, PDO::PARAM_INT);
+		$stmt->execute();
+		$rows = $stmt->fetchAll();
+
+		return [
+			'total' => $total,
+			'filtrado' => $filtrado,
+			'rows' => $rows,
+		];
+	}
 }

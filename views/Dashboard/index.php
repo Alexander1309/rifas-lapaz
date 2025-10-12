@@ -90,7 +90,7 @@
 	<div class="tab-content mt-3">
 		<div class="tab-pane fade show active" id="pendientes" role="tabpanel">
 			<div class="table-responsive">
-				<table class="table table-striped align-middle table-custom" id="tablaPendientes">
+				<table class="table table-striped align-middle display nowrap" style="width:100%" id="tablaPendientes">
 					<thead>
 						<tr>
 							<th>ID</th>
@@ -102,18 +102,14 @@
 							<th>Acciones</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr class="empty-state">
-							<td colspan="7"><i class="bi bi-inbox"></i><br>Sin órdenes pendientes</td>
-						</tr>
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 		</div>
 
 		<div class="tab-pane fade" id="vendidos" role="tabpanel">
 			<div class="table-responsive">
-				<table class="table table-bordered table-custom" id="tablaVendidos">
+				<table class="table table-bordered display nowrap" style="width:100%" id="tablaVendidos">
 					<thead>
 						<tr>
 							<th>#</th>
@@ -123,18 +119,14 @@
 							<th>Cliente</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr class="empty-state">
-							<td colspan="5"><i class="bi bi-inbox"></i><br>Sin boletos vendidos</td>
-						</tr>
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 		</div>
 
 		<div class="tab-pane fade" id="bloqueados" role="tabpanel">
 			<div class="table-responsive">
-				<table class="table table-bordered table-custom" id="tablaBloqueados">
+				<table class="table table-bordered display nowrap" style="width:100%" id="tablaBloqueados">
 					<thead>
 						<tr>
 							<th>#</th>
@@ -144,11 +136,7 @@
 							<th>Cliente</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr class="empty-state">
-							<td colspan="5"><i class="bi bi-inbox"></i><br>Sin boletos bloqueados</td>
-						</tr>
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 		</div>
@@ -164,82 +152,11 @@
 		return res.json();
 	}
 
-	async function cargarPendientes() {
-		const data = await fetchJSON(base + 'dashboard/pendientes');
-		const tbody = document.querySelector('#tablaPendientes tbody');
-		tbody.innerHTML = '';
-		if (!Array.isArray(data) || data.length === 0) {
-			return; // deja el estado vacío
-		}
-		tbody.innerHTML = '';
-		data.forEach(row => {
-			const tr = document.createElement('tr');
-			const cliente = `${row.nombre_completo || ''} <br><small>${row.telefono || ''} · ${row.correo || ''}</small>`;
-			const compUrl = base + 'dashboard/comprobante?orden_id=' + row.id;
-			tr.innerHTML = `
-      <td>${row.id}</td>
-      <td>${row.codigo_orden}</td>
-      <td>${cliente}</td>
-      <td>${row.cantidad_boletos}</td>
-      <td>$ ${Number(row.total).toFixed(2)}</td>
-      <td>
-        <a class="btn btn-sm btn-outline-secondary" href="${compUrl}" target="_blank">
-          Ver
-        </a>
-      </td>
-      <td>
-        <div class="btn-group">
-          <button class="btn btn-success btn-sm" onclick="aprobar(${row.id})"><i class="bi bi-check2-circle"></i> Aceptar</button>
-          <button class="btn btn-danger btn-sm" onclick="denegar(${row.id})"><i class="bi bi-x-circle"></i> Denegar</button>
-        </div>
-      </td>
-    `;
-			tbody.appendChild(tr);
-		});
-	}
-
-	async function cargarVendidos() {
-		const data = await fetchJSON(base + 'dashboard/vendidos');
-		const tbody = document.querySelector('#tablaVendidos tbody');
-		tbody.innerHTML = '';
-		if (!Array.isArray(data) || data.length === 0) {
-			return;
-		}
-		tbody.innerHTML = '';
-		data.forEach((row, i) => {
-			const tr = document.createElement('tr');
-			const cliente = `${row.nombre_completo || ''} <br><small>${row.telefono || ''} · ${row.correo || ''}</small>`;
-			tr.innerHTML = `
-      <td>${i + 1}</td>
-      <td>${row.numero}</td>
-      <td>${row.codigo_orden || ''}</td>
-      <td>${row.fecha_venta || ''}</td>
-      <td>${cliente}</td>
-    `;
-			tbody.appendChild(tr);
-		});
-	}
-
-	async function cargarBloqueados() {
-		const data = await fetchJSON(base + 'dashboard/bloqueados');
-		const tbody = document.querySelector('#tablaBloqueados tbody');
-		tbody.innerHTML = '';
-		if (!Array.isArray(data) || data.length === 0) {
-			return;
-		}
-		tbody.innerHTML = '';
-		data.forEach((row, i) => {
-			const tr = document.createElement('tr');
-			const cliente = `${row.nombre_completo || ''} <br><small>${row.telefono || ''} · ${row.correo || ''}</small>`;
-			tr.innerHTML = `
-      <td>${i + 1}</td>
-      <td>${row.numero}</td>
-      <td>${row.codigo_orden || ''}</td>
-      <td>${row.fecha_expiracion || ''}</td>
-      <td>${cliente}</td>
-	`;
-			tbody.appendChild(tr);
-		});
+	function clienteHTML(row) {
+		const nombre = row.nombre_completo || '';
+		const telefono = row.telefono || '';
+		const correo = row.correo || '';
+		return `${nombre} <br><small>${telefono} · ${correo}</small>`;
 	}
 
 	function showAlert(type, message) {
@@ -272,8 +189,14 @@
 			const data = await res.json();
 			if (data.ok) {
 				showAlert('success', data.message || 'Orden aprobada.');
-				await cargarPendientes();
-				await cargarVendidos();
+				if (window.jQuery && jQuery.fn && jQuery.fn.DataTable) {
+					try {
+						jQuery('#tablaPendientes').DataTable().ajax.reload(null, false);
+					} catch (e) {}
+					try {
+						jQuery('#tablaVendidos').DataTable().ajax.reload(null, false);
+					} catch (e) {}
+				}
 			} else {
 				showAlert('danger', data.message || 'No se pudo aprobar la orden.');
 			}
@@ -300,8 +223,14 @@
 			const data = await res.json();
 			if (data.ok) {
 				showAlert('success', data.message || 'Orden cancelada.');
-				await cargarPendientes();
-				await cargarBloqueados();
+				if (window.jQuery && jQuery.fn && jQuery.fn.DataTable) {
+					try {
+						jQuery('#tablaPendientes').DataTable().ajax.reload(null, false);
+					} catch (e) {}
+					try {
+						jQuery('#tablaBloqueados').DataTable().ajax.reload(null, false);
+					} catch (e) {}
+				}
 			} else {
 				showAlert('danger', data.message || 'No se pudo denegar la orden.');
 			}
@@ -312,29 +241,152 @@
 		}
 	}
 
-	// Inicialización de pestañas y carga inicial
+	// Inicialización DataTables server-side y carga inicial
+	let dtPend = null,
+		dtVend = null,
+		dtBloq = null;
 	window.addEventListener('DOMContentLoaded', () => {
-		cargarPendientes();
-		const vendTab = document.getElementById('vendidos-tab');
-		const bloqTab = document.getElementById('bloqueados-tab');
-		if (vendTab) vendTab.addEventListener('shown.bs.tab', cargarVendidos);
-		if (bloqTab) bloqTab.addEventListener('shown.bs.tab', cargarBloqueados);
+		const dtCommon = {
+			processing: true,
+			serverSide: true,
+			deferRender: true,
+			scrollY: '50vh',
+			scrollX: true,
+			searchDelay: 300,
+			pageLength: 25,
+			lengthMenu: [25, 50, 100, 250],
+			language: {
+				url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+			},
+		};
 
-		// Refrescar
-		document.getElementById('btnRefresh')?.addEventListener('click', () => {
-			Promise.all([cargarPendientes(), cargarVendidos(), cargarBloqueados(), cargarResumen()]);
+		// Pendientes
+		dtPend = jQuery('#tablaPendientes').DataTable({
+			...dtCommon,
+			ajax: {
+				url: base + 'dashboard/pendientes',
+				type: 'POST'
+			},
+			order: [
+				[0, 'desc']
+			],
+			columns: [{
+					data: 'id'
+				},
+				{
+					data: 'codigo_orden'
+				},
+				{
+					data: null,
+					render: (d, t, row) => clienteHTML(row)
+				},
+				{
+					data: 'cantidad_boletos'
+				},
+				{
+					data: 'total',
+					render: (d) => '$ ' + Number(d || 0).toFixed(2)
+				},
+				{
+					data: null,
+					orderable: false,
+					render: (d, t, row) => {
+						const url = base + 'dashboard/comprobante?orden_id=' + row.id;
+						return `<a class="btn btn-sm btn-outline-secondary" href="${url}" target="_blank">Ver</a>`;
+					}
+				},
+				{
+					data: null,
+					orderable: false,
+					render: (d, t, row) => {
+						return `<div class=\"btn-group\">\n\						<button class=\"btn btn-success btn-sm\" onclick=\"aprobar(${row.id})\"><i class=\\\"bi bi-check2-circle\\\"></i> Aceptar</button>\n\						<button class=\"btn btn-danger btn-sm\" onclick=\"denegar(${row.id})\"><i class=\\\"bi bi-x-circle\\\"></i> Denegar</button>\n\					</div>`;
+					}
+				}
+			]
 		});
 
-		// Abrir pestaña según hash
+		// Vendidos (inicializa al mostrar pestaña)
+		const vendTab = document.getElementById('vendidos-tab');
+		vendTab?.addEventListener('shown.bs.tab', () => {
+			if (dtVend) return;
+			dtVend = jQuery('#tablaVendidos').DataTable({
+				...dtCommon,
+				ajax: {
+					url: base + 'dashboard/vendidos',
+					type: 'POST'
+				},
+				order: [
+					[3, 'desc']
+				],
+				columns: [{
+						data: 'rownum'
+					},
+					{
+						data: 'numero'
+					},
+					{
+						data: 'codigo_orden'
+					},
+					{
+						data: 'fecha_venta'
+					},
+					{
+						data: null,
+						render: (d, t, row) => clienteHTML(row)
+					},
+				]
+			});
+		});
+
+		// Bloqueados (inicializa al mostrar pestaña)
+		const bloqTab = document.getElementById('bloqueados-tab');
+		bloqTab?.addEventListener('shown.bs.tab', () => {
+			if (dtBloq) return;
+			dtBloq = jQuery('#tablaBloqueados').DataTable({
+				...dtCommon,
+				ajax: {
+					url: base + 'dashboard/bloqueados',
+					type: 'POST'
+				},
+				order: [
+					[3, 'desc']
+				],
+				columns: [{
+						data: 'rownum'
+					},
+					{
+						data: 'numero'
+					},
+					{
+						data: 'codigo_orden'
+					},
+					{
+						data: 'fecha_expiracion'
+					},
+					{
+						data: null,
+						render: (d, t, row) => clienteHTML(row)
+					},
+				]
+			});
+		});
+
+		// Botón refrescar: recargar tablas y resumen
+		document.getElementById('btnRefresh')?.addEventListener('click', () => {
+			dtPend?.ajax?.reload(null, false);
+			dtVend?.ajax?.reload(null, false);
+			dtBloq?.ajax?.reload(null, false);
+			cargarResumen();
+		});
+
+		// Abrir pestaña por hash
 		if (location.hash === '#vendidos' && vendTab) {
 			new bootstrap.Tab(vendTab).show();
-			cargarVendidos();
 		} else if (location.hash === '#bloqueados' && bloqTab) {
 			new bootstrap.Tab(bloqTab).show();
-			cargarBloqueados();
 		}
 
-		// Cargar resumen
+		// Cargar resumen inicial
 		cargarResumen();
 	});
 
@@ -357,11 +409,27 @@
 			document.getElementById('statBloqueados').textContent = bloqueados;
 			document.getElementById('statRecaudado').textContent = `$ ${ (vendidos * precio).toFixed(2) }`;
 
-			const pct = totalBoletos > 0 ? Math.round((vendidos / totalBoletos) * 100) : 0;
+			const pctRaw = totalBoletos > 0 ? ((vendidos / totalBoletos) * 100) : 0;
+			const pctClamped = Math.min(100, Math.max(0, pctRaw));
 			document.getElementById('lblAvance').textContent = `${vendidos.toLocaleString()} / ${totalBoletos.toLocaleString()}`;
 			const bar = document.getElementById('barAvance');
-			bar.style.width = pct + '%';
-			bar.textContent = pct + '%';
+			// Asegurar que se vea aunque sea < 1%
+			let barWidth = pctClamped;
+			if (pctClamped > 0 && pctClamped < 1) barWidth = 1;
+			bar.style.width = barWidth.toFixed(2) + '%';
+			bar.textContent = pctClamped.toFixed(2) + '%';
+			bar.setAttribute('aria-valuenow', String(Math.round(pctClamped)));
+			bar.setAttribute('aria-valuemin', '0');
+			bar.setAttribute('aria-valuemax', '100');
+			// Semáforo: 0-33 rojo, 34-66 amarillo, 67-100 verde
+			bar.classList.remove('bg-danger', 'bg-warning', 'bg-success');
+			if (pctClamped < 34) {
+				bar.classList.add('bg-danger');
+			} else if (pctClamped < 67) {
+				bar.classList.add('bg-warning');
+			} else {
+				bar.classList.add('bg-success');
+			}
 		} catch (e) {
 			// silencioso
 		}

@@ -153,4 +153,73 @@ class OrdenModel extends Model
 		$row = $this->db->fetchOne("SELECT comprobante_ruta, comprobante_nombre FROM {$this->table} WHERE id = :id", [':id' => $ordenId]);
 		return $row ?: null;
 	}
+
+	/**
+	 * Server-side processing para DataTables: órdenes pendientes
+	 * Retorna array [total, filtrado, rows]
+	 */
+	public function sspPendientes(int $start, int $length, string $search, string $orderCol, string $orderDir): array
+	{
+		$pdo = $this->db->getConnection();
+		// Conteo total
+		$total = (int)$this->db->fetchColumn("SELECT COUNT(*) FROM {$this->table} WHERE estado = 'pendiente'");
+
+		$where = " WHERE o.estado = 'pendiente' ";
+		$params = [];
+		if ($search !== '') {
+			$where .= " AND (o.codigo_orden LIKE :q1 OR c.nombre_completo LIKE :q2 OR c.telefono LIKE :q3 OR c.correo LIKE :q4)";
+			$params[':q1'] = '%' . $search . '%';
+			$params[':q2'] = '%' . $search . '%';
+			$params[':q3'] = '%' . $search . '%';
+			$params[':q4'] = '%' . $search . '%';
+		}
+
+		// Mapeo de columnas ordenables seguras
+		$orderMap = [
+			'id' => 'o.id',
+			'codigo_orden' => 'o.codigo_orden',
+			'cliente' => 'c.nombre_completo',
+			'cantidad_boletos' => 'o.cantidad_boletos',
+			'total' => 'o.total',
+			'comprobante' => 'o.created_at',
+			'acciones' => 'o.id'
+		];
+		$orderBy = $orderMap[$orderCol] ?? 'o.id';
+		$orderDir = in_array(strtolower($orderDir), ['asc', 'desc'], true) ? $orderDir : 'desc';
+
+		// Conteo filtrado
+		$sqlCount = "SELECT COUNT(*)
+					 FROM {$this->table} o
+					 LEFT JOIN clientes c ON c.id = o.usuario_id
+					 $where";
+		$stmtCount = $pdo->prepare($sqlCount);
+		foreach ($params as $k => $v) {
+			$stmtCount->bindValue($k, $v, PDO::PARAM_STR);
+		}
+		$stmtCount->execute();
+		$filtrado = (int)$stmtCount->fetchColumn();
+
+		// Datos paginados
+		$sql = "SELECT o.id, o.codigo_orden, o.cantidad_boletos, o.total, o.created_at,
+						c.nombre_completo, c.telefono, c.correo
+				FROM {$this->table} o
+				LEFT JOIN clientes c ON c.id = o.usuario_id
+				$where
+				ORDER BY $orderBy $orderDir
+				LIMIT :start, :length";
+		$stmt = $pdo->prepare($sql);
+		foreach ($params as $k => $v) {
+			$stmt->bindValue($k, $v, PDO::PARAM_STR);
+		}
+		$stmt->bindValue(':start', $start, PDO::PARAM_INT);
+		$stmt->bindValue(':length', $length, PDO::PARAM_INT);
+		$stmt->execute();
+		$rows = $stmt->fetchAll();
+
+		return [
+			'total' => $total,
+			'filtrado' => $filtrado,
+			'rows' => $rows,
+		];
+	}
 }

@@ -12,6 +12,14 @@ const BOLETOS_POR_LOTE = 100;
 const MAX_BOLETOS_ALEATORIOS = 1000; // Máximo para selección aleatoria
 let boletosActuales = 0;
 let cargandoBoletos = false;
+let filtroActual = ""; // para filtrar por prefijo en los boletos cargados
+let searchMode = false; // modo búsqueda de un solo boleto
+let searchTimer = null; // debounce del input de búsqueda
+let lastSearchKey = null; // evitar re-render del mismo número
+let io = null; // IntersectionObserver para carga perezosa
+let filtroEstado = "todos"; // todos | disponibles | vendidos
+let ensureFillTimer = null; // temporizador para relleno automático
+let ensureFillBudget = 0; // número máximo de lotes a cargar automáticamente en un ciclo
 
 // ===========================
 // INICIALIZACIÓN
@@ -41,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   cargarBoletosIniciales();
-  configurarScrollListener();
+  configurarCargaResponsiva();
   configurarEventListeners();
 });
 
@@ -78,6 +86,11 @@ function crearBoletoHTML(numero) {
     boleto.classList.add("seleccionado");
   }
 
+  // Aplicar filtro por prefijo (solo en los ya cargados)
+  if (filtroActual && !numeroKey.startsWith(filtroActual)) {
+    boleto.style.display = "none";
+  }
+
   // Agregar event listener si no está vendido
   if (!boletosVendidos.has(numeroKey)) {
     boleto.addEventListener("click", function () {
@@ -89,7 +102,7 @@ function crearBoletoHTML(numero) {
 }
 
 function cargarLoteBoletos() {
-  if (cargandoBoletos || boletosActuales >= TOTAL_BOLETOS) {
+  if (searchMode || cargandoBoletos || boletosActuales >= TOTAL_BOLETOS) {
     return;
   }
 
@@ -97,8 +110,9 @@ function cargarLoteBoletos() {
   const loadingIndicator = document.getElementById("loading-indicator");
 
   // Mostrar indicador solo si hay más boletos por cargar
-  if (loadingIndicator && boletosActuales < TOTAL_BOLETOS) {
-    loadingIndicator.style.display = "block";
+  if (loadingIndicator) {
+    loadingIndicator.style.display =
+      boletosActuales < TOTAL_BOLETOS ? "block" : "none";
   }
 
   // Usar requestAnimationFrame para mejor rendimiento
@@ -128,40 +142,113 @@ function cargarLoteBoletos() {
 
     // Marcar boletos vendidos en el nuevo lote
     marcarBoletosVendidos();
+    // Aplicar filtro de estado/prefijo al nuevo contenido
+    aplicarFiltroEstado();
 
     cargandoBoletos = false;
 
     // Ocultar indicador después de cargar
     if (loadingIndicator) {
-      if (boletosActuales >= TOTAL_BOLETOS) {
-        loadingIndicator.style.display = "none";
-      } else {
-        // Ocultar temporalmente y dejar visible para el observer
-        loadingIndicator.style.display = "block";
-      }
+      loadingIndicator.style.display =
+        boletosActuales >= TOTAL_BOLETOS ? "none" : "block";
     }
 
     console.log(`Total cargados: ${boletosActuales}/${TOTAL_BOLETOS}`);
+    // Reanclar el observer al sentinel por si el DOM cambió
+    if (io && loadingIndicator) {
+      try {
+        io.unobserve(loadingIndicator);
+        io.observe(loadingIndicator);
+      } catch (_) {}
+    }
+    // Asegurar relleno tras carga por si el filtro deja poco contenido visible (con presupuesto)
+    if (ensureFillBudget > 0) setTimeout(ensureFillContainer, 0);
   });
 }
 
-function configurarScrollListener() {
-  const boletosGrid = document.querySelector(".boletos-grid");
+function configurarCargaResponsiva() {
+  const container = document.querySelector(".boletos-grid");
+  const sentinel = document.getElementById("loading-indicator");
+  if (!container || !sentinel) return;
 
-  if (!boletosGrid) return;
+  // Desconectar previo observer si existe
+  if (io) {
+    try {
+      io.disconnect();
+    } catch (_) {}
+    io = null;
+  }
 
-  boletosGrid.addEventListener("scroll", function () {
-    // Verificar si estamos cerca del final (300px antes del final)
-    const scrollTop = this.scrollTop;
-    const scrollHeight = this.scrollHeight;
-    const clientHeight = this.clientHeight;
-
-    if (scrollTop + clientHeight >= scrollHeight - 300) {
-      if (!cargandoBoletos && boletosActuales < TOTAL_BOLETOS) {
+  if ("IntersectionObserver" in window) {
+    // Detectar si el contenedor realmente es scrollable; si no, usar viewport
+    const cs = getComputedStyle(container);
+    const containerScrollable =
+      (cs.overflowY !== "visible" && cs.overflowY !== "hidden") ||
+      container.scrollHeight > container.clientHeight + 5;
+    const useViewport = !containerScrollable;
+    io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (searchMode) return;
+          if (
+            entry.isIntersecting &&
+            !cargandoBoletos &&
+            boletosActuales < TOTAL_BOLETOS
+          ) {
+            cargarLoteBoletos();
+          }
+        });
+      },
+      {
+        root: useViewport ? null : container, // usar viewport si el contenedor no hace scroll
+        rootMargin: "200px", // pre-cargar antes de llegar al final
+        threshold: 0,
+      }
+    );
+    io.observe(sentinel);
+  } else {
+    // Fallback a scroll listener si no hay IntersectionObserver
+    container.addEventListener("scroll", function () {
+      if (searchMode) return;
+      const nearBottom =
+        this.scrollTop + this.clientHeight >= this.scrollHeight - 300;
+      if (nearBottom && !cargandoBoletos && boletosActuales < TOTAL_BOLETOS) {
         cargarLoteBoletos();
       }
-    }
+    });
+  }
+  // Intentar rellenar por si el primer lote no alcanza
+  ensureFillBudget = 2; // no cargar más de 2 lotes en auto en el arranque
+  setTimeout(ensureFillContainer, 0);
+  window.addEventListener("resize", () => {
+    ensureFillBudget = 2; // pequeño presupuesto tras redimensionar
+    setTimeout(ensureFillContainer, 120);
   });
+}
+
+// Relleno automático para mantener visible contenido en cualquier filtro
+function ensureFillContainer() {
+  if (searchMode) return;
+  const container = document.querySelector(".boletos-grid");
+  if (!container) return;
+  if (ensureFillBudget <= 0) return; // sin presupuesto, no auto-cargar más
+  const needsMore = container.scrollHeight <= container.clientHeight + 20;
+  if (needsMore && boletosActuales < TOTAL_BOLETOS) {
+    if (!cargandoBoletos) {
+      ensureFillBudget = Math.max(0, ensureFillBudget - 1);
+      cargarLoteBoletos();
+    }
+    if (ensureFillBudget > 0) {
+      if (ensureFillTimer) clearTimeout(ensureFillTimer);
+      ensureFillTimer = setTimeout(ensureFillContainer, 120);
+    }
+  } else {
+    // Ya hay suficiente contenido o no hay más que cargar
+    if (ensureFillTimer) {
+      clearTimeout(ensureFillTimer);
+      ensureFillTimer = null;
+    }
+  }
 }
 
 // ===========================
@@ -200,6 +287,180 @@ function configurarEventListeners() {
   document
     .getElementById("cantidadBoletos")
     .addEventListener("input", validarCantidad);
+
+  // Buscador automático por prefijo / número exacto
+  const inputBuscar = document.getElementById("inputBuscarBoleto");
+  if (inputBuscar) {
+    inputBuscar.addEventListener("input", () => {
+      if (searchTimer) clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        const raw = inputBuscar.value || "";
+        const digits = String(raw).replace(/\D/g, "");
+        // No filtrar hasta que cumpla con el formato (exactamente 5 dígitos)
+        if (digits.length < 5) {
+          // Resetear filtro y mostrar todos
+          if (searchMode) exitSearchMode();
+          if (filtroActual !== "") {
+            filtroActual = "";
+            aplicarFiltroPrefijo();
+          }
+          return;
+        }
+        // Cuando hay 5 dígitos: no ocultamos la grilla; solo vamos al boleto exacto
+        if (digits.length === 5) {
+          if (filtroActual !== "") {
+            filtroActual = "";
+            aplicarFiltroPrefijo();
+          }
+          const objetivo = digits.padStart(5, "0");
+          // Evitar re-render si ya estamos mostrando el mismo
+          if (searchMode && lastSearchKey === objetivo) return;
+          enterSearchMode(objetivo);
+        }
+      }, 180); // debounce ~180ms
+    });
+    // Limpiar con Escape
+    inputBuscar.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        filtroActual = "";
+        inputBuscar.value = "";
+        aplicarFiltroPrefijo();
+        if (searchMode) exitSearchMode();
+      }
+    });
+  }
+
+  // Filtro por estado (aplica sobre la grilla cargada; ignora modo búsqueda)
+  const selectEstado = document.getElementById("selectFiltroEstado");
+  if (selectEstado) {
+    selectEstado.addEventListener("change", () => {
+      filtroEstado = selectEstado.value || "todos";
+      if (!searchMode) {
+        aplicarFiltroEstado();
+        // Si el filtro deja poco contenido visible, cargar 1-2 lotes como máximo
+        ensureFillBudget = 2;
+        setTimeout(ensureFillContainer, 0);
+      }
+    });
+  }
+}
+
+// ===========================
+// FILTRADO Y BÚSQUEDA
+// ===========================
+function aplicarFiltroPrefijo() {
+  const contenedor = document.getElementById("grid-boletos");
+  if (!contenedor) return;
+  const items = contenedor.querySelectorAll(".boleto");
+  items.forEach((el) => {
+    const num = el.getAttribute("data-numero") || "";
+    const coincidePrefijo = !filtroActual || num.startsWith(filtroActual);
+    const coincideEstado =
+      filtroEstado === "todos" ||
+      (filtroEstado === "vendidos" && el.classList.contains("vendido")) ||
+      (filtroEstado === "disponibles" && !el.classList.contains("vendido"));
+    el.style.display = coincidePrefijo && coincideEstado ? "" : "none";
+  });
+  // Asegurar carga extra si el filtro redujo en exceso el alto
+  if (!searchMode) {
+    // No exceder presupuesto automático: solo complementar si se activó
+    if (ensureFillBudget <= 0) ensureFillBudget = 1; // pequeño empujón
+    setTimeout(ensureFillContainer, 0);
+  }
+}
+
+function aplicarFiltroEstado() {
+  const contenedor = document.getElementById("grid-boletos");
+  if (!contenedor) return;
+  const items = contenedor.querySelectorAll(".boleto");
+  items.forEach((el) => {
+    const num = el.getAttribute("data-numero") || "";
+    const coincidePrefijo = !filtroActual || num.startsWith(filtroActual);
+    const coincideEstado =
+      filtroEstado === "todos" ||
+      (filtroEstado === "vendidos" && el.classList.contains("vendido")) ||
+      (filtroEstado === "disponibles" && !el.classList.contains("vendido"));
+    el.style.display = coincidePrefijo && coincideEstado ? "" : "none";
+  });
+  // Asegurar carga extra si el filtro redujo en exceso el alto
+  if (!searchMode) {
+    if (ensureFillBudget <= 0) ensureFillBudget = 1;
+    setTimeout(ensureFillContainer, 0);
+  }
+}
+
+function buscarYEnfocarBoletoExacto(numeroKey) {
+  // Si aún no está cargado, cargar lotes hasta incluirlo
+  const numero = parseInt(numeroKey, 10);
+  while (boletosActuales < numero && boletosActuales < TOTAL_BOLETOS) {
+    cargarLoteBoletos();
+  }
+  // Intentar encontrarlo en DOM
+  requestAnimationFrame(() => {
+    const el = document.querySelector(`[data-numero="${numeroKey}"]`);
+    if (el) {
+      // Mostrar si estaba oculto por filtro
+      el.style.display = "";
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.classList.add("resaltado");
+      setTimeout(() => el.classList.remove("resaltado"), 1200);
+    } else {
+      mostrarAlerta(`No se encontró el boleto #${numeroKey}`, "warning");
+    }
+  });
+}
+
+// ===========================
+// MODO BÚSQUEDA (un solo boleto)
+// ===========================
+function enterSearchMode(numeroKey) {
+  searchMode = true;
+  lastSearchKey = numeroKey;
+  const grid = document.getElementById("grid-boletos");
+  const loading = document.getElementById("loading-indicator");
+  // Desconectar observer mientras estamos en búsqueda
+  if (io) {
+    try {
+      io.disconnect();
+    } catch (_) {}
+    io = null;
+  }
+  if (loading) loading.style.display = "none";
+  if (!grid) return;
+  // Limpiar grilla por rendimiento
+  grid.innerHTML = "";
+
+  // Validar rango
+  const numero = parseInt(numeroKey, 10);
+  const enRango = numero >= 1 && numero <= TOTAL_BOLETOS;
+
+  if (enRango) {
+    const boletoEl = crearBoletoHTML(numeroKey);
+    // Forzar visible por si la función aplicó algún display
+    boletoEl.style.display = "inline-block";
+    boletoEl.style.margin = "12px auto";
+    grid.appendChild(boletoEl);
+  } else {
+    // Si está fuera de rango, dejamos la grilla vacía; se puede salir editando el input o con Esc
+  }
+}
+
+function exitSearchMode() {
+  searchMode = false;
+  lastSearchKey = null;
+  if (searchTimer) {
+    clearTimeout(searchTimer);
+    searchTimer = null;
+  }
+  // Reiniciar el grid y lazy loading desde cero para evitar inconsistencias
+  const grid = document.getElementById("grid-boletos");
+  const loading = document.getElementById("loading-indicator");
+  if (grid) grid.innerHTML = "";
+  boletosActuales = 0;
+  cargandoBoletos = false;
+  if (loading) loading.style.display = "block";
+  cargarBoletosIniciales();
+  configurarCargaResponsiva();
 }
 
 // ===========================

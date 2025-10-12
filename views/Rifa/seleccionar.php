@@ -34,7 +34,7 @@
 	<?php else: ?>
 		<!-- Grid de Boletos -->
 		<div class="boletos-grid">
-			<h2 class="mb-4 text-center fw-bold">Selecciona tus Boletos</h2>
+			<h2 class="mb-2 text-center fw-bold">Selecciona tus Boletos</h2>
 			<div class="grid-boletos" id="grid-boletos">
 				<!-- Los boletos se cargarán dinámicamente con lazy loading -->
 			</div>
@@ -54,18 +54,61 @@
 			</div>
 
 			<div class="panel-body">
-				<!-- Cantidad de Boletos -->
-				<div class="config-section">
-					<label for="cantidadBoletos" class="form-label fw-semibold">Cantidad de Boletos Aleatorios</label>
-					<input type="number" class="form-control" id="cantidadBoletos" min="1" max="1000" value="1" placeholder="Máx. 1000">
-					<small class="text-muted">Máximo 1000 para selección aleatoria</small>
-				</div>
+				<!-- Acordeón de filtros -->
+				<div class="accordion mb-3" id="accordionFiltros">
+					<div class="accordion-item">
+						<h2 class="accordion-header" id="headingFiltros">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFiltros" aria-expanded="false" aria-controls="collapseFiltros">
+								Filtros
+							</button>
+						</h2>
+						<div id="collapseFiltros" class="accordion-collapse collapse" aria-labelledby="headingFiltros" data-bs-parent="#accordionFiltros">
+							<div class="accordion-body">
+								<div class="config-section">
+									<label for="inputBuscarBoleto" class="form-label fw-semibold">Buscar boleto</label>
+									<input type="text" class="form-control" id="inputBuscarBoleto" placeholder="Ingresa 5 dígitos (ej. 01234)">
+									<small class="text-muted">Al escribir 5 dígitos, se mostrará solo ese boleto; presiona Esc para salir.</small>
+								</div>
 
-				<!-- Boleto Aleatorio -->
-				<div class="config-section">
-					<button class="btn btn-aleatorio w-100" id="btnAleatorio">
-						<i class="bi bi-shuffle"></i> Boleto Aleatorio
-					</button>
+								<div class="config-section">
+									<label for="selectFiltroEstado" class="form-label fw-semibold">Mostrar</label>
+									<select id="selectFiltroEstado" class="form-select">
+										<option value="todos">Todos</option>
+										<option value="disponibles">Solo disponibles</option>
+										<option value="vendidos">Solo vendidos</option>
+									</select>
+									<small class="text-muted">Aplica al listado general (no al resultado de búsqueda exacta).</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Acordeón de aleatorio (colapsado) -->
+				<div class="accordion mb-3" id="accordionAleatorio">
+					<div class="accordion-item">
+						<h2 class="accordion-header" id="headingAleatorio">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAleatorio" aria-expanded="false" aria-controls="collapseAleatorio">
+								Aleatorio
+							</button>
+						</h2>
+						<div id="collapseAleatorio" class="accordion-collapse collapse" aria-labelledby="headingAleatorio" data-bs-parent="#accordionAleatorio">
+							<div class="accordion-body">
+								<!-- Cantidad de Boletos -->
+								<div class="config-section">
+									<label for="cantidadBoletos" class="form-label fw-semibold">Cantidad de Boletos Aleatorios</label>
+									<input type="number" class="form-control" id="cantidadBoletos" min="1" max="1000" value="1" placeholder="Máx. 1000">
+									<small class="text-muted">Máximo 1000 para selección aleatoria</small>
+								</div>
+
+								<!-- Boleto Aleatorio -->
+								<div class="config-section">
+									<button class="btn btn-aleatorio w-100" id="btnAleatorio">
+										<i class="bi bi-shuffle"></i> Boleto Aleatorio
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<!-- Resumen de Selección -->

@@ -181,7 +181,7 @@
 					<a href="https://www.instagram.com/" target="_blank" class="btn btn-outline-light btn-lg rounded-circle" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center;">
 						<i class="bi bi-instagram"></i>
 					</a>
-					<a href="https://wa.me/529876543210" target="_blank" class="btn btn-outline-light btn-lg rounded-circle" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center;">
+					<a href="https://wa.me/528661126294" target="_blank" class="btn btn-outline-light btn-lg rounded-circle" style="width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center;">
 						<i class="bi bi-whatsapp"></i>
 					</a>
 				</div>
