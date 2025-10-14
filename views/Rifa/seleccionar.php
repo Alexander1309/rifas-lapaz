@@ -1,4 +1,8 @@
 <div class="boletos-container">
+	<!-- Botón flotante para reabrir el panel en móviles -->
+	<button type="button" id="panelFloatToggle" class="panel-float-toggle" aria-label="Mostrar configuración" title="Mostrar configuración" style="display:none;">
+		<i class="fas fa-bars"></i>
+	</button>
 	<?php if (isset($this->params['rifa_activa']) && $this->params['rifa_activa'] == 0): ?>
 		<!-- Mensaje de Rifa Inactiva -->
 		<div class="container my-5">
@@ -49,11 +53,14 @@
 
 		<!-- Panel de Configuración Fixed -->
 		<div class="panel-configuracion">
-			<div class="panel-header">
-				<h3 class="fw-bold mb-3">Configuración</h3>
+			<div class="panel-header d-flex justify-content-between align-items-center">
+				<h3 class="fw-bold mb-0">Configuración</h3>
+				<button type="button" class="btn btn-sm btn-outline-success" id="panelToggle" aria-expanded="true" aria-controls="panelBody">
+					Ocultar
+				</button>
 			</div>
 
-			<div class="panel-body">
+			<div class="panel-body" id="panelBody">
 				<!-- Acordeón de filtros -->
 				<div class="accordion mb-3" id="accordionFiltros">
 					<div class="accordion-item">

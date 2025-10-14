@@ -20,6 +20,8 @@ let io = null; // IntersectionObserver para carga perezosa
 let filtroEstado = "todos"; // todos | disponibles | vendidos
 let ensureFillTimer = null; // temporizador para relleno automático
 let ensureFillBudget = 0; // número máximo de lotes a cargar automáticamente en un ciclo
+let lastTouchTs = 0; // para evitar doble activación touch + click en iOS
+const PANEL_STATE_KEY = "ui.panelConfigHidden"; // persistencia del estado del panel en móviles
 
 // ===========================
 // INICIALIZACIÓN
@@ -66,6 +68,9 @@ function crearBoletoHTML(numero) {
   const boleto = document.createElement("div");
   boleto.className = "boleto";
   boleto.setAttribute("data-numero", numeroKey);
+  // Mejorar accesibilidad y compatibilidad táctil en iOS
+  boleto.setAttribute("role", "button");
+  boleto.setAttribute("tabindex", "0");
 
   boleto.innerHTML = `
     <div class="boleto-superior">
@@ -89,13 +94,6 @@ function crearBoletoHTML(numero) {
   // Aplicar filtro por prefijo (solo en los ya cargados)
   if (filtroActual && !numeroKey.startsWith(filtroActual)) {
     boleto.style.display = "none";
-  }
-
-  // Agregar event listener si no está vendido
-  if (!boletosVendidos.has(numeroKey)) {
-    boleto.addEventListener("click", function () {
-      toggleBoleto(this);
-    });
   }
 
   return boleto;
@@ -268,6 +266,45 @@ function marcarBoletosVendidos() {
 // CONFIGURAR EVENT LISTENERS
 // ===========================
 function configurarEventListeners() {
+  const grid = document.getElementById("grid-boletos");
+  if (grid) {
+    // Delegación de eventos: click
+    grid.addEventListener("click", (e) => {
+      // Evitar click generado inmediatamente después de un touch
+      if (Date.now() - lastTouchTs < 350) return;
+      const target = e.target.closest(".boleto");
+      if (!target || target.classList.contains("vendido")) return;
+      toggleBoleto(target);
+    });
+
+    // Delegación de eventos: touchend (iOS)
+    grid.addEventListener(
+      "touchend",
+      (e) => {
+        lastTouchTs = Date.now();
+        const touch = e.changedTouches && e.changedTouches[0];
+        const el = document.elementFromPoint(
+          touch ? touch.clientX : 0,
+          touch ? touch.clientY : 0
+        );
+        const target = (el || e.target).closest(".boleto");
+        if (!target || target.classList.contains("vendido")) return;
+        // No hacer preventDefault para no bloquear scroll
+        toggleBoleto(target);
+      },
+      { passive: true }
+    );
+
+    // Accesibilidad: teclado (Enter/Espacio)
+    grid.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const target = e.target.closest(".boleto");
+      if (!target || target.classList.contains("vendido")) return;
+      e.preventDefault();
+      toggleBoleto(target);
+    });
+  }
+
   // Botón Aleatorio
   document
     .getElementById("btnAleatorio")
@@ -342,6 +379,89 @@ function configurarEventListeners() {
         setTimeout(ensureFillContainer, 0);
       }
     });
+  }
+
+  // Reconfigurar lazy-loading cuando el menú móvil se abre/cierra
+  document.addEventListener("sidebar:sidebarOpen", () => {
+    // Puede cambiar el viewport/scroll; reanclar IO
+    setTimeout(configurarCargaResponsiva, 80);
+  });
+  document.addEventListener("sidebar:sidebarClose", () => {
+    setTimeout(configurarCargaResponsiva, 80);
+  });
+
+  // Toggle del panel de configuración en móviles
+  const panel = document.querySelector(".panel-configuracion");
+  const panelBtn = document.getElementById("panelToggle");
+  const panelBody = document.getElementById("panelBody");
+  const panelFloatToggle = document.getElementById("panelFloatToggle");
+  if (panel && panelBtn) {
+    const isMobileView = () => window.innerWidth <= 1199;
+
+    const applyBodyPaddingState = (hidden) => {
+      document.body.classList.toggle("panel-config-hidden", hidden);
+    };
+
+    const setPanelHidden = (hidden, persist = true) => {
+      if (!isMobileView()) hidden = false; // en desktop siempre visible
+
+      panel.classList.toggle("hidden", hidden);
+      // Actualizar botón de cabecera
+      panelBtn.textContent = hidden ? "Mostrar" : "Ocultar";
+      panelBtn.setAttribute("aria-expanded", (!hidden).toString());
+
+      // Botón flotante visible solo cuando está oculto en móvil
+      if (panelFloatToggle) {
+        panelFloatToggle.style.display =
+          hidden && isMobileView() ? "flex" : "none";
+      }
+
+      applyBodyPaddingState(hidden);
+
+      // Persistir estado
+      if (persist) {
+        try {
+          localStorage.setItem(PANEL_STATE_KEY, hidden ? "1" : "0");
+        } catch (_) {}
+      }
+
+      // Recalibrar lazy-loading tras la animación
+      setTimeout(() => {
+        ensureFillBudget = 1;
+        configurarCargaResponsiva();
+      }, 260);
+    };
+
+    // Estado inicial desde localStorage (solo móvil)
+    let initialHidden = false;
+    try {
+      initialHidden = localStorage.getItem(PANEL_STATE_KEY) === "1";
+    } catch (_) {}
+    setPanelHidden(initialHidden, false);
+
+    // Toggle desde botón del header
+    panelBtn.addEventListener("click", () => {
+      const hiddenNow = panel.classList.contains("hidden");
+      setPanelHidden(!hiddenNow, true);
+    });
+
+    // Reabrir panel desde el botón flotante
+    if (panelFloatToggle) {
+      panelFloatToggle.addEventListener("click", () => {
+        setPanelHidden(false, true);
+      });
+
+      // Ajustar visibilidad del flotante en resize
+      window.addEventListener("resize", () => {
+        if (!isMobileView()) {
+          setPanelHidden(false, false);
+        } else {
+          const hiddenNow = panel.classList.contains("hidden");
+          panelFloatToggle.style.display = hiddenNow ? "flex" : "none";
+          applyBodyPaddingState(hiddenNow);
+        }
+      });
+    }
   }
 }
 

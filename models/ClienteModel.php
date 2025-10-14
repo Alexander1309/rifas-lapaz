@@ -10,6 +10,18 @@ class ClienteModel extends Model
 		$row = $this->db->fetchOne("SELECT id FROM {$this->table} WHERE correo = :correo", [':correo' => $correo]);
 		if ($row && isset($row['id'])) return (int)$row['id'];
 
+		// Logear de forma defensiva el teléfono que se va a insertar para depuración
+		try {
+			$logger = new Logger();
+			$logger->logInfo('ClienteModel::getOrCreate - insert values', null, 'ClienteModel::getOrCreate', [
+				'nombre' => $nombre,
+				'telefono' => $telefono,
+				'correo' => $correo,
+			]);
+		} catch (Throwable $_e) {
+			// No bloquear la inserción si el logger falla
+		}
+
 		$this->db->execute(
 			"INSERT INTO {$this->table} (nombre_completo, telefono, correo) VALUES (:n, :t, :c)",
 			[':n' => $nombre, ':t' => $telefono, ':c' => $correo]
